@@ -754,7 +754,7 @@ class FALabel(FA):
                 "role": "system",
                 "content": (
                     "You are a leading data scientist who specialises in explanatory data analysis. \n"
-                    f"You have recently conducted factor analyses that allows you to summarise various entities, "
+                    "You have recently conducted factor analyses that allows you to summarise various entities, "
                     "identifying key underlying factors that explain the observed correlations among various features about those entities. \n"
                     "In each case, you have identified which factors are negatively and positively associated with specific features and how strong that association is. \n"
                     "Your task now is to name factors resulting from a factor analysis based on the analysis. \n"
@@ -799,7 +799,7 @@ class FALabel(FA):
             "role": "user",
             "content":"You are now going to name the factors that come from some factor analyses.\n"
                 "The name must strictly follow the format: 'negative vs positive' association.\n"
-                f"Specifically, the name should be of the form x vs y, where x is one adjective that is "
+                "Specifically, the name should be of the form x vs y, where x is one adjective that is "
                 "negatively associated with the features and y is one adjective that is positively associated with the features.\n"
                 "The adjective x should be the opposite of the name y.\n"
                 "Neither of the adjectives should have a negative connotation.\n"
@@ -851,7 +851,7 @@ class QandAWordalisation(FA):
                 "role": "system",
                 "content": (
                     "You are a leading data scientist who specialises in explanatory data analysis. \n"
-                    f"You have recently conducted factor analyses that allows you to summarise various entities, "
+                    "You have recently conducted factor analyses that allows you to summarise various entities, "
                     "identifying key underlying factors that explain the observed correlations among various features about those entities. \n"
                     "In each case, you have identified which factors are negatively and positively associated with specific features and how strong that association is. \n"
                     "You have also given a name to the factors resulting from a factor analysis. \n"
