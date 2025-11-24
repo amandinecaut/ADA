@@ -51,7 +51,7 @@ default_values = {
     "indice": 0,
     "selected_entity" : None,
     "entity_id" : 'entity',
-    
+    'article' : 'an',
 }
 
 ### ---- Demo data path ---- ###
@@ -267,6 +267,7 @@ def get_defaults():
         DEFAULT_MAX_COMPONENTS,
         DEFAULT_NUM_CLUSTERS,
     )
+
 
 def choose_article(word):
     """

@@ -88,6 +88,7 @@ with tab1:
     with left_t1:
         st.markdown("#### Variable name input")
         user_input = st.text_input("Enter your variable name:", key="entity_id")
+        st.session_state.article = choose_article(st.session_state.entity_id)
     
   
 

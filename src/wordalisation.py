@@ -15,6 +15,7 @@ import os
 
 
 
+
 class Wordalisation(ABC):
     describe_base = "data/describe"
 
@@ -153,11 +154,17 @@ class Wordalisation(ABC):
         """
         
         st.expander("Chat transcript", expanded=False).write(self.messages)
+        
     
         msgs = self.convert_messages_format(self.messages)
         
         MH = ModelHandler()
         answer = MH.get_generate(msgs, 150)
+
+        # Convert to DataFrame and save it
+        #df = pd.DataFrame(self.messages)
+        #df['role'] = 
+        #df.to_excel("messages_test.xlsx", index=False)
        
 
         return answer
@@ -185,6 +192,7 @@ class CreateWordalisation(Wordalisation):
         
         self.indice = st.session_state.indice
         self.entity_id = st.session_state.entity_id
+        self.article = st.session_state.article
         self.synthetic_text = self.tell_it_what_data_to_use()
         self.messages = self.setup_messages()
         
@@ -333,11 +341,12 @@ class CreateWordalisation(Wordalisation):
         messages = [
             {
                 "role": "user",
-                "content": "You will be provided the background informations"
+                "content": ("You will be provided the background informations about each cluster.")
+
             },
             {
                 "role": "assistant",
-                "content": f"Understood. I will use this information when describing {self.entity_id}."
+                "content": f"Understood. I will use this information when describing {self.article} {self.entity_id}."
             },
             
         ]
@@ -345,11 +354,12 @@ class CreateWordalisation(Wordalisation):
             messages.extend([
                 {
                     "role": "user",
-                    "content": f"What is '{name}' about?"
+                    "content": f"What is the cluster '{name}' about?"
                 },
                 {
                     "role": "assistant",
-                    "content": f" '{name}' is described as: {desc}"
+                    "content": (f"{desc}")
+                    #f"{(self.article).upper()} {self.entity_id} described as '{name}' is: {desc}"
                 }
             ])
 
@@ -387,10 +397,11 @@ class CreateWordalisation(Wordalisation):
             f"The second sentence should describe the {self.entity_id}'s specific strengths based on the metrics. \n"
             f"The third sentence should describe aspects in which the {self.entity_id} is average and/or weak based on the statistics. \n"
             f"Finally, summarize the {self.entity_id} with a single concluding statement. \n" 
+            "You use those descriptions to learn how to answer similar prompts."
             )
             },
             {"role": "assistant",
-            "content": f"Understood. Please provide the {self.entity_id} descriptions."
+            "content": f"Understood. Please provide the descriptions."
             }]
 
         try:
