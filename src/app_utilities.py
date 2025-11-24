@@ -28,7 +28,7 @@ import re
 import os
 
 
-DEFAULT_CUM_EXP = 3
+DEFAULT_FACTOR_NB = 3
 DEFAULT_THRESHOLD = 0.2
 DEFAULT_MAX_COMPONENTS = 7
 DEFAULT_NUM_CLUSTERS = 4
@@ -262,12 +262,11 @@ def load_map(file=None):
     
 def get_defaults():
     return (
-        DEFAULT_CUM_EXP,
+        DEFAULT_FACTOR_NB,
         DEFAULT_THRESHOLD,
         DEFAULT_MAX_COMPONENTS,
         DEFAULT_NUM_CLUSTERS,
     )
-
 
 def choose_article(word):
     """
@@ -291,17 +290,20 @@ def choose_article(word):
 ### ----  Analysis tab utilities ---- ###
 
 # Factor Analysis utilities
-def perform_FA(cum_exp=DEFAULT_CUM_EXP, threshold=DEFAULT_THRESHOLD):
+def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
 
     if st.session_state.features != []:
         x = st.session_state.df_filtered.loc[:, st.session_state.features].values
         original_index = st.session_state.df_filtered.index
 
         x = StandardScaler().fit_transform(x)
-        if "cum_exp" in st.session_state:
-            components = st.session_state.cum_exp
+        if "factor_nb" in st.session_state:
+            components = st.session_state.factor_nb
         else:
-            components = DEFAULT_CUM_EXP
+            components = DEFAULT_FACTOR_NB
+
+
+        print(f"Number of factors: {components}")
 
         # Factor Analysis
         FA = FactorAnalysis(n_components=components)
@@ -313,7 +315,9 @@ def perform_FA(cum_exp=DEFAULT_CUM_EXP, threshold=DEFAULT_THRESHOLD):
             index=original_index,
         )
      
+        
 
+       
         # st.session_state.exp_ratio = PCA.explained_variance_ratio_ ## This is only for PCA
 
         st.session_state.N = components
@@ -413,6 +417,16 @@ def perform_FA(cum_exp=DEFAULT_CUM_EXP, threshold=DEFAULT_THRESHOLD):
     else:
         st.session_state.FA_component_dict = {}
         st.session_state.df = None
+
+# Get Kaiser criterion (eigenvalues > 1)
+def get_kaiser_criterion():
+    x = st.session_state.df_filtered.loc[:, st.session_state.features].values
+    x = StandardScaler().fit_transform(x)
+    corr_matrix =  np.corrcoef(x, rowvar=False)
+    eigenvalues = np.linalg.eigh(corr_matrix)[0] 
+    kaiser_n = eigenvalues[eigenvalues > 1]
+    return len(kaiser_n)
+
 
 def get_component_labels(FA_component_dict):
     FALabeler = FALabel()

@@ -24,7 +24,7 @@ from embeddings import Embeddings, embed
 st.set_page_config(layout="wide")
 
 
-default_cum_exp, default_threshold, default_max_components, default_num_clusters = (
+default_factor_nb, default_threshold, default_max_components, default_num_clusters = (
     get_defaults()
 )
 
@@ -281,15 +281,29 @@ with tab2:
         if st.session_state.analysis == "FA":
             left_t2.markdown("### Factor Analysis")
 
-            cum_exp = left_t2.slider(
-                "Select the number of components",
-                min_value=1,
-                max_value=default_max_components,
-                value=app_utilities.DEFAULT_CUM_EXP,
-                step=1,
-                key="cum_exp",
-                on_change=perform_FA,
+            # Ask user if they want to automatically find optimal number of factors
+            kaiser = left_t2.radio(
+            "Would you like to find the optimal number of factors automatically?",
+            ("Yes", "No"),
+             index=1,  # Default to "No"
             )
+
+            if kaiser == "Yes":
+                kaiser_number = app_utilities.get_kaiser_criterion()
+                left_t2.write(f"The optimal number of factors is {kaiser_number}")
+                st.session_state.factor_nb = kaiser_number
+
+            else:
+
+                factor_nb = left_t2.slider(
+                    "Select the number of components",
+                    min_value=1,
+                    max_value=default_max_components,
+                    value=default_factor_nb,
+                    step=1,
+                    key="factor_nb",
+                    on_change=perform_FA,
+                )
 
             if left_t2.button("Run Factor Analysis"):
                 perform_FA()
