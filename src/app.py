@@ -226,13 +226,9 @@ with tab1:
                 key="entity_radio",
                 )
 
-            print('entity name radio', st.session_state.entity_radio)
-
-
             if entity_name_radio == "No":
                 st.session_state["col_name"] = None
-                print('NO')
-                #print('col name', st.session_state.ignore_cols)
+             
                 
             elif entity_name_radio == "Yes":
                 print('YES')
