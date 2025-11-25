@@ -1,3 +1,4 @@
+from email.mime import text
 from google.generativeai import GenerationConfig
 from typing import List, Union, Dict, Optional
 from abc import ABC, abstractmethod
@@ -691,19 +692,16 @@ class FA(Wordalisation):
         self.synthetic_text = self.description_FA(FA_component_dict)
         return self.synthetic_text 
 
-    def describe_level_FA(self, value):
+    def describe_level_FA(self, value,text):
         thresholds=[0.30, 0.49, 0.59, 0.70]
-        if value > 0: 
-            text = 'positively'
-        else: 
-            text = 'negatively'
+
 
         words = [
-        f"very weakly {text} associated with ",  
-        f"weakly {text} associated with ",  
-        f"moderately {text} associated with ",
-        f"strongly {text} associated with ",
-        f"very strongly {text} associated with ", 
+        f"very weakly associated with {text} ",  
+        f"weakly associated with {text} ",  
+        f"moderately associated with {text} ",
+        f"strongly associated with {text} ",
+        f"very strongly associated with {text} ", 
         ]
         return CreateWordalisation.describe(thresholds, words, abs(value))
 
@@ -726,22 +724,30 @@ class FA(Wordalisation):
 
         text = ''
 
-        # --- TOP FEATURES (positive loadings)
-        if top_features:
-            text = "The features that whould be used to name y pole of the factor x vs y are those positively associated with it. The factor is "
-            descriptions = [self.describe_level_FA(value) + f"the feature that {feature}" for feature, value in zip(top_features, top_values)]
-            text += ", ".join(descriptions) + ". "
-        else:
-            text += "There are no features positively associated with the factor. The y pole of the factor x vs y therefore represents the absence of negatively associated features. We should describe it simply as the opposite of x. "
-        text +="\n"
-
         # --- BOTTOM FEATURES (negative loadings)
         if bottom_features:
-            text = "The features that whould be used to name x pole of the factor x vs y are those negatively associated with it. The factor is "
-            descriptions = [self.describe_level_FA(value) + f"the feature that {feature}" for feature, value in zip(bottom_features, bottom_values)]
+            text = "The first features we look at should primarily be used to name the x pole. "
+            text += "The higher the value of the association, the more important the feature is for naming the x pole. "
+            text += "Here is a list of the features and how important they are for naming the x pole: "
+            descriptions = [f"the feature that {feature} is" + self.describe_level_FA(value, 'the x pole') for feature, value in zip(bottom_features, bottom_values)]
             text += ", ".join(descriptions) + ". "
         else:
-            text += "There are no features negatively associated with the factor. The x pole of the factor x vs y therefore represents the absence of positively associated features. We should describe it simply as the opposite of y. "
+            text = "There are no features primarily be used to name the x pole. "
+            text += "You should describe it simply as the opposite of the y pole, which we now give more information about in order to choose a name. "
+            text += "If possibble use a negation to name the x pole. "
+
+        # --- TOP FEATURES (positive loadings)
+        if top_features:
+            text += "The next features we look at should primarily be used to name the y pole. "
+            text += "The higher the value of the association, the more important the feature is for naming the y pole. "
+            text += "Here is a list of the features and how important they are for naming the y pole: "
+            descriptions = [f"the feature that {feature} is " + self.describe_level_FA(value, 'the y pole')  for feature, value in zip(top_features, top_values)]
+            text += ", ".join(descriptions) + ".\n "
+        else:
+            text += "There are no features used to name the y pole. "
+            text += "You should describe it simply as the opposite of the x pole, which you already got information about. "
+            text += "If possibble use a negation such as 'not x' to name the y pole. "
+        text +="\n"
 
         return text
 
@@ -796,7 +802,7 @@ class FALabel(FA):
                   "Use either a single adjective or a combination of two adjectives for both x and y.\n"
                   "Three word descriptions for both x and y are fine as well, especially if they capture the meaning well.\n"
                   "Longer names are not allowed.\n"
-                  "Output the name (in x vs y format) only. \n"
+                  "Output the name in x vs y format only. \n"
         )
         if self.existing_labels_text != "": 
             prompt += f"{self.existing_labels_text}\n"
@@ -874,6 +880,8 @@ class QandAWordalisation(FA):
                     "You have also given a name to the factors resulting from a factor analysis. \n"
                     "The names have the form x vs y, where x is the opposite of the name y. \n"
                     "Now, for each case, you are going to generate a short summary of factors based on the description provided.\n" 
+                    "Be very careful to only use the information provided in the description to generate the summaries. Do not add properties that are not described. \n"
+                    "If there is no information about the pole you are asked to summarise, simply describe it in terms of its opposite. \n"
                 ),
             }, 
             {                
@@ -897,20 +905,29 @@ class QandAWordalisation(FA):
             f"The second sentence should contrast it with being the opposite of {self.factor}.\n"
             "The summary should be easy to understand for someone not familiar with factor analysis and not mention any technical terms.\n"
             "It should be lively and engaging. Give life to the description.\n"
+            "Be very careful to only use the information provided in the description to generate the summaries. Do not add properties that are not described. \n"
+            "If there is no information about the pole you are asked to summarise, simply describe it in terms of its opposite. \n"
+ 
         )
         prompt = prompt + f"{self.synthetic_text}"
         return [{"role": "user", "content": prompt}]
     
 
-    def tell_it_what_data_to_use(self, article,entity,factor,wholefactor,FA_component_dict):
+    def tell_it_what_data_to_use(self, article,entity,factor,oppositefactor,wholefactor,FA_component_dict):
 
         question = f"what does it mean when {article} {entity} is described as {factor}?"
         self.factor = factor
+        self.oppositefactor = oppositefactor
         self.wholefactor = wholefactor
         self.entity= entity
         self.synthetic_text = "The name of the factor is: " + wholefactor + ". \n" 
+        # Use a regular expression to split on " vs " (case-insensitive)
+        parts = re.split(r"\s+vs\.?\s+", wholefactor, flags=re.IGNORECASE)
+        text1, text2 = parts[0].strip(), parts[1].strip()
+
         self.synthetic_text += "It was based on the following description: "
         self.synthetic_text += self.description_FA(FA_component_dict) + "\n\n"
+        self.synthetic_text = self.synthetic_text.replace("the x pole", text1).replace("the y pole", text2)
         self.synthetic_text += "Now tell me, " + question + "\n\n"
 
         return self.synthetic_text 
