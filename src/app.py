@@ -249,6 +249,16 @@ with tab1:
                     right_t1.warning("To select an entity name column, it must be in the 'Ignore columns' list. Please select a column to ignore first.")
 
             st.session_state.tab1_done = True
+
+            col_name = st.session_state.get("col_name")
+            option_row = st.session_state.df_filtered.index.to_list()
+            if col_name is None:
+                option_labels = [f"{st.session_state.entity_id.capitalize()} №{i}" for i, _ in enumerate(option_row)]
+            else: 
+                option_labels = st.session_state.df_full.loc[st.session_state.df_filtered.index, selected_from_ignore] 
+            label_to_value = dict(zip(option_labels, option_row))
+            st.session_state["label_to_value"] = label_to_value
+            
      
 
 # "Analysis Tools"
@@ -586,17 +596,7 @@ with tab4:
         left_t4, right_t4 = st.columns([0.3, 0.7])
         left_t4.markdown("### Select entity")
 
-        col_name = st.session_state.get("col_name")
-        option_row = st.session_state.df_filtered.index.to_list()
-            
-
-        if col_name is None:
-            option_labels = [f"{st.session_state.entity_id.capitalize()} №{i}" for i, _ in enumerate(option_row)]
-            
-        else: 
-            option_labels = st.session_state.df_full.loc[st.session_state.df_filtered.index, selected_from_ignore] 
-             
-        label_to_value = dict(zip(option_labels, option_row))
+        
         
 
 
@@ -606,7 +606,7 @@ with tab4:
             options=option_labels,
             key="selected_entity",
             index=0,
-            on_change=add_to_fig,
+            on_change=add_to_fig(label_to_value),
         )
 
 

@@ -696,19 +696,27 @@ def display_cluster_color(cluster_name, color, size=40):
 ### ---- View tab utilities ---- ###
 
 # View utilities
-def add_to_fig():
-
-    ind = st.session_state.indice
-    #df = st.session_state.df_z_scores.iloc[ind, :].to_frame().T
-    df = st.session_state.df.iloc[ind, :].to_frame().T
+def add_to_fig(label_to_value):
+    selected = st.session_state.get("selected_entity")
+  
+    if selected not in label_to_value:
+        return
+    ind = label_to_value[selected]
     
+    st.session_state.indice = ind
+    row = st.session_state.df.iloc[[ind]]
+    mapping = {factor: info["label"] for factor, info in  st.session_state.FA_component_dict.items()}
+    row = row.rename(columns=mapping)
+   
     color = st.get_option("theme.primaryColor")
     if color is None:
         color = "#FF4B4B"
 
-    for col in df.columns.tolist():
+    for col in row.columns[:-1]:  
+        value = row[col].values[0]
         st.session_state.fig_base.update_traces(
-            selector={"name": f"{col} selected"}, x=df[col]
+            selector={"name": f"{col} selected"},
+            x=[value],                     
         )
 
     st.session_state.fig_base.update_traces(

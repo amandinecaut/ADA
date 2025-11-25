@@ -35,8 +35,10 @@ class Visualisation:
         cols = [k for k in FA_label_map.keys()]
         self.df_FA = df_FA[cols]
         self.FA_label_map = FA_label_map
-
-        self.df_z_scores = self.get_z_scores()
+        
+        
+        self.df_z_scores = df_FA[cols]
+        #self.df_z_scores = self.get_z_scores()
         # map self.df_z_scores using FA_label_map
         self.df_z_scores.rename(columns=self.FA_label_map, inplace=True)
 
@@ -60,12 +62,13 @@ class Visualisation:
 
         # Ensure correct order by using FA_label_map
         df = df[list(self.FA_label_map.values())]
-        df_entity = self.df_z_scores.iloc[0, :].to_frame().T[list(self.FA_label_map.values())]
-        
-        # add a scatter plot for each principal component
-        for i, col in enumerate(df.columns):
-            
 
+        ind = st.session_state.get("indice", 0)
+        df_entity = self.df_z_scores.iloc[ind, :].to_frame().T[list(self.FA_label_map.values())]
+        
+        # add a scatter plot for each factors
+        for i, col in enumerate(df.columns):
+          
             self.fig.add_trace(
                 go.Scatter(
                     x=df[col],
@@ -91,7 +94,7 @@ class Visualisation:
                 name=f"{col} text",
             )
 
-        #  Add entity points in correct order
+        # #  Add entity points in correct order
         for i, col in enumerate(df_entity.columns):
             
             self.fig.add_trace(
@@ -108,6 +111,7 @@ class Visualisation:
                     name=f"{col} selected",
                 )
             )
+
 
         # show grid line x axis
         self.fig.update_xaxes(
@@ -146,6 +150,7 @@ class ClusterVisualisation:
         ind_col_map = getattr(st.session_state, "ind_col_map", None)
         FA_component_dict = getattr(st.session_state, "FA_component_dict", {})
         list_cluster_name = getattr(st.session_state, "list_cluster_name", None)
+        label_to_value = getattr(st.session_state, "label_to_value", {})
         dim_x = getattr(st.session_state, "dim_x", None)
         dim_y = getattr(st.session_state, "dim_y", None)
 
@@ -164,9 +169,17 @@ class ClusterVisualisation:
         for i in st.session_state.u_labels:
             #cluster_points = st.session_state.df[st.session_state.df['Cluster'] == i]
             cluster_points = self.df[self.df['Cluster'] == i]
-            #color=st.session_state.ind_col_map[i]
+
+        
+            point_names = cluster_points.index.tolist()
+            index_to_label = {v: k for k, v in label_to_value.items()}
+            point_labels = [index_to_label.get(idx, "Unknown") for idx in point_names]
+            custom_data = [
+                [name] for name in point_labels
+            ]
            
             hovertext=(
+                "<b> %{customdata[0]}: </b><br>" +
                 f"<b>{self.list_cluster_name[i]}</b><br>" +
                 f"{dim_x}: %{{x}}<br>" +  
                 f"{dim_y}: %{{y}}<extra></extra>"
@@ -177,8 +190,8 @@ class ClusterVisualisation:
                 y=cluster_points.loc[:, inv_map[dim_y]],
                 mode='markers',
                 marker=dict(color=st.session_state.ind_col_map[i], size = 5, opacity=0.3),
-                #name=f'Cluster {i}'
                 hovertemplate=hovertext,
+                customdata=custom_data,
                 name = self.list_cluster_name[i]
                 )
             )
@@ -213,7 +226,6 @@ class ClusterVisualisation3D:
         self.centroids = centroids  
         self.ind_col_map = ind_col_map
         self.list_cluster_name = st.session_state.list_cluster_name
-   
         self.fig = go.Figure()
         self.set_visualization_cluster3D()
 
@@ -225,6 +237,8 @@ class ClusterVisualisation3D:
         for attr in required_attributes:
             if attr not in st.session_state:
                 raise RuntimeError(f"Missing attribute: {attr}. Ensure clustering is run first.")
+        label_to_value = getattr(st.session_state, "label_to_value", {})
+        
 
 
         
@@ -238,10 +252,19 @@ class ClusterVisualisation3D:
 
         for i in st.session_state.u_labels:
             cluster_points = st.session_state.df[st.session_state.df['Cluster'] == i]
+            point_names = cluster_points.index.tolist()
+            index_to_label = {v: k for k, v in label_to_value.items()}
+            point_labels = [index_to_label.get(idx, "Unknown") for idx in point_names]
+            custom_data = [
+                [name] for name in point_labels
+            ]
+           
             hovertext=(
+                "<b> %{customdata[0]} </b><br>" +
                 f"<b>{self.list_cluster_name[i]}</b><br>" +
                 f"{dim_x}: %{{x}}<br>" +  
-                f"{dim_y}: %{{y}}<extra></extra>"
+                f"{dim_y}: %{{y}}<br>" +
+                f"{dim_z}: %{{z}}<extra></extra>"
             )
             self.fig.add_trace(
                 go.Scatter3d(
@@ -251,6 +274,7 @@ class ClusterVisualisation3D:
                 mode='markers',
                 marker=dict(color=st.session_state.ind_col_map[i], size = 5, opacity=0.3),
                 hovertemplate=hovertext,
+                 customdata=custom_data,
                 name = self.list_cluster_name[i]
                 )
             )
@@ -327,8 +351,6 @@ class DistributionPlot:
         
         dataframe = self.df_z_scores
 
-
-
         # Ensure correct order by using FA_label_map
         dataframe = dataframe[list(self.FA_label_map.values())]
         df = self.df_z_scores.iloc[0, :].to_frame().T
@@ -346,7 +368,7 @@ class DistributionPlot:
 
 
         for i, col in enumerate(dataframe.columns):
-            
+           
             self.fig.add_trace(
                 go.Violin(
                     x=dataframe[col].tolist(),
@@ -368,14 +390,13 @@ class DistributionPlot:
 
             self.fig.add_trace(
                 go.Scatter(
-                    x=df[col],
+                    x=[df[col]],
                     y=[cols[i]],
                     mode="markers", # if we want marker and text do "markers+text"
                     marker=dict(symbol="diamond", size=6, color="#9340ff"),
                     name= f"{col} selected",
                     legendgroup ="Selected entity",
                     showlegend=False,
-                    #showlegend=(i == 0),  # ensures legend is shown
                     hovertemplate= hovertext,#f"<b>{cols[i]}</b><br>Value: %{{x}}<br><extra></extra>",
                     ),
                     row=i+1,
