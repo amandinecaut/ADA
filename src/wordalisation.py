@@ -725,17 +725,23 @@ class FA(Wordalisation):
 
 
         text = ''
+
         # --- TOP FEATURES (positive loadings)
         if top_features:
-            text = "The factor is "
+            text = "The features that whould be used to name y pole of the factor x vs y are those positively associated with it. The factor is "
             descriptions = [self.describe_level_FA(value) + f"the feature that {feature}" for feature, value in zip(top_features, top_values)]
             text += ", ".join(descriptions) + ". "
-                
+        else:
+            text += "There are no features positively associated with the factor. The y pole of the factor x vs y therefore represents the absence of negatively associated features. We should describe it simply as the opposite of x. "
+        text +="\n"
+
         # --- BOTTOM FEATURES (negative loadings)
         if bottom_features:
-            text += "The factor is "
+            text = "The features that whould be used to name x pole of the factor x vs y are those negatively associated with it. The factor is "
             descriptions = [self.describe_level_FA(value) + f"the feature that {feature}" for feature, value in zip(bottom_features, bottom_values)]
             text += ", ".join(descriptions) + ". "
+        else:
+            text += "There are no features negatively associated with the factor. The x pole of the factor x vs y therefore represents the absence of positively associated features. We should describe it simply as the opposite of y. "
 
         return text
 
@@ -787,7 +793,7 @@ class FALabel(FA):
                   "I am now going to give you one last labelling task to complete. \n"
                   "Again, the name must strictly follow the form x vs y, where x is the opposite of the name y. "
                   "The name should not have a negative connotation. "
-                  "A combination of two adjectives for both x and y are preferred but if you can think of a single word for each then use that.\n"
+                  "Use either a single adjective or a combination of two adjectives for both x and y.\n"
                   "Three word descriptions for both x and y are fine as well, especially if they capture the meaning well.\n"
                   "Longer names are not allowed.\n"
                   "Output the name (in x vs y format) only. \n"
@@ -815,7 +821,7 @@ class FALabel(FA):
                 "The adjective x should be the opposite of the name y.\n"
                 "Neither of the adjectives should have a negative connotation.\n"
                 "Output the name (in x vs y format) only.\n"
-                "A combination of two adjectives for both x and y are preferred but if you can think of a single word for each then use that.\n"
+                "Use either a single adjective or a combination of two adjectives for both x and y.\n"
                 "Three word descriptions for both x and y are fine as well, especially if they capture the meaning well.\n"
                 "Longer names are not allowed.\n"
                 "I will provide you with factor descriptions and you will return the names in the format specified an nothing else. "}
