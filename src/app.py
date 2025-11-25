@@ -231,7 +231,6 @@ with tab1:
              
                 
             elif entity_name_radio == "Yes":
-                print('YES')
                 if st.session_state.ignore_cols:
                     selected_from_ignore = right_t1.selectbox(
                          f"Pick the column to use for the {st.session_state.entity_id} names",

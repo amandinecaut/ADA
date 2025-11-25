@@ -142,6 +142,7 @@ class ClusterVisualisation:
 
         u_labels = getattr(st.session_state, "u_labels", np.array([]))
         centroids = getattr(st.session_state, "centroids", None)
+       
         ind_col_map = getattr(st.session_state, "ind_col_map", None)
         FA_component_dict = getattr(st.session_state, "FA_component_dict", {})
         list_cluster_name = getattr(st.session_state, "list_cluster_name", None)
@@ -181,13 +182,12 @@ class ClusterVisualisation:
                 name = self.list_cluster_name[i]
                 )
             )
-
-        
+       
         # Plot centroids
         self.fig.add_trace(
             go.Scatter(
-            x=st.session_state.centroids[:, int(inv_map[dim_x].split()[-1])],
-            y=st.session_state.centroids[:, int(inv_map[dim_y].split()[-1])],
+            x=st.session_state.centroids[:, int(inv_map[dim_x].split()[-1]) -1],
+            y=st.session_state.centroids[:, int(inv_map[dim_y].split()[-1])-1],
             mode='markers',
             marker=dict(color='black', size=6, symbol='x'),
             name='Centroids'

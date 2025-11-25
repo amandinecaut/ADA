@@ -71,10 +71,10 @@ DATA_PATHS = {
         "map": "./data/demo_data/football/map-football.xlsx", 
         "entity": "football player"
     },
-    "Breast Cancer": {
-        "data": "./data/demo_data/breast-cancer/wdbc_data.csv",
-        "map": "./data/demo_data/breast-cancer/wdbc_map.xlsx", 
-        "entity": "patient"
+    "Mental health & social media": {
+        "data": "./data/demo_data/mental_health/mental_health_social_media_sample.csv",
+        "map": "./data/demo_data/mental_health/map.xlsx",
+        "entity": "person"
     },
     "16 Personality": {
         "data": "./data/demo_data/16_personality/16p.csv",
@@ -85,7 +85,12 @@ DATA_PATHS = {
         "data": "./data/demo_data/cardiovascular/cardio_train.csv",
         "map": "./data/demo_data/cardiovascular/cardio_map.xlsx", 
         "entity": "patient"
-    }
+    }, 
+    "Dogs Breeds": {
+        "data": "./data/demo_data/dogs/breed_traits.csv",
+        "map": "./data/demo_data/dogs/map.xlsx", 
+        "entity": "dog"
+    },
     # Add other datasets here
 }
 
@@ -302,9 +307,6 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         else:
             components = DEFAULT_FACTOR_NB
 
-
-        print(f"Number of factors: {components}")
-
         # Factor Analysis
         FA = FactorAnalysis(n_components=components)
         principalComponents = FA.fit_transform(x)
@@ -513,9 +515,9 @@ def create_QandA(text: str | None):
         QandA_text.tell_it_what_data_to_use(text)
         QandA_text.messages = QandA_text.setup_messages()
         sublist = QandA_text.stream_gpt()
-        print(sublist)
+     
         cleaned_list =  clean_qanda_list_text(sublist)
-        print(cleaned_list)
+ 
         list_QandA.append(cleaned_list)
 
     return qa_to_dataframe(list_QandA)
