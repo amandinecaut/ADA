@@ -709,9 +709,9 @@ class FA(Wordalisation):
         if not list_labels:
             self.existing_labels_text = ''
         elif len(list_labels) ==1:
-            self.existing_labels_text = "An existing name is: " + list_labels[0] + ". In this case, it is important that the name you now make is different from this name."
+            self.existing_labels_text = "An existing name is: " + list_labels[0] + ". In this case, it is important that the name you now make does not contain any of these adjectives or nouns."
         else:
-            self.existing_labels_text = "The existing names are: " + ", ".join(list_labels) + ". In this case, it is important that the name you now make is different from these names."
+            self.existing_labels_text = "The existing names are: " + ", ".join(list_labels) + ". In this case, it is important that the name you now make does not contain any of these adjectives or nouns."
         return self.existing_labels_text
     
     def description_FA(self, FA_component_dict): 
@@ -729,7 +729,7 @@ class FA(Wordalisation):
             text = "The first features we look at should primarily be used to name the x pole. "
             text += "The higher the value of the association, the more important the feature is for naming the x pole. "
             text += "Here is a list of the features and how important they are for naming the x pole: "
-            descriptions = [f"the feature that {feature} is" + self.describe_level_FA(value, 'the x pole') for feature, value in zip(bottom_features, bottom_values)]
+            descriptions = [f"the feature that {feature} is " + self.describe_level_FA(value, 'the x pole') for feature, value in zip(bottom_features, bottom_values)]
             text += ", ".join(descriptions) + ". "
         else:
             text = "There are no features primarily be used to name the x pole. "
@@ -742,12 +742,12 @@ class FA(Wordalisation):
             text += "The higher the value of the association, the more important the feature is for naming the y pole. "
             text += "Here is a list of the features and how important they are for naming the y pole: "
             descriptions = [f"the feature that {feature} is " + self.describe_level_FA(value, 'the y pole')  for feature, value in zip(top_features, top_values)]
-            text += ", ".join(descriptions) + ".\n "
+            text += ", ".join(descriptions) + "."
         else:
             text += "There are no features used to name the y pole. "
             text += "You should describe it simply as the opposite of the x pole, which you already got information about. "
-            text += "If possibble use a negation such as 'not x' to name the y pole. "
-        text +="\n"
+            text += "If possible use a negation such as 'not x' to name the y pole. "
+
 
         return text
 
@@ -796,13 +796,15 @@ class FALabel(FA):
     def get_prompt_messages(self):
 
         prompt = ("Those were really good. Exactly what I am looking for. \n"
+                  "Make sure you continue to use the same format and style in the next example. \n"
                   "I am now going to give you one last labelling task to complete. \n"
-                  "Again, the name must strictly follow the form x vs y, where x is the opposite of the name y. "
+                  "Again, the name must strictly follow the form x vs y. "
                   "The name should not have a negative connotation. "
-                  "Use either a single adjective or a combination of two adjectives for both x and y.\n"
-                  "Three word descriptions for both x and y are fine as well, especially if they capture the meaning well.\n"
+                  "x should consist of two adjectives or descriptive nouns, as should y. Only ever use single words if they describe less than three features.\n"
+                  "Two adjectives coupled by ´and´ or ´but´ for both x and y are fine as well, especially if they capture the meaning well.\n"
+                  "Look carefully at the previous answers you gave and make sure to use similar number of words and format.\n"
                   "Longer names are not allowed.\n"
-                  "Output the name in x vs y format only. \n"
+                  "Output the name in x vs y format only. We refer to x in this format as the x pole and y as the y pole.\n"
         )
         if self.existing_labels_text != "": 
             prompt += f"{self.existing_labels_text}\n"
@@ -822,14 +824,12 @@ class FALabel(FA):
             "role": "user",
             "content":"You are now going to name the factors that come from some factor analyses.\n"
                 "The name must strictly follow the format: 'negative vs positive' association.\n"
-                "Specifically, the name should be of the form x vs y, where x is one adjective that is "
-                "negatively associated with the features and y is one adjective that is positively associated with the features.\n"
-                "The adjective x should be the opposite of the name y.\n"
+                "Specifically, the name should be of the form x vs y, where x is  "
+                "negatively associated with the features and y is positively associated with the features.\n"
                 "Neither of the adjectives should have a negative connotation.\n"
-                "Output the name (in x vs y format) only.\n"
-                "Use either a single adjective or a combination of two adjectives for both x and y.\n"
-                "Three word descriptions for both x and y are fine as well, especially if they capture the meaning well.\n"
-                "Longer names are not allowed.\n"
+                "Output the name (in x vs y format) only. We refer to x in this format as the x pole and y as the y pole.\n"
+                "x should consist of two adjectives or descriptive nouns, as should y. Only ever use single words if they don't describe many features.\n"
+                "Two adjectives coupled by ´and´ or ´but´ for both x and y are fine as well, especially if they capture the meaning well.\n"
                 "I will provide you with factor descriptions and you will return the names in the format specified an nothing else. "}
             , 
             {"role": "assistant",
@@ -878,7 +878,7 @@ class QandAWordalisation(FA):
                     "identifying key underlying factors that explain the observed correlations among various features about those entities. \n"
                     "In each case, you have identified which factors are negatively and positively associated with specific features and how strong that association is. \n"
                     "You have also given a name to the factors resulting from a factor analysis. \n"
-                    "The names have the form x vs y, where x is the opposite of the name y. \n"
+                    "The names have the form x vs y. \n"
                     "Now, for each case, you are going to generate a short summary of factors based on the description provided.\n" 
                     "Be very careful to only use the information provided in the description to generate the summaries. Do not add properties that are not described. \n"
                     "If there is no information about the pole you are asked to summarise, simply describe it in terms of its opposite. \n"
@@ -897,12 +897,14 @@ class QandAWordalisation(FA):
     def get_prompt_messages(self):
         prompt = (
             "Those were really good. Exactly what I am looking for.\n"
+            "Make sure you continue to use the same format and style in the next example. \n"
             "Now, I am now going to give you one last task to complete. \n"
             f"I will give you, firstly, a name of a factor in the form {self.wholefactor}. \n" \
             f"Second, I will give you a description of {self.wholefactor} in terms of the features of a given {self.entity}.\n"
-            f"Your task is to write a two sentence summary explaining how we should interpret {self.factor}.\n"
-            f"The first sentence should explain what it means to be {self.factor}.\n"
-            f"The second sentence should contrast it with being the opposite of {self.factor}.\n"
+            f"Your task is to write a one or two sentence summary explaining how we should interpret {self.factor}.\n"
+            f"The sentences should explain what it means to be {self.factor}. \n"
+            "If there are only one or two features associated with the pole you are asked to summarise, write one sentence summarising them. \n"
+            "If there are three or more features associated with the pole you are asked to summarise, combine them over two sentences. \n"
             "The summary should be easy to understand for someone not familiar with factor analysis and not mention any technical terms.\n"
             "It should be lively and engaging. Give life to the description.\n"
             "Be very careful to only use the information provided in the description to generate the summaries. Do not add properties that are not described. \n"
@@ -950,12 +952,12 @@ class QandAWordalisation(FA):
             "role": "user",
             "content": (
                     "Let's now try some examples of your task. I will now provide you with two things.\n"
-                    "First, a name of a factor in the form x vs y, where adjective x is the opposite of the adjective y. \n" \
+                    "First, a name of a factor in the form x vs y. \n" \
                     "Second, a description of the factor in terms of the features of a given entity.\n"
-                    "Your task is to write a two sentence summary explaining how we should interpret either x or y.\n"
+                    "Your task is to write a one or two sentence summary explaining how we should interpret either x or y.\n"
                     "Sometimes you will be asked to explain x, other times y.\n"
-                    "The first sentence should explain what it means to possess the adjective in question.\n"
-                    "The second sentence should contrast it with its opposite.\n"
+                    "If there are only one or two features associated with the pole you are asked to summarise, write one sentence summarising them. \n"
+                    "If there are three or more features associated with the pole you are asked to summarise, combine them over two sentences. \n"
                     "The summary should be easy to understand for someone not familiar with factor analysis and not mention any technical terms.\n"
                     "It should be lively and engaging. Give life to the description.\n"
                  )}, 
