@@ -64,6 +64,12 @@ class Cluster:
             description = self.desc.stream_gpt() 
             list_description_cluster.append(description)
 
+            # Convert to DataFrame and save it
+            df = pd.DataFrame(self.desc.messages)
+            new_row = pd.DataFrame([{'role': 'assistant', 'content': description}])
+            df = pd.concat([df, new_row], ignore_index=True)
+            df.to_excel(f"messages_{center}.xlsx", index=False)
+
         return list_description_cluster
         
     def name_the_cluster(self, list_description_cluster):

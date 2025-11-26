@@ -572,7 +572,7 @@ with tab3:
                 if fig_cluster3d is not None and fig_cluster3d.data:
                     right_t3.plotly_chart(fig_cluster3d, use_container_width=True, theme="streamlit")
 
-            st.session_state.tab3_done = True
+            #st.session_state.tab3_done = True
 
         # Cluster description section
         with right_t3:

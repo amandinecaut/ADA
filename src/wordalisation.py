@@ -162,11 +162,7 @@ class Wordalisation(ABC):
         MH = ModelHandler()
         answer = MH.get_generate(msgs, 150)
 
-        # Convert to DataFrame and save it
-        #df = pd.DataFrame(self.messages)
-        #df['role'] = 
-        #df.to_excel("messages_test.xlsx", index=False)
-       
+        
 
         return answer
 
@@ -474,7 +470,8 @@ class ClusterWordalisation(Wordalisation):
             {
                 "role": "system",
                 "content": (
-                    "You are a data analyst and you did a factor analysis, then a clustering. \n"
+                    "You are a leading data scientist who specialises in explanatory data analysis. \n"
+                    "You did a factor analysis, then a clustering. \n"
                     "You are task is to describe some clusters given the provided informations. \n"
                     "You will get a description of each cluster based on the latent factors. \n"
                     "First, you will be provided with a set of questions and answers that give you the necessary informations on each factors."
@@ -609,8 +606,14 @@ class Clusterlabel(Wordalisation):
                 "role": "system",
                 "content": (
                     "You are a data analyst. \n"
-                    "You are going to label clusters. \n"
+                    "You are going to give a name to each cluster. \n"
                     "First, you will be provided with a set of questions and answers that give you the necessary context."
+                ),
+            },
+            {                
+                "role": "assistant",
+                "content": (    
+                    "Understood. I will follow your instructions to name the cluster based on their associations."
                 ),
             }
         ]
