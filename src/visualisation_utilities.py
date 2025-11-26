@@ -31,7 +31,6 @@ def wrap_text(text, max_len=15):
 class Visualisation:
     def __init__(self, df_FA, FA_label_map):
 
-        # print("creating visualization")
         cols = [k for k in FA_label_map.keys()]
         self.df_FA = df_FA[cols]
         self.FA_label_map = FA_label_map
@@ -207,7 +206,13 @@ class ClusterVisualisation:
         ))
         
         # Update layout
-    
+        # Axis ranges
+        x_min = self.df[inv_map[dim_x]].min()
+        x_max = self.df[inv_map[dim_x]].max()
+        y_min = self.df[inv_map[dim_y]].min()
+        y_max = self.df[inv_map[dim_y]].max()
+
+
         self.fig.update_layout(
             title='K-Means Clustering Visualization',
             xaxis_title= dim_x,
@@ -215,7 +220,9 @@ class ClusterVisualisation:
             legend_title='Clusters',
             width=900,
             height=900,
-            legend= {'itemsizing': 'constant'}
+            legend= {'itemsizing': 'constant'},
+            xaxis=dict(range=[x_min, x_max]),
+            yaxis=dict(range=[y_min, y_max])
         )
 
 class ClusterVisualisation3D:
