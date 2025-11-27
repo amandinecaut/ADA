@@ -526,8 +526,8 @@ class ClusterWordalisation(Wordalisation):
             "You will receive information about the cluster based on the latent factors that best describe it.\n"
             "For each cluster, write a concise summary based on the available information.\n"
             "The first sentence should give an overview of the cluster. \n"
-            "The second sentence should describe the cluster’s specific strengths based on the available information.\n"
-            "The third sentence should highlight areas where the cluster has specific weaknesses based on the available information.\n"
+            "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
+            "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
             f"Now do the same thing with the following: ```{self.synthetic_text}```"
         )
         
@@ -588,8 +588,8 @@ class ClusterWordalisation(Wordalisation):
                 "You will receive information about the cluster based on the latent factors that best describe it.\n"
                 "For each cluster, write a concise summary based on the available information.\n"
                 "The first sentence should give an overview of the cluster. \n"
-                "The second sentence should describe the cluster’s specific strengths based on the available information.\n"
-                "The third sentence should highlight areas where the cluster has specific weaknesses based on the available information.\n"
+                "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
+                "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
                 "I will provided with 4 differents cluster analysis that you have done on different datasets. Use those examples to give a description of the same style for the new analysis. "
             )   
             },
