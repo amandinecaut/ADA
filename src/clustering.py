@@ -57,7 +57,8 @@ class Cluster:
     def get_description_cluster_list(self, centroids):
       
         list_description_cluster = []
-        for center in centroids:
+        for i,center in enumerate(centroids):
+
             self.desc.tell_it_what_data_to_use(center)
             self.desc.messages = self.desc.setup_messages()
           
@@ -65,10 +66,10 @@ class Cluster:
             list_description_cluster.append(description)
 
             # Convert to DataFrame and save it
-            df = pd.DataFrame(self.desc.messages)
-            new_row = pd.DataFrame([{'role': 'assistant', 'content': description}])
-            df = pd.concat([df, new_row], ignore_index=True)
-            df.to_excel(f"messages_{center}.xlsx", index=False)
+           # df = pd.DataFrame(self.desc.messages)
+            #new_row = pd.DataFrame([{'role': 'assistant', 'content': description}])
+            #df = pd.concat([df, new_row], ignore_index=True)
+            #df.to_excel(f"./stream_history/messages_{i}.xlsx", index=False)
 
         return list_description_cluster
         

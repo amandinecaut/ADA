@@ -458,6 +458,37 @@ class ClusterWordalisation(Wordalisation):
 
         return text1, text2
 
+    def get_messages(self,paths):
+        
+        # Handle list and str paths arg
+        if isinstance(paths, str):
+            paths = [paths]
+        elif len(paths) == 0:
+            return []
+
+        _, ext = os.path.splitext(paths[0])
+        ext = ext.lower()
+        if ext in [".xls", ".xlsx"]:
+            df = pd.read_excel(paths[0])
+            for path in paths[1:]:
+                df = pd.concat([df, pd.read_excel(path)])
+        else:
+            raise ValueError(f"Unsupported file extension: {ext}")
+
+
+        if df.empty:
+            return []
+
+        # Convert to list of dicts
+        messages = []
+        for i, row in df.iterrows():
+            if i == 0:
+                messages.append({"role": "system", "content": row["Assistant"]})
+            else:
+                messages.append({"role": row["User"], "content": row["Assistant"] })
+            
+
+        return messages
 
     def tell_it_who_it_is(self) -> List[Dict[str, str]]:
         """
@@ -471,8 +502,8 @@ class ClusterWordalisation(Wordalisation):
                 "role": "system",
                 "content": (
                     "You are a leading data scientist who specialises in explanatory data analysis. \n"
-                    "You did a factor analysis, then a clustering. \n"
-                    "You are task is to describe some clusters given the provided informations. \n"
+                    "You conducted a factor analysis, then performed k-means clustering on the factors extracted from that analysis. \n"
+                    "Your task now is to describe the clusters you obtained based on the information provided. \n"
                     "You will get a description of each cluster based on the latent factors. \n"
                     "First, you will be provided with a set of questions and answers that give you the necessary informations on each factors."
                 ),
@@ -489,7 +520,9 @@ class ClusterWordalisation(Wordalisation):
 
     def get_prompt_messages(self):
         prompt = (
-            "Now your task is to provide a description of a cluster.\n"
+            "Now, go back to your own cluster analysis. Your task is to provide a description of a cluster.\n"
+            "Make sure you continue to use the same format and style from the examples. \n"
+            "I am now going to give you one last description task to complete. \n"
             "You will receive information about the cluster based on the latent factors that best describe it.\n"
             "For each cluster, write a concise summary based on the available information.\n"
             "The first sentence should give an overview of the cluster. \n"
@@ -537,8 +570,7 @@ class ClusterWordalisation(Wordalisation):
         # ---- Tell it who it is ----
         messages = self.tell_it_who_it_is()
 
-        # ---- Tell it what it knows ----
-        #messages += self.get_messages_from_excel([f"{self.describe_base}/generate/tell_it_what_it_knows.csv"])
+        # ---- Tell it what it knows ----   
         # --- Load QandA ---
         try:
             tell_it_what_it_knows_paths = self.tell_it_what_it_knows
@@ -558,20 +590,30 @@ class ClusterWordalisation(Wordalisation):
                 "The first sentence should give an overview of the cluster. \n"
                 "The second sentence should describe the cluster’s specific strengths based on the available information.\n"
                 "The third sentence should highlight areas where the cluster has specific weaknesses based on the available information.\n"
-                "I will provided you with the cluster description and you will return the summary. "
+                "I will provided with 4 differents cluster analysis that you have done on different datasets. Use those examples to give a description of the same style for the new analysis. "
             )   
             },
             {"role": "assistant",
-            "content": "Understood. Please provide the cluster descriptions."
-            }]
+            "content": "Understood. Please provide the first analysis."
+            },
+            {"role": "user",
+            "content": "This is an analysis that you have done on the dog dataset."
+            }
+            ]
+        messages += self.get_messages('./data/describe/input_cluster/messages_dog.xlsx')
+        messages += [{"role": "user","content": "This is an analysis that you have done on the world value survey dataset."}]
+        messages += self.get_messages('./data/describe/input_cluster/messages_country.xlsx')
+        messages += [{"role": "user","content": "This is an analysis that you have done on the football player dataset."}]
+        messages += self.get_messages('./data/describe/input_cluster/messages_foot.xlsx')
+        messages += [{"role": "user","content": "This is an analysis that you have done on the big five personality test dataset."}]
+        messages += self.get_messages('./data/describe/input_cluster/messages_personality.xlsx')
 
-
-        try:
-            example_paths = self.tell_it_how_to_answer
-            messages += self.get_messages_from_excel(example_paths)
-        except FileNotFoundError as e:
-            # FIXME: When merging with new_training, add the other exception type
-            print(f"Example paths file not found: {e}")
+        #try:
+        #    example_paths = self.tell_it_how_to_answer
+        #    messages += self.get_messages_from_excel(example_paths)
+        #except FileNotFoundError as e:
+        #    # FIXME: When merging with new_training, add the other exception type
+        #    print(f"Example paths file not found: {e}")
         
         # ---- Tell it what data to use ----
         # --- Add prompt messages ---
@@ -605,15 +647,19 @@ class Clusterlabel(Wordalisation):
             {
                 "role": "system",
                 "content": (
-                    "You are a data analyst. \n"
-                    "You are going to give a name to each cluster. \n"
-                    "First, you will be provided with a set of questions and answers that give you the necessary context."
+                    "You are a leading data scientist who specialises in explanatory data analysis. \n"
+                    "You have recently conducted factor analyses that allows you to summarise various entities, "
+                    "identifying key underlying factors that explain the observed correlations among various features about those entities. \n"
+                    "You then performed k-means clustering on the factors extracted from those analyses, grouping the entities based on shared characteristics. \n"
+                    "Your task now is to label the clusters you obtained based on the information provided. \n"
+                    "First, you will be provided with a set of questions and answers that give you the necessary context regarding each factors. \n"
+                    "You need to use this information to understand the characteristics of each cluster, and use it to label the cluster. \n"
                 ),
             },
             {                
                 "role": "assistant",
                 "content": (    
-                    "Understood. I will follow your instructions to name the cluster based on their associations."
+                    "Understood. I will follow your instructions to label the cluster based on their associations."
                 ),
             }
         ]
@@ -622,13 +668,20 @@ class Clusterlabel(Wordalisation):
 
     def get_prompt_messages(self):
         prompt = (
-            "Generate a short label for the clusters.\n" 
-            "The label is maximum 2 words.\n" 
-            "The label must have a positive or neutral connotation. The label should not have negative connotation.\n" 
-            "Output a label only — nothing else.\n"
-            f"{self.existing_labels_text}\n"
-            f"Now do the same thing with the following: ```{self.synthetic_text}```"
+                "Those were really good. Exactly what I am looking for. \n"
+                "Make sure you continue to use the same format and style in the next example. \n"
+                "I am now going to give you one last labelling task to complete. \n"
+                "Again, your task is to generate a short label for the clusters.\n"
+                "The cluster label must be short, with maximum two words.\n" 
+                "The label must have a positive or neutral connotation. The label should not have negative connotation.\n" 
+                "Output a label only — nothing else.\n"
+        
         )
+        if self.existing_labels_text != '':
+            prompt +=f"{self.existing_labels_text}\n"
+        
+        prompt += f"Now do the same thing with the following: ```{self.synthetic_text}```"
+        
         
         return [{"role": "user", "content": prompt}]
     
@@ -662,10 +715,9 @@ class Clusterlabel(Wordalisation):
         messages += [{
             "role": "user",
             "content": (
-                "Generate a short label for the clusters.\n" 
-                "The label is maximum 2 words.\n" 
+                "Great, now your task is to generate a short label for the clusters.\n"
+                "The cluster label must be short, with maximum two words.\n" 
                 "The label must have a positive or neutral connotation. The label should not have negative connotation.\n" 
-                "The label must be different from previous labels.\n"
                 "Output a label only — nothing else.\n"
                 "I will provide you with cluster descriptions and you will return the label in the format specified an nothing else. "
             )}, 

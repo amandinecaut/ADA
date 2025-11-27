@@ -408,7 +408,7 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         st.session_state.FA_component_dict = FA_component_dict
         
         st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
-
+        st.session_state.df_original = st.session_state.df.copy()
         vis = DistributionPlot(
             st.session_state.df,
             {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
@@ -637,20 +637,20 @@ def find_optimal_k_elbow(X, k_min=1, k_max=10, random_state=42):
 def perform_clustering(num_clusters = DEFAULT_NUM_CLUSTERS):
     num_clusters = st.session_state.get("num_clusters", DEFAULT_NUM_CLUSTERS)
     
-    #if "Cluster" in st.session_state.df.columns:
-    #    st.session_state.df.drop(columns=["Cluster"], inplace=True)
+    st.session_state.df = st.session_state.df_original.copy()
+
+    df_copy = st.session_state.df.copy()  
 
     cluster = Cluster(
-        st.session_state.df,
+        df_copy,
         {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
         num_clusters,
     )
-    (
-        st.session_state.u_labels,
-        st.session_state.centroids,
-        st.session_state.ind_col_map,
-    ) = (cluster.u_labels, cluster.centroids, cluster.ind_col_map)
-    st.session_state.df = cluster.df
+
+    st.session_state.u_labels = cluster.u_labels
+    st.session_state.centroids = cluster.centroids
+    st.session_state.ind_col_map = cluster.ind_col_map
+    st.session_state.df = df_copy
 
 # Cluster visualisation utilities
 def update_fig_cluster():
