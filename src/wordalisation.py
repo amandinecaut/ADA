@@ -321,12 +321,12 @@ class CreateWordalisation(Wordalisation):
         prompt = (
             f"You will describe a specific {self.entity_id} based on its statistical description and informative description.\n"
             f"{self.get_description_cluster_entity()}\n"
-            f"Please use the statistical description enclosed with ``` to give a concise, four sentence summary of the {self.entity_id}. \n"
+            f"Please use the statistical description enclosed with ``` ´´´ to give a concise, four sentence summary of the {self.entity_id}. \n"
             f"The first sentence should use varied language to give an overview of the {self.entity_id}. \n"
             f"The second sentence should describe the {self.entity_id}'s specific strengths based on the metrics. \n"
             f"The third sentence should describe aspects in which the {self.entity_id} is average and/or weak based on the statistics. \n"
             f"Finally, summarize the {self.entity_id} with a single concluding statement. \n" 
-            f"Here is the statistical description of the {self.entity_id}: ```{self.synthetic_text}```"
+            f"Here is the statistical description of the {self.entity_id}: ```{self.synthetic_text}´´´"
         )
         return [{"role": "user", "content": prompt}]
 
@@ -504,14 +504,13 @@ class ClusterWordalisation(Wordalisation):
                     "You are a leading data scientist who specialises in explanatory data analysis. \n"
                     "You conducted a factor analysis, then performed k-means clustering on the factors extracted from that analysis. \n"
                     "Your task now is to describe the clusters you obtained based on the information provided. \n"
-                    "You will get a description of each cluster based on the latent factors. \n"
-                    "First, you will be provided with a set of questions and answers that give you the necessary informations on each factors."
+                    "First, you will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings. "
                 ),
             },
             {
                 "role": "assistant",
                 "content": (    
-                    "Understood. I will follow your instructions to describe the clusters based on the provided information."
+                    "Understood.  Please provide the first question."
                 ),
             }
         ]
@@ -528,7 +527,7 @@ class ClusterWordalisation(Wordalisation):
             "The first sentence should give an overview of the cluster. \n"
             "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
             "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
-            f"Now do the same thing with the following: ```{self.synthetic_text}```"
+            f"Now do the same thing with the following: ```{self.synthetic_text}´´´"
         )
         
         return [{"role": "user", "content": prompt}]
@@ -591,13 +590,8 @@ class ClusterWordalisation(Wordalisation):
                 "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
                 "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
                 "I will provided with 4 differents cluster analysis that you have done on different datasets. Use those examples to give a description of the same style for the new analysis. "
+                "The first one is an analysis that you have done on the dog dataset."
             )   
-            },
-            {"role": "assistant",
-            "content": "Understood. Please provide the first analysis."
-            },
-            {"role": "user",
-            "content": "This is an analysis that you have done on the dog dataset."
             }
             ]
         messages += self.get_messages('./data/describe/input_cluster/messages_dog.xlsx')
@@ -652,14 +646,14 @@ class Clusterlabel(Wordalisation):
                     "identifying key underlying factors that explain the observed correlations among various features about those entities. \n"
                     "You then performed k-means clustering on the factors extracted from those analyses, grouping the entities based on shared characteristics. \n"
                     "Your task now is to label the clusters you obtained based on the information provided. \n"
-                    "First, you will be provided with a set of questions and answers that give you the necessary context regarding each factors. \n"
                     "You need to use this information to understand the characteristics of each cluster, and use it to label the cluster. \n"
+                    "First, you will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings."
                 ),
             },
             {                
                 "role": "assistant",
                 "content": (    
-                    "Understood. I will follow your instructions to label the cluster based on their associations."
+                    "Understood. Please provide the first question."
                 ),
             }
         ]
@@ -680,7 +674,7 @@ class Clusterlabel(Wordalisation):
         if self.existing_labels_text != '':
             prompt +=f"{self.existing_labels_text}\n"
         
-        prompt += f"Now do the same thing with the following: ```{self.synthetic_text}```"
+        prompt += f"Now do the same thing with the following: ```{self.synthetic_text}´´´"
         
         
         return [{"role": "user", "content": prompt}]
@@ -864,7 +858,7 @@ class FALabel(FA):
         if self.existing_labels_text != "": 
             prompt += f"{self.existing_labels_text}\n"
 
-        prompt += f"Here is the factor description in terms of the features of a {self.entity_id}: ```{self.synthetic_text}```"
+        prompt += f"Here is the factor description in terms of the features of a {self.entity_id}: ```{self.synthetic_text}´´´"
         
         return [{"role": "user", "content": prompt}]
 
@@ -1079,7 +1073,7 @@ class QandAWordalisation_from_text(Wordalisation):
             "You deduce question and answer pairs about that text."
             "The questions should be about the text, and the answers should explain them. "
             "The questions should be simple and the answers should be easy to understand."
-            f"Now do the same thing with the following: ```{self.synthetic_text}```"
+            f"Now do the same thing with the following: ```{self.synthetic_text}´´´"
         )
         
         return [{"role": "user", "content": prompt}]
