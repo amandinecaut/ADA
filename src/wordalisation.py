@@ -583,17 +583,22 @@ class ClusterWordalisation(Wordalisation):
         messages += [{
             "role": "user",
             "content": (
-                "Now your task is to provide a description of a cluster.\n"
-                "You will receive information about the cluster based on the latent factors that best describe it.\n"
-                "For each cluster, write a concise summary based on the available information.\n"
+                "Thats really good. You truly understand the factors and names."
+                "Now your task is to provide a description of a cluster based on how strongly each of the factors describe it.\n"
+                "The description should be three sentences long."
                 "The first sentence should give an overview of the cluster. \n"
                 "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
                 "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
+                "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging."
                 "I will provided with 4 differents cluster analysis that you have done on different datasets. Use those examples to give a description of the same style for the new analysis. "
                 "The first one is an analysis that you have done on the dog dataset."
             )   
             }
             ]
+
+ 
+
+
         messages += self.get_messages('./data/describe/input_cluster/messages_dog.xlsx')
         messages += [{"role": "user","content": "This is an analysis that you have done on the world value survey dataset."}]
         messages += self.get_messages('./data/describe/input_cluster/messages_country.xlsx')
