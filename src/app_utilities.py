@@ -597,27 +597,7 @@ def clean_QandA(QandA):
 ### ---- Clustering tab utilities ---- ###
 
 # Find optimal number of clusters
-def find_optimal_k_elbow(X, k_min=1, k_max=10, random_state=42):
-    """
-    Determines the optimal number of clusters (k) using the Elbow Method.
-    
-       Parameters
-    ----------
-     X : array-like, shape (n_samples, n_features)
-        The input data for clustering.
-    k_min : int, optional (default=1)
-        The minimum number of clusters to test.
-    k_max : int, optional (default=10)
-        The maximum number of clusters to test.
-    random_state : int, optional (default=42)
-        Random state for reproducibility.
-
-    Returns
-    -------
-    optimal_k : int
-        The estimated optimal number of clusters.
-    """
-
+def find_optimal_k_elbow(X, k_min=1, k_max=15, random_state=42):
     inertias = []
     Ks = range(k_min, k_max + 1)
 
