@@ -406,25 +406,25 @@ class CreateWordalisation(Wordalisation):
             ]
    
 
-        messages += self.get_messages_from_excel('./data/describe/input_final_summary/messages_dog.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_dog.xlsx')
 
         messages += [{"role": "user",
                     "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
                                 "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
                     }]
-        messages += self.get_messages_from_excel('./data/describe/input_final_summary/messages_country.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_country.xlsx')
 
         messages += [{"role": "user",
                     "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
                                 "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
                     }]
-        messages += self.get_messages_from_excel('./data/describe/input_final_summary/messages_foot.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_foot.xlsx')
 
         messages += [{"role": "user",
                     "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset..\n"
                                 "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
                     }]
-        messages += self.get_messages_from_excel('./data/describe/input_final_summary/messages_personality.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_personality.xlsx')
 
         # try:
         #     example_paths = self.tell_it_how_to_answer
@@ -592,25 +592,25 @@ class ClusterWordalisation(Wordalisation):
             }
             ]
 
-        messages += self.get_messages_from_excel('./data/describe/input_cluster/messages_dog.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_dog.xlsx')
 
         messages += [{"role": "user",
                     "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
                                 "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
                     }]
-        messages += self.get_messages_from_excel('./data/describe/input_cluster/messages_country.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_country.xlsx')
 
         messages += [{"role": "user",
                     "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
                                 "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
                     }]
-        messages += self.get_messages_from_excel('./data/describe/input_cluster/messages_foot.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_foot.xlsx')
 
         messages += [{"role": "user",
                     "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset..\n"
                                 "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
                     }]
-        messages += self.get_messages_from_excel('./data/describe/input_cluster/messages_personality.xlsx')
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_personality.xlsx')
 
         #try:
         #    example_paths = self.tell_it_how_to_answer
