@@ -171,7 +171,7 @@ This approach has some weaknesses, including relaying on the LLM to generate acc
 
 ## Prompt architecture
 
-![wordalisation architecture](prompt card/img/wordalisation_architecture.png)
+![wordalisation architecture](https://github.com/amandinecaut/ADA/tree/main/prompt%20card/img/wordalisation_architecture.png)
 
 ## Ethical considerations
 
