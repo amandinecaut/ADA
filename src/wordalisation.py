@@ -587,7 +587,7 @@ class ClusterWordalisation(Wordalisation):
                 "I will provided with 4 differents cluster analysis that you have done on different datasets. You will be provided background informations first on each dataset.\n"
                 "Use those examples to give a description of the same style for the new analysis.\n"
                 "The first one is an analysis that you have done on the dog dataset. \n"
-                "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." 
+                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." 
             )   
             }
             ]
@@ -753,7 +753,6 @@ class FA(Wordalisation):
 
     def describe_level_FA(self, value,text):
         thresholds=[0.30, 0.49, 0.59, 0.70]
-
 
         words = [
         f"very weakly associated with {text} ",  
