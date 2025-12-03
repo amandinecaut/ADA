@@ -131,6 +131,8 @@ class Visualisation:
 class ClusterVisualisation:
     def __init__(self, df, FA_label_map, u_labels, centroids, ind_col_map):
         self.df = df
+        if len(self.df) > 100:
+            self.df = self.df.sample(n=100, random_state=42)
         self.FA_label_map = FA_label_map
         self.u_labels = u_labels
         self.centroids = centroids  

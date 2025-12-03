@@ -208,10 +208,18 @@ class CreateWordalisation(Wordalisation):
             {
                 "role": "system",
                 "content": (
-                    "You are an expert in interpreting and summarizing the results of complex statistical analyses. \n"
-                    f"You have recently conducted a factor analysis in which you classified a set of {self.entity_id}, in multiple dimensions and grouped them based on shared characteristics. \n"
-                    f"Your current task is to describe a specific {self.entity_id} in the context of this classification. \n"
-                    "Before doing so, you will answer a series of questions related to the underlying scales and clusters."
+                    "You are an expert in interpreting and summarizing the results of complex statistical analysis. \n"
+                    "You have recently conducted factor analysis, then a cluster analysis that allows you to summarise various entities. \n"
+                    "You will be provided previous analysis on different datasets.\n"
+                    "These examples illustrate the type of language you use and how you summarise your current analysis in terms of scales and clusters.\n"
+                    "For each summary, provide a concise four sentence summary.\n"
+                    "The first sentence should use varied language to give an overview of the entity. \n"
+                    "The second sentence should describe the entity's specific strengths based on the metrics. \n"
+                    "The third sentence should describe aspects in which the entity is average and/or weak based on the statistics. \n"
+                    "Finally, summarise the entity with a single concluding statement. \n" 
+                    "You use those summary to learn how to answer similar prompts. \n"
+                    "The first one is an analysis that you have done on the dog dataset.\n"
+                    "You will be answer a set of questions to show that you have really understood each of the factors names and meanings."  
                 ),
             }
         ]
@@ -328,6 +336,7 @@ class CreateWordalisation(Wordalisation):
             f"Here is the statistical description of the {self.entity_id}: ```{self.synthetic_text}´´´ \n"
             f"Here is the informative description of {self.article} {self.entity_id} belongs to: ```{self.get_description_cluster_entity()}´´´"
         )
+
         return [{"role": "user", "content": prompt}]
 
     def tell_it_what_it_knows_cluster(self):
@@ -352,7 +361,7 @@ class CreateWordalisation(Wordalisation):
             messages.extend([
                 {
                     "role": "user",
-                    "content": f"What is the cluster '{name}' about?"
+                    "content": f"What does it mean for {self.article} {self.entity_id} to be '{name}'?"
                 },
                 {
                     "role": "assistant",
@@ -366,9 +375,43 @@ class CreateWordalisation(Wordalisation):
 
     def setup_messages(self) -> List[Dict[str, str]]:
         """Builds and returns a list of chat messages for model input."""
+
+         # --- Tell it who it is ---
         messages = self.tell_it_who_it_is()
 
+        # --- Load few-shots examples  ---
+
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_dog.xlsx')
+
+        messages += [{"role": "user",
+                    "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
+                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    }]
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_country.xlsx')
+
+        messages += [{"role": "user",
+                    "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
+                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    }]
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_foot.xlsx')
+
+        messages += [{"role": "user",
+                    "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset..\n"
+                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    }]
+        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_personality.xlsx')
+
         # --- Load QandA ---
+
+        messages += [{"role": "user",
+                    "content": ("Now let's move on to your own analysis. \n"
+                                f"You have recently conducted a factor analysis, then a cluster analysis in which you classified a set of {self.entity_id}, in multiple dimensions and grouped them based on shared characteristics. \n"
+                                f"Your current task is to describe a specific {self.entity_id} in the context of this classification. \n"
+                                "Before doing so, you will answer a series of questions related to the underlying scales and clusters.")
+                    },
+                    {"role": "assistant",
+                    "content": ("Understood! Please provide the first question.")
+                    }]
         try:
             tell_it_what_it_knows_paths = self.tell_it_what_it_knows
             messages += self.get_messages_from_excel(tell_it_what_it_knows_paths)
@@ -381,57 +424,10 @@ class CreateWordalisation(Wordalisation):
         
 
         # --- Filter out non-string content ---
-        messages = [m for m in messages if isinstance(m.get("content"), str)]
+        #messages = [m for m in messages if isinstance(m.get("content"), str)]
 
-        # --- Load few-shots examples  ---
-        messages += [{
-            "role": "user",
-            "content": (
-                "Great! Exactly what I was looking for.\n"
-                f"Now, your task is to summarize a specific {self.entity_id}.\n"
-                f"You will be provided with descriptions of {self.entity_id} from previous analyses on different datasets.\n"
-                f"These examples illustrate the type of language you use and how you describe {self.entity_id} in terms of scales and clusters.\n"
-                f"For each {self.entity_id}, provide a concise four sentence summary.\n"
-                f"The first sentence should use varied language to give an overview of the {self.entity_id}. \n"
-                f"The second sentence should describe the {self.entity_id}'s specific strengths based on the metrics. \n"
-                f"The third sentence should describe aspects in which the {self.entity_id} is average and/or weak based on the statistics. \n"
-                f"Finally, summarize the {self.entity_id} with a single concluding statement. \n" 
-                "You use those descriptions to learn how to answer similar prompts. \n"
-                "The first one is an analysis that you have done on the dog dataset." 
-            )
-            }, 
-            {"role": "assistant",
-            "content": "Understood. Please provide the first analysis"
-            }
-            ]
-   
+        
 
-        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_dog.xlsx')
-
-        messages += [{"role": "user",
-                    "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
-                                "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
-                    }]
-        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_country.xlsx')
-
-        messages += [{"role": "user",
-                    "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
-                                "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
-                    }]
-        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_foot.xlsx')
-
-        messages += [{"role": "user",
-                    "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset..\n"
-                                "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
-                    }]
-        messages += self.get_messages_from_excel('./data/describe/few_shot/final_summary/messages_personality.xlsx')
-
-        # try:
-        #     example_paths = self.tell_it_how_to_answer
-        #     messages += self.get_messages_from_excel(example_paths)
-        # except FileNotFoundError as e:
-        #     # FIXME: When merging with new_training, add the other exception type
-        #     print(f"Example paths file not found: {e}")
 
         # --- Add prompt messages ---
         messages += self.get_prompt_messages()
@@ -497,14 +493,23 @@ class ClusterWordalisation(Wordalisation):
                 "content": (
                     "You are a leading data scientist who specialises in explanatory data analysis. \n"
                     "You conducted a factor analysis, then performed k-means clustering on the factors extracted from that analysis. \n"
-                    "Your task now is to describe the clusters you obtained based on the information provided. \n"
-                    "First, you will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings. "
+                    "Your task is to provide a description of a cluster based on how strongly each of the factors describe it.\n"
+                    "The description should be three sentences long. \n"
+                    "The first sentence should give an overview of the cluster. \n"
+                    "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
+                    "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
+                    "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
+                    "I will provided with 4 differents cluster analysis that you have done on different datasets. You will be provided background informations first on each dataset.\n"
+                    "Use those examples to give a description of the same style for the new analysis.\n"
+                    "The first one is an analysis that you have done on the dog dataset. \n"
+                    "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." 
+                    
                 ),
             },
             {
                 "role": "assistant",
                 "content": (    
-                    "Understood.  Please provide the first question."
+                    "Understood! Please provide the first analysis."
                 ),
             }
         ]
@@ -563,62 +568,66 @@ class ClusterWordalisation(Wordalisation):
         # ---- Tell it who it is ----
         messages = self.tell_it_who_it_is()
 
+
+        # -----Tell it how to answer ----
+        # --- Load few-shots examples  ---
+
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_dog.xlsx')
+
+        messages += [{"role": "user",
+                    "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
+                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    }]
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_country.xlsx')
+
+        messages += [{"role": "user",
+                    "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
+                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    }]
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_foot.xlsx')
+
+        messages += [{"role": "user",
+                    "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset..\n"
+                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    }]
+        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_personality.xlsx')
+
+
         # ---- Tell it what it knows ----   
         # --- Load QandA ---
+
+        messages += [
+            {
+                "role": "user",
+                "content": (
+                    "That was great! \n"
+                    "Now I will give you one last cluster description task to complete.\n"
+                    "Your task is to provide a description of a cluster based on how strongly each of the factors describe it.\n"
+                    "The description should be three sentences long. \n"
+                    "The first sentence should give an overview of the cluster. \n"
+                    "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
+                    "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
+                    "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
+                    "You will be answer a set of questions to show that you have really understood each of the factors names and meanings about the analysis." 
+                ),
+            },
+            {
+                "role": "assistant",
+                "content": (    
+                    "Understood! Please provide the first question."
+                ),
+            }
+        ]
+
+
         try:
             tell_it_what_it_knows_paths = self.tell_it_what_it_knows
             messages += self.get_messages_from_excel(tell_it_what_it_knows_paths)
         except FileNotFoundError as e:
             # FIXME: When merging with new_training, add the other exception type
             print(f"Describe paths file not found: {e}")
-
-        # -----Tell it how to answer ----
-        # --- Load few-shots examples  ---
-        messages += [{
-            "role": "user",
-            "content": (
-                "Thats really good. You truly understand the factors and names. "
-                "Now your task is to provide a description of a cluster based on how strongly each of the factors describe it.\n"
-                "The description should be three sentences long. \n"
-                "The first sentence should give an overview of the cluster. \n"
-                "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
-                "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
-                "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
-                "I will provided with 4 differents cluster analysis that you have done on different datasets. You will be provided background informations first on each dataset.\n"
-                "Use those examples to give a description of the same style for the new analysis.\n"
-                "The first one is an analysis that you have done on the dog dataset. \n"
-                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." 
-            )   
-            }
-            ]
-
-        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_dog.xlsx')
-
-        messages += [{"role": "user",
-                    "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
-                                "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
-                    }]
-        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_country.xlsx')
-
-        messages += [{"role": "user",
-                    "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
-                                "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
-                    }]
-        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_foot.xlsx')
-
-        messages += [{"role": "user",
-                    "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset..\n"
-                                "You will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings." )
-                    }]
-        messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_personality.xlsx')
-
-        #try:
-        #    example_paths = self.tell_it_how_to_answer
-        #    messages += self.get_messages_from_excel(example_paths)
-        #except FileNotFoundError as e:
-        #    # FIXME: When merging with new_training, add the other exception type
-        #    print(f"Example paths file not found: {e}")
         
+
         # ---- Tell it what data to use ----
         # --- Add prompt messages ---
         messages += self.get_prompt_messages()
