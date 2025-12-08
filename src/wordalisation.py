@@ -535,7 +535,7 @@ class ClusterWordalisation(Wordalisation):
             "For each cluster, write a concise summary based on the available information.\n"
             "The first sentence should give an overview of the cluster. \n"
             "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
-            "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
+            "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exists.\n"
             f"Now do the same thing with the following: ```{self.synthetic_text}´´´"
         )
         
@@ -630,7 +630,7 @@ class ClusterWordalisation(Wordalisation):
                     "The description should be three sentences long. \n"
                     "The first sentence should give an overview of the cluster. \n"
                     "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
-                    "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
+                    "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exists.\n"
                     "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
                     "You will be answer a set of questions to show that you have really understood each of the factors names and meanings about the analysis." 
                 ),
@@ -1002,7 +1002,7 @@ class QandAWordalisation(FA):
             "If there is no information about the pole you are asked to summarise, simply describe it in terms of its opposite. \n"
  
         )
-        prompt = prompt + f"{self.synthetic_text}"
+        prompt += f"{self.synthetic_text}"
         return [{"role": "user", "content": prompt}]
     
 

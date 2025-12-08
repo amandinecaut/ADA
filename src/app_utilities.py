@@ -22,6 +22,7 @@ import pandas as pd
 import numpy as np
 import itertools
 import openai
+import prince
 import json
 import ast
 import re
@@ -311,6 +312,22 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         FA = FactorAnalysis(n_components=components)
         principalComponents = FA.fit_transform(x)
 
+        #x = st.session_state.df_filtered.loc[:, st.session_state.features]
+        #x = x.apply(lambda col: pd.to_numeric(col, errors='ignore'))
+
+        # famd = prince.FAMD(
+        # n_components=components,
+        # n_iter=10,
+        # copy=True,
+        # check_input=True,
+        # engine='auto',
+        # random_state=42
+        # )
+        # famd = famd.fit(x)
+        # principalComponents = famd.row_coordinates(x)
+        # principalComponents.columns = [f"Factor {i+1}" for i in range(components)]
+        # principalComponents.index = original_index
+
         principalDf = pd.DataFrame(
             data=principalComponents,
             columns=[f"Factor {i+1}" for i in range(principalComponents.shape[-1])],
@@ -407,7 +424,7 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         get_component_labels(FA_component_dict)
         st.session_state.FA_component_dict = FA_component_dict
         
-        st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
+        st.session_state.df = principalDf #.apply(zscore, nan_policy="omit")
         st.session_state.df_original = st.session_state.df.copy()
         vis = DistributionPlot(
             st.session_state.df,
