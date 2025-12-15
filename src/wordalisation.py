@@ -256,7 +256,7 @@ class CreateWordalisation(Wordalisation):
 
     def get_description(self, indice):
         df = self.df[list(self.FA_component_dict.keys())]
-        #df = df.apply(zscore, nan_policy="omit") # already done after the factor analysis in the perform_fa function
+      
         indice = self.indice
 
         dictionary = st.session_state.col_mapping
@@ -269,8 +269,11 @@ class CreateWordalisation(Wordalisation):
                 continue
 
             text_left, text_right = ClusterWordalisation.split_qualities(component['label'])
+           
             text += f"{st.session_state.selected_entity} "
             value = df.loc[indice, component_key]
+            
+          
 
             if np.isnan(value):
                 continue
@@ -278,8 +281,10 @@ class CreateWordalisation(Wordalisation):
             # Describe the value
             if value >= 0:
                 text += self.describe_level(value) + text_right + '. '
+                
             else:
                 text += self.describe_level(value) + text_left + '. '
+               
 
             # Map top features to columns
             top_map_list = [
@@ -290,7 +295,7 @@ class CreateWordalisation(Wordalisation):
              k for k, v in dictionary.items() if v in component["bottom"]
             ]
 
-            # Fast argmax / argmin using NumPy
+            # Fast argmax / argmin
             if value > 1 and top_map_list:
                 top_values = st.session_state.df_filtered.loc[indice, top_map_list].values
                 argmax_idx = np.argmax(top_values)
@@ -510,7 +515,7 @@ class ClusterWordalisation(Wordalisation):
                     "The description should be three sentences long. \n"
                     "The first sentence should give an overview of the cluster. \n"
                     "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
-                    "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
+                    "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exists.\n"
                     "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
                     "I will provided with 4 differents cluster analysis that you have done on different datasets. You will be provided background informations first on each dataset.\n"
                     "Use those examples to give a description of the same style for the new analysis."
@@ -630,7 +635,7 @@ class ClusterWordalisation(Wordalisation):
                     "The description should be three sentences long. \n"
                     "The first sentence should give an overview of the cluster. \n"
                     "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
-                    "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exists.\n"
+                    "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
                     "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
                     "You will be answer a set of questions to show that you have really understood each of the factors names and meanings about the analysis." 
                 ),

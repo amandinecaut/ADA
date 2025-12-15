@@ -92,6 +92,11 @@ DATA_PATHS = {
         "map": "./data/demo_data/dogs/map.xlsx", 
         "entity": "dog"
     },
+    "Rugby Players": {
+        "data": "./data/demo_data/rugby/Statistic_rugby_players.csv",
+        "map": "./data/demo_data/rugby/rugby_player_map.xlsx", 
+        "entity": "rugby player"
+    },
     # Add other datasets here
 }
 
@@ -424,7 +429,7 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         get_component_labels(FA_component_dict)
         st.session_state.FA_component_dict = FA_component_dict
         
-        st.session_state.df = principalDf #.apply(zscore, nan_policy="omit")
+        st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
         st.session_state.df_original = st.session_state.df.copy()
         vis = DistributionPlot(
             st.session_state.df,
@@ -700,15 +705,18 @@ def display_cluster_color(cluster_name, color, size=40):
 # View utilities
 def add_to_fig(label_to_value):
     selected = st.session_state.get("selected_entity")
+   
   
     if selected not in label_to_value:
         return
     ind = label_to_value[selected]
-    
     st.session_state.indice = ind
-    row = st.session_state.df.iloc[[ind]]
+   
+    row = st.session_state.df.loc[[ind]]
+
     mapping = {factor: info["label"] for factor, info in  st.session_state.FA_component_dict.items()}
     row = row.rename(columns=mapping)
+    
    
     color = st.get_option("theme.primaryColor")
     if color is None:

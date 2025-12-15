@@ -1,0 +1,100 @@
+racking,Name,Nationality,Position,age,tall(m),weight,start_career,club,Tournament,club-match,club_W,club_D,club_L,club_starter,club_try,club_points,club_Min,other club tournament  ,other-match,other_W,other_D,other_L,other_starter,other_try,other_points,other_Min,National_match,National_W,National_D,National_L,National_starter,National_try,National_Points,National_min,yellow card,red card
+1,Antoine Dupont,France,Scrumhalf,27,1.74,86,2000,Toulouse,Top 14,14,11,0,3,9,6,30,866,champions cup,8,8,0,0,8,5,25,627,2,2,0,0,2,0,0,127,0,0
+2,Ardie Savea,New Zealand,Backrow,30,1.9,103,2013,Wellington Hurricanes,None,0,0,0,0,0,0,0,0,None,0,0,0,0,0,0,0,0,13,9,0,4,13,6,30,918,1,0
+3,Pieter-Steph Du Toit,South Africa,Backrow,32,2,116,2013,Toyota Verblitz,Japan rugby leage,35,7,0,4,,2,10,,,,,,,,,,,12,10,0,2,12,3,15,856,1,0
+4,Caelen Doris,Ireland,Backrow,26,193,106,2017,Leinster,United Rugby Championship,7,5,0,2,6,1,5,382,champions cup,8,7,0,1,8,3,15,618,15,12,0,2,12,3,15,1069,1,0
+5,Eben Etzebeth,South Africa,Secondrow,32,2.03,126,2013,sharks,United Rugby Championship,7,4,0,3,7,1,5,383,Challenge Cup,6,5,0,1,5,1,5,324,12,10,0,2,11,1,5,603,2,0
+6,Dan Sheehan,Ireland,Hooker,25,1.91,110,2021, Leinster Rugby,United Rugby Championship,10,8,0,2,5,5,25,401,Challenge Cup,8,7,0,1,8,3,15,457,10,7,0,3,9,6,30,502,0,0
+7,Damian Penaud,France,Winger,27,1.88,97,2016,Bordeaux,Top 14,16,11,0,5,15,14,70,1133,champions cup,4,4,0,0,4,4,20,320,11,8,1,2,11,10,50,400,0,0
+8,Will Jordan,New Zealand,Utility Back,26,1.88,94,,Crusaders,none,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,6,0,4,9,10,50,633,1,0
+9,Cheslin Kolbe,South Africa,Winger,30,1.71,76,2013,none,none,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,8,0,2,10,3,15,712,1,0
+10,Hugo Keenan,Ireland,Fullback ,28,1.85,92,2016,Leinster Rugby,United Rugby Championship,4,3,0,1,4,0,0,320,Champions Cup,6,5,0,1,6,0,0,482,8,7,0,2,9,3,15,695,1,0
+11,Handre Pollard,South Africa,Fly,30,1.89,98,2013,Leicester,Premiership,13,8,0,5,13,0,105,961,Champions Cup,4,1,0,3,3,2,37,274,8,7,0,1,0,0,2,385,1,0
+12,Tadhg Beirne,Ireland,Utility Forward,32,1.98,114,2015,Leinster Rugby,United Rugby Championship,12,9,0,3,12,1,5,870,Champions Cup,5,1,1,3,5,0,0,400,14,11,0,3,0,5,25,1022,2,0
+13,Damian Willemse,South Africa,Utility Back,26,1.84,96,2016,Stormers,United Rugby Championship,9,7,0,2,8,1,8,666,Champions Cup,4,3,0,1,4,0,0,320,9,8,0,1,8,2,20,550,1,0
+14,Jamison Gibson-Park,Ireland,Scrumhalf ,32,1.75,80,2013,Leinster Rugby,United Rugby Championship,7,5,0,2,5,1,5,338,Champions Cup,8,7,0,1,8,5,25,593,10,8,0,2,9,3,15,627,0,0
+15,Ben Earl,England,Backrow ,26,1.86,102,2016,Saracens,Premiership,10,6,0,4,8,1,5,696,Champions Cup,3,1,0,2,3,0,0,221,18,11,0,7,17,4,20,1374,0,0
+16,Will Skelton,Australia,Secondrow,32,2.03,145,2013,Stade Rochelais,Top 14,14,8,1,5,12,1,5,936,Champions Cup,6,3,0,3,6,1,5,405,3,1,0,1,1,0,0,169,3,0
+17,Finn Russell,Scotland,Fly,31,1.82,93,2013,Bath Rugby,Premiership,16,11,0,5,15,0,155,1198,Champions Cup,5,3,0,2,5,0,9,330,11,5,0,6,11,0,55,851,0,0
+18,Bundee Aki,Ireland,Center,34,1.78,101,2013,Chiefs,United Rugby Championship,6,3,0,3,6,2,10,480,Champions Cup,3,1,0,2,3,1,5,240,11,8,0,3,11,5,30,869,0,0
+19,Jordie Barrett,New Zealand,Center,27,1.96,102,2016,Hurricanes,Super Rugby Pacific,13,10,0,3,12,5,41,931,None,0,0,0,0,0,0,0,0,11,8,0,3,10,1,13,683,0,1
+20,Ox Nche,South Africa,Prop,29,1.76,123,2015,sharks,United Rugby Championship,10,4,0,6,7,2,10,468,Challenge Cup,8,7,0,1,8,3,15,490,14,12,0,2,6,0,0,551,0,0
+21,Romain Ntamack,France,Fly,25,1.86,94,2013,Stade Toulousain,Top 14,4,4,0,0,4,0,2,254,Champions Cup,4,4,0,0,4,1,5,318,1,1,0,0,1,1,5,55,0,0
+22,Richie Mo’unga,New Zealand,Fly,30,1.76,86,2015,Toshiba Brave Lupus Tokyo,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,6,0,3,7,1,56,572,0,0
+23,Josh van-der-Flier,Ireland,Backrow ,31,1.83,105,2014,Leinster Rugby,United Rugby Championship,7,5,0,2,6,2,10,397,Champions Cup,8,7,0,1,5,3,15,441,14,11,0,3,12,0,0,886,0,0
+24,RG Snyman,South Africa,Secondrow ,29,2.07,131,2015,Munster Rugby,United Rugby Championship,10,9,0,1,8,5,25,521,None,0,0,0,0,0,0,0,0,11,8,0,2,2,1,5,525,0,0
+25,Scott Barrett,New Zealand,Secondrow ,30,1.97,119,2013,Crusaders,Super Rugby Pacific,5,1,0,4,5,1,5,318,None,0,0,0,0,0,0,0,0,11,8,0,3,9,0,0,700,2,1
+26,Tadhg Furlong,Ireland,Prop,31,1.83,119,2013,Leinster Rugby,United Rugby Championship,7,6,0,1,4,0,0,256,champions cup,6,5,0,1,6,0,0,346,13,10,0,3,12,0,0,703,0,0
+27,Thomas Ramos,France,Fullback ,29,1.78,87,2004,Stade Toulousain,Top 14,13,8,1,4,13,5,155,914,champions cup,7,7,0,0,4,3,77,373,12,9,1,2,11,1,63,843,0,0
+28,Courtney Lawes,England,Utility Forward ,35,2.01,115,2008,Northampton,Premiership,12,10,0,2,11,2,10,815,champions cup,7,6,0,1,7,3,15,502,8,5,0,3,5,1,5,590,0,0
+29,Cyrill Baille,France,Prop,30,1.82,118,2013,Stade Toulousain,Top 14,12,8,1,3,5,0,0,475,champions cup,8,8,0,0,8,0,0,442,8,6,1,2,8,2,10,455,0,0
+30,Angus Bell,Australia,Prop ,23,1.93,130,2018,Waratahs,Super Rugby Pacific,6,1,0,5,5,0,0,314,None,0,0,0,0,0,0,0,0,7,2,0,5,7,1,5,395,0,0
+31,Blair Kinghorn,Scotland,Utility Back ,27,1.93,107,2015,Stade Toulousain,Top 14,6,6,0,0,6,3,32,435,champions cup,8,8,0,0,8,4,59,624,10,5,0,5,8,1,5,584,0,0
+32,Owen Farrell,England,Fly,32,1.88,94,2012,Saracens,Premiership,13,8,0,5,13,1,103,1007,champions cup,4,2,0,2,4,0,40,320,6,5,0,1,6,0,84,462,0,1
+33,James Lowe,Ireland,Winger,32,1.88,105,2013,Leinster Rugby,United Rugby Championship,3,2,0,1,3,4,20,143,champions cup,6,5,0,1,6,6,30,480,13,10,0,3,13,7,35,978,2,0
+34,Malcolm Marx,South Africa,Hooker ,30,1.89,116,2013,Kubota Spears Funabashi Tokyo-Bay,,,,,,,,,,,,,,,,,,,8,7,0,1,4,4,20,297,1,0
+35,Tommasso Menoncello,Italy,Utility Back,22,1.87,101,2020,Benetton Rugby Trévise,United Rugby Championship,8,5,0,3,8,3,15,512,Challenge Cup,5,4,0,1,5,3,15,400,10,4,1,5,10,1,5,778,1,0
+36,Kurt Lee-Arendse,South Africa,Winger,28,1.76,82,2019,Bulls,United Rugby Championship,13,9,0,4,13,10,50,925,champions cup,2,2,0,0,2,0,0,160,11,9,0,2,10,7,35,783,2,0
+37,Levani Botia,Fiji,Center,35,1.82,103,2013,Stade Rochelais,Top 14,14,8,0,6,13,3,15,858,champions cup,6,3,0,3,6,0,0,395,6,2,0,4,5,1,5,383,2,0
+38,Garry Ringrose,Ireland,Center,29,1.86,90,2015,Leinster Rugby,United Rugby Championship,4,3,0,1,4,1,5,226,champions cup,4,4,0,0,4,0,0,308,10,8,0,2,7,2,10,578,0,0
+39,Siya Kolisi,South Africa,Backrow,33,1.89,104,2013,Racing 92,Top 14,13,4,0,9,13,0,0,992,champions cup,5,1,0,4,5,1,5,316,11,9,0,2,11,2,10,570,2,0
+40,Semi Radradra,Fiji,Utility Back,32,1.88,105,2015,Lyon,Top 14,9,5,0,4,9,0,0,644,champions cup,1,0,0,1,1,1,5,80,7,3,0,4,7,1,5,513,3,0
+41,Tom Curry,England,Backrow,26,1.85,110,2016,Sale,Premiership,1,0,0,1,0,0,0,34,None,0,0,0,0,0,0,0,0,8,5,0,3,0,0,0,339,0,1
+42,Robbie Henshaw,Ireland,Center,31,1.91,100,2013,Leinster,United Rugby Championship,7,5,0,2,7,1,5,427,champions cup,8,7,0,1,8,2,10,650,11,9,0,2,9,0,0,705,1,0
+43,Damian McKenzie,New Zealand,Utility Back,29,1.77,81,2014,Chiefs,Super Rugby Pacific,15,10,0,5,15,2,177,1102,None,0,0,0,0,0,0,0,0,12,10,0,2,8,6,122,576,0,0
+44,Damian De-Allende,South Africa,Center,32,1.89,106,2013,Munster Rugby,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,8,0,2,9,1,0,727,0,0
+45,Peter O’Mahony,Ireland,Backrow ,34,1.91,108,2012,Munster Rugby,United Rugby Championship,8,7,0,1,8,0,0,392,champions cup,3,1,0,2,3,1,5,183,13,10,0,3,11,2,10,717,3,0
+46,Julian Montoya,Argentine,Hooker,30,1.83,113,2015,Leicester,Premiership,11,7,0,4,11,3,15,738,champions cup,4,1,0,3,4,0,0,301,10,4,0,6,10,0,0,641,0,0
+47,Lukhayno Am,South Africa,Hooker,30,1.86,93,2015,sharks,United Rugby Championship,10,4,0,6,10,2,10,757,Challenge Cup,7,6,0,1,7,4,20,539,3,3,0,0,3,1,5,200,0,0
+48,Jack Willis,England,Backrow ,27,1.9,112,2016,Wasps,Top 14,14,9,1,4,11,3,15,781,champions cup,6,6,0,0,5,1,5,418,4,2,0,2,2,1,5,191,1,0
+49,Ange Capuozzo,Italy,Utility Back,25,1.78,82,2022,Stade Toulousain,Top 14,12,8,1,3,9,6,30,761,champions cup,1,1,0,0,0,0,0,7,11,7,1,3,11,6,30,802,0,0
+50,Sam Underhill,England,Backrow ,28,1.91,110,2014,Bath Rugby,Premiership,11,8,0,3,11,0,0,759,champions cup,2,1,0,1,2,0,0,150,9,5,0,4,8,1,5,186,0,0
+51,Gregory Alldritt,France,Backrow,27,1.91,114,2004,Stade Rochelais,Top 14,12,7,1,4,10,2,10,826,champions cup,4,3,0,1,4,1,5,320,10,8,0,2,10,0,0,687,0,0
+52,Mark Telea,New Zealand,Winger ,27,1.86,94,2018,Blues,Super Rugby Pacific,15,13,0,2,15,9,45,1180,None,0,0,0,0,0,0,0,0,9,5,0,4,8,6,30,631,0,0
+53,Peato Mauvaka,France,Hooker,27,1.8,112,2013,Stade Toulousain,Top 14,12,9,1,2,6,5,25,512,champions cup,8,8,0,0,8,5,25,445,13,9,1,3,7,4,20,619,1,0
+54,Waisea Nayacalevu,Fiji,Center ,34,1.93,105,2012,Rugby Club Toulonnais,top14,7,4,0,3,6,0,0,496,champions cup,2,0,0,2,2,0,0,146,8,4,0,4,8,3,15,615,0,0
+55,Joe McCarthy,Ireland,Secondrow,23,1.98,119,2021,Leinster Rugby,United Rugby Championship,8,6,0,2,8,0,0,550,champions cup,8,7,0,1,7,1,5,574,11,8,0,3,9,1,5,653,1,0
+56,Willie Le-Roux,South Africa,Fullback ,35,1.84,92,2013,Bulls,United Rugby Championship,14,11,0,3,13,2,10,973,champions cup,3,0,0,3,3,2,10,204,10,9,0,1,6,2,10,254,0,0
+57,Marcos Kremer,Argentina,Backrow,27,1.95,115,2015,ASM Clermont Auvergne,top14,18,8,1,9,16,0,0,1265,Challenge Cup,3,1,0,2,3,0,0,240,13,8,0,5,13,1,5,900,1,0
+58,George Martin,England,Back row,23,1.98,118,2017,Leicester,Premiership,6,3,0,3,6,2,10,425,champions cup,2,1,0,1,2,1,5,144,14,8,0,6,9,0,0,788,1,0
+59,Kwagga Smith,South Africa,Back row,31,1.8,97,2014,Lions Rugby,None,0,0,0,0,0,0,0,0,None,0,0,0,0,0,0,0,0,12,10,0,2,4,3,15,524,0,0
+60,Pita Ahki, Tonga,Center,31,1.89,101,2011,Stade Toulousain,top14,16,12,0,4,15,4,20,1063,champions cup,8,8,0,0,8,3,15,523,6,3,0,3,6,1,5,470,1,0
+61,Mack Hansen,Ireland,Fullback,26,1.88,89,2018,Connacht Rugby,United Rugby Championship,3,1,0,2,3,0,0,233,champions cup,1,0,0,1,1,0,0,21,7,6,0,1,6,3,15,419,0,0
+62,Tommy Freeman,England,Fullback,23,1.88,102,2019,Northampton Saints,Premiership,16,12,0,4,14,5,25,1148,champions cup,7,6,0,1,7,4,20,560,8,4,0,4,8,2,10,622,0,0
+63,Jack Crowley,Ireland,Fly,24,1.85,90,2020,Munster Rugby,United Rugby Championship,14,10,0,4,13,2,115,942,champions cup,5,1,1,3,5,0,32,400,14,11,0,3,9,1,92,780,0,0
+64,Sione Tuipulotu,Scotland,Center,27,1.78,104,2015,Glasgow Warriors,United Rugby Championship,15,11,0,4,15,1,5,1101,champions cup,4,2,0,2,4,1,5,310,11,7,0,4,11,0,0,772,2,0
+65,James Ryan,Ireland,Secondrow,28,2.01,115,2017,Leinster Rugby,United Rugby Championship,5,3,0,2,5,0,0,271,champions cup,5,4,0,1,3,0,0,337,11,10,0,1,6,0,0,461,1,0
+66,Gael Fickou,France,Center,30,1.9,100,2006,Racing 92,top14,15,8,0,7,14,2,10,1119,champions cup,5,1,0,4,5,0,0,377,11,8,1,2,11,3,15,860,0,0
+67,Jamie George,England,Hooker,33,1.83,114,2013,Saracens,Premiership,13,8,0,5,9,4,20,639,champions cup,3,1,0,2,3,2,10,167,13,9,0,4,12,0,0,870,0,0
+68,Reiko Ioane,New Zealand,Center,27,1.89,103,2015,Blues,Super Rugby Pacific,12,10,0,2,12,0,0,830,None,0,0,0,0,0,0,0,0,11,7,0,4,9,1,5,616,0,0
+69,Canan Moodie,South Africa,Winger,21,1.91,92,2021,Bulls,United Rugby Championship,12,9,0,3,11,9,45,887,champions cup,2,2,0,0,2,1,5,150,5,5,0,0,5,4,20,400,2,0
+70,Ollie Lawrence,England,Center,24,1.8,100,2017,Bath Rugby,Premiership,12,9,0,3,12,4,20,950,champions cup,5,3,0,2,5,2,10,396,16,9,0,7,9,3,15,802,1,0
+71,Taniela Tupou,Australia,Prop,28,1.78,135,2015,Melbourne Rebels,Super Rugby Pacific,14,5,0,9,6,1,5,544,None,0,0,0,0,0,0,0,0,5,3,0,2,6,1,5,306,0,0
+72,Henry Slade,England,Center,31,1.94,98,2013,Exeter Chiefs,Premiership,16,9,0,7,16,5,152,1262,champions cup,6,4,0,2,6,1,49,480,8,4,0,5,8,1,9,597,1,0
+73,Faf de-Klerk,South Africa,Scrum,32,1.73,88,2013,Canon Eagles,none,0,0,0,0,0,0,0,0,None,0,0,0,0,0,0,0,0,10,8,0,2,7,0,0,6,0,0
+74,Ethan de-Groot,New Zealand,Prop,26,1.9,128,2018,Highlanders,Super Rugby Pacific,12,4,0,8,11,1,5,577,None,0,0,0,0,0,0,0,0,10,6,0,4,8,2,10,496,0,1
+75,Sevu Reece,New Zealand,Winger,27,1.79,98,2018,Crusaders,Super Rugby Pacific,13,3,0,10,13,12,60,1030,None,0,0,0,0,0,0,0,0,4,3,0,1,4,2,10,268,1,0
+76,Paolo Garbisi,Italy,Fly,24,1.84,97,2018,Rugby Club Toulonnais,top14,18,8,0,10,10,1,39,937,Challenge Cup,3,2,0,1,3,0,11,222,15,8,1,5,15,2,83,1172,0,0
+77,Charles Ollivon,France,Backrow,31,1.99,114,2004,Rugby Club Toulonnais,top14,12,8,0,4,11,1,5,841,champions cup,2,0,0,2,0,0,0,160,11,8,1,2,11,4,20,785,1,0
+78,Ben Tameifuna,Tonga,Prop,32,1.88,151,2011,Union Bordeaux-Bègles,top14,22,13,0,9,12,1,5,918,champions cup,5,3,0,2,3,0,0,226,9,4,0,6,8,2,10,249,1,0
+79,Tommy Reffell,Wales,Backrow ,25,1.83,100,2017,Leicester,Premiership,12,7,0,5,12,5,25,806,champions cup,2,1,0,1,0,0,0,110,11,2,0,9,10,0,0,764,1,0
+80,Immanuel Feyi-Waboso,England,Winger,21,1.83,89,2018,Exeter Chiefs,Premiership,14,8,0,6,13,10,50,993,champions cup,4,3,0,1,4,0,0,250,7,4,0,3,4,4,20,304,1,0
+81,Marcus Smith,England,FlyHalf ,25,1.75,82,2017,Harlequins,Premiership,13,6,0,7,12,3,88,966,champions cup,7,5,0,2,7,4,85,553,14,8,0,6,7,5,59,659,1,0
+82,Rory Darge,Scotland,Backrow,24,1.86,102,2019,Glasgow Warriors,United Rugby Championship,14,9,0,5,13,1,5,829,champions cup,2,0,0,2,2,0,0,160,15,9,0,6,12,4,20,916,0,0
+83,Steven Kitshoff,South Africa,Prop,32,1.83,126,2010,Ulster Rugby,United Rugby Championship,8,3,0,5,5,0,0,369,champions cup,4,1,0,3,4,0,0,264,9,8,0,1,7,0,0,394,0,0
+84,Manie Libbok,South Africa,Fly,27,1.8,80,2017,Stormers,United Rugby Championship,12,9,0,3,12,0,111,949,champions cup,4,3,0,1,4,1,42,320,10,9,0,8,0,0,60,536,0,0
+85,Ronan Kelleher,Ireland,Hooker,26,1.85,106,2018,Leinster Rugby ,United Rugby Championship,10,8,0,2,7,2,10,428,champions cup,8,7,0,1,0,0,0,203,12,9,0,3,3,1,5,387,1,0
+86,Michelle Lamaro,Italy,Backrow,26,1.88,103,2018,Benetton Rugby Trévise,United Rugby Championship,12,9,0,3,11,1,5,764,Challenge Cup,4,2,0,2,3,0,0,276,15,8,1,6,14,2,10,1049,2,0
+87,Jack Conan,Ireland,Backrow,32,1.93,111,2013,Leinster Rugby,United Rugby Championship,9,6,0,3,5,2,10,402,champions cup,7,6,0,1,0,1,5,152,8,6,0,2,2,1,5,252,1,0
+88,Julian Marchand,France,Hooker,29,1.81,110,2005,Stade Toulousain,top14,9,6,0,3,6,2,10,422,champions cup,6,6,0,0,0,0,0,176,8,6,1,1,5,0,0,297,1,0
+89,Louis Bielle-Biarrey,France,Winger,21,1.85,84,2008,Union Bordeaux-Bègles,top14,15,9,0,6,12,5,25,1004,champions cup,5,3,0,2,5,6,30,388,11,8,0,3,9,6,30,751,0,0
+90,Zander Fagerson,Scotland,Prop,28,1.88,125,2014,Glasgow Warriors,United Rugby Championship,16,11,0,5,12,0,0,864,champions cup,5,2,0,3,4,0,0,278,9,4,0,5,8,1,5,560,1,1
+91,Duhan van-der-Merwe,Scotland,Winger,29,1.93,106,2015,Edimbourg Rugby,United Rugby Championship,12,6,0,6,12,3,15,942,Challenge Cup,5,3,0,2,5,4,20,401,13,7,0,6,11,11,55,1020,3,0
+92,George Furbank,England,Fullback,27,1.82,93,2017,Northampton Saints,Premiership,13,11,0,2,13,4,51,1040,champions cup,6,5,0,1,5,2,10,410,5,2,0,3,5,4,10,327,1,0
+93,Fletcher Newell, New Zealand,Prop,24,1.86,119,2019,Crusaders,Super Rugby Pacific,12,3,0,9,11,0,0,669,None,0,0,0,0,0,0,0,0,12,9,0,3,1,1,5,399,0,0
+94,Jac Morgan,Wales,Backrow,24,1.82,104,2018,Ospreys,United Rugby Championship,6,3,0,3,4,0,0,375,Challenge Cup,1,1,0,0,1,0,0,80,7,5,0,2,7,2,10,560,0,0
+95,Alex Mitchell,England,Scrumhalf,27,1.8,83,2015,Northampton Saints,Premiership,12,10,0,2,10,7,35,798,champions cup,7,6,0,1,6,3,15,435,13,8,0,5,13,2,10,808,0,0
+96,Tom Wright,Australia,Fullback,27,1.86,100,2018,Brumbies,Super Rugby Pacific,16,13,0,3,16,10,50,1274,None,0,0,0,0,0,0,0,0,6,4,0,2,6,2,10,400,0,0
+97,Uluoano Seuteni,Samoa,Center,30,1.85,100,2012,Stade Rochelais,top14,17,9,1,7,17,3,15,1235,champions cup,6,3,0,3,6,3,15,461,3,1,0,2,3,0,0,198,1,0
+98,Dewi Lake,Wales,Hooker,25,1.85,114,2017,Ospreys,United Rugby Championship,10,5,0,5,8,2,10,566,Challenge Cup,3,2,0,1,3,4,20,124,8,3,0,5,7,5,25,421,0,0
+99,Uini Antonio,France,Prop,34,1.97,147,2011,Stade Rochelais,top14,15,10,1,4,10,1,5,708,champions cup,6,3,0,3,6,0,0,341,12,9,1,2,11,1,5,573,1,1
