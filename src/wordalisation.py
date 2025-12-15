@@ -385,7 +385,7 @@ class CreateWordalisation(Wordalisation):
         # --- Load few-shots examples  ---
         messages += [{"role": "user",
                     "content": ("The first one is an analysis that you have done on the dog dataset. \n"
-                    "You will be answer a set of questions to show that you have really understood each of the factors names and meanings.")
+                    "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings.")
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about dogs?")
@@ -394,7 +394,7 @@ class CreateWordalisation(Wordalisation):
 
         messages += [{"role": "user",
                     "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
-                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                                "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings." )
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about countries?")
@@ -403,7 +403,7 @@ class CreateWordalisation(Wordalisation):
 
         messages += [{"role": "user",
                     "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
-                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                                "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings." )
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about football players?")
@@ -412,7 +412,7 @@ class CreateWordalisation(Wordalisation):
 
         messages += [{"role": "user",
                     "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset.\n"
-                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                                "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings." )
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about people personality?")
@@ -588,7 +588,7 @@ class ClusterWordalisation(Wordalisation):
         # --- Load few-shots examples  ---
         messages += [{"role": "user",
                     "content": ("The first one is an analysis that you have done on the dog dataset. \n"
-                    "You will be answer a set of questions to show that you have really understood each of the factors names and meanings.")
+                    "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings.")
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about dogs?")
@@ -596,8 +596,8 @@ class ClusterWordalisation(Wordalisation):
         messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_dog.xlsx')
 
         messages += [{"role": "user",
-                    "content": ("Fantastic! Now I will provide you the background information and cluster analysis that you have done on the world value survey dataset.\n"
-                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    "content": ("Fantastic! Now we will do the same for a cluster analysis that you have done on the world value survey dataset.\n"
+                                "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings." )
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about countries?")
@@ -605,8 +605,8 @@ class ClusterWordalisation(Wordalisation):
         messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_country.xlsx')
 
         messages += [{"role": "user",
-                    "content": ("Wonderful! Now I will provide you the background information and cluster analysis that you have done on the football player dataset.\n"
-                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    "content": ("Wonderful! Now we will do the same for a cluster analysis that you have done on a football player dataset.\n"
+                                "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings." )
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about football players?")
@@ -614,8 +614,8 @@ class ClusterWordalisation(Wordalisation):
         messages += self.get_messages_from_excel('./data/describe/few_shot/cluster/messages_foot.xlsx')
 
         messages += [{"role": "user",
-                    "content": ("Remarkable! Now I will provide you the background information and cluster analysis that you have done on the big five personality test dataset.\n"
-                                "You will be answer a set of questions to show that you have really understood each of the factors names and meanings." )
+                    "content": ("Remarkable! Now we will do the same for a cluster analysis that you have done on a personality test dataset.\n"
+                                "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings." )
                     },
                     {"role": "assistant",
                     "content": ("Sure! What would you like to learn about people personality?")
@@ -637,7 +637,7 @@ class ClusterWordalisation(Wordalisation):
                     "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
                     "The third sentence should describe the cluster’s specific weaknessess based on the available information, if any exists.\n"
                     "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
-                    "You will be answer a set of questions to show that you have really understood each of the factors names and meanings about the analysis." 
+                    "You will be asked to answer a set of questions to show that you have really understood each of the factors names and meanings about the analysis." 
                 ),
             },
             {
@@ -695,7 +695,7 @@ class Clusterlabel(Wordalisation):
                     "You then performed k-means clustering on the factors extracted from those analyses, grouping the entities based on shared characteristics. \n"
                     "Your task now is to label the clusters you obtained based on the information provided. \n"
                     "You need to use this information to understand the characteristics of each cluster, and use it to label the cluster. \n"
-                    "First, you will be answer a set of questions and answers to show that you have really understood each of the factors names and meanings."
+                    "First, you will be asked to answer a set of questions and answers to show that you have really understood each of the factors names and meanings."
                 ),
             },
             {                
