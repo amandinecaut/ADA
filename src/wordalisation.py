@@ -510,21 +510,24 @@ class ClusterWordalisation(Wordalisation):
                 "role": "system",
                 "content": (
                     "You are a leading data scientist who specialises in explanatory data analysis. \n"
-                    "You conducted a factor analysis, then performed k-means clustering on the factors extracted from that analysis. \n"
-                    "Your task is to provide a description of a cluster based on how strongly each of the factors describe it.\n"
+                    "You have just conducted a factor analysis, then performed k-means clustering on the factors extracted from that analysis. \n"
+                    "Your task now is to provide a description of a cluster based on how strongly each of the factors describe it.\n"
                     "The description should be three sentences long. \n"
                     "The first sentence should give an overview of the cluster. \n"
-                    "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
-                    "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exists.\n"
-                    "Only use the information you have repeated to me, but make sure the descriptions of the clusters are engaging. \n"
-                    "I will provided with 4 differents cluster analysis that you have done on different datasets. You will be provided background informations first on each dataset.\n"
-                    "Use those examples to give a description of the same style for the new analysis."
+                    "The second sentence should describe the cluster’s specific strengths based on the available information, if any exist.\n"
+                    "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exist.\n"
+                    "But before you do the cluster description I will test your knowedge about the factors.\n"
+                    "This is because it is important only to use information you established in the factor analysis when you describe the clusters. \n"
+                    "You are going to complete a series of five cluster naming tasks. "
+                    "For each task you will first answer questions about the factors, then I will tell you properties of the cluster and you will "
+                    "describe it in the way outlined above. "
+                    "It is important you do exactly the same thing in each of the five analyses."
                 ),
             },
             {
                 "role": "assistant",
                 "content": (    
-                    "Understood! Please provide the first analysis."
+                    "Understood! Please provide the first task."
                 ),
             }
         ]
@@ -533,15 +536,16 @@ class ClusterWordalisation(Wordalisation):
 
     def get_prompt_messages(self):
         prompt = (
-            "Now, Your task is to provide a description of a cluster.\n"
-            "Make sure you continue to use the same format and style from the examples. \n"
-            "I am now going to give you one last description task to complete. \n"
+            "From your answers I see that you have all the information you need about the factors. "
+            "We are now going to do the most important task: provide a description of a cluster.\n"
+            "Make sure you continue to use the same format and style as in earlier examples. \n"
+            "This is the last description task to complete, so please pay close attention. \n"
             "You will receive information about the cluster based on the latent factors that best describe it.\n"
             "For each cluster, write a concise summary based on the available information.\n"
             "The first sentence should give an overview of the cluster. \n"
             "The second sentence should describe the cluster’s specific strengths based on the available information, if any exists.\n"
             "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exists.\n"
-            f"Now do the same thing with the following: ```{self.synthetic_text}´´´"
+            f"Now do this task based on the following description: ```{self.synthetic_text}´´´"
         )
         
         return [{"role": "user", "content": prompt}]
