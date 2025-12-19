@@ -288,17 +288,30 @@ with tab2:
             left_t2.markdown("### Factor Analysis")
 
             # Ask user if they want to automatically find optimal number of factors
-            kaiser = left_t2.radio(
+            factor_auto = left_t2.radio(
             "Would you like to find the optimal number of factors automatically?",
             ("Yes", "No"),
              index=1,  # Default to "No"
             )
 
-            if kaiser == "Yes":
+            if factor_auto == "Yes":
                 kaiser_number = app_utilities.get_kaiser_criterion()
-                left_t2.write(f"The optimal number of factors is {kaiser_number}")
-                st.session_state.factor_nb = kaiser_number
+                Horn = app_utilities.HornParallelAnalysis()
+                left_t2.write(f"The optimal number of factors with Kaiser is {kaiser_number}")
+                left_t2.write(f"The optimal number of factors with parallel analysis is {Horn}")
+                
+                col1, col2 = left_t2.columns(2)
 
+                if col1.button(f"Proceed with Kaiser ({kaiser_number})"):
+                    st.session_state.factor_nb = kaiser_number
+                    st.success(f"Factor count set to {kaiser_number}")
+                    perform_FA()
+
+                if col2.button(f"Proceed with parallel analysis ({Horn})"):
+                    st.session_state.factor_nb = Horn
+                    st.success(f"Factor count set to {Horn}")
+                    perform_FA()
+                          
             else:
 
                 factor_nb = left_t2.slider(
@@ -311,8 +324,8 @@ with tab2:
                     on_change=perform_FA,
                 )
 
-            if left_t2.button("Run Factor Analysis"):
-                perform_FA()
+            #if left_t2.button("Run Factor Analysis"):
+            #    perform_FA()
 
             if "df_full" not in st.session_state:
                 right_t2.write("Load data to perform Factor Analysis")
