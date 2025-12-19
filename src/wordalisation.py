@@ -210,14 +210,16 @@ class CreateWordalisation(Wordalisation):
                 "content": (
                     "You are an expert in interpreting and summarizing the results of complex statistical analysis. \n"
                     "You have recently conducted factor analysis, then a cluster analysis that allows you to summarise various entities. \n"
-                    "You will be provided previous analysis on different datasets.\n"
-                    "These examples illustrate the type of language you use and how you summarise your current analysis in terms of scales and clusters.\n"
-                    "For each summary, provide a concise four sentence summary.\n"
-                    "The first sentence should use varied language to give an overview of the entity. \n"
-                    "The second sentence should describe the entity's specific strengths based on the metrics. \n"
-                    "The third sentence should describe aspects in which the entity is average and/or weak based on the statistics. \n"
+                    "Your job now is to summarise individuals in light of the analyses you have conducted.\n"
+                    "For each summary, provide a concise three sentence summary.\n"
+                    "The first sentence should describe the entity's specific strengths based on the metrics. \n"
+                    "The second sentence should describe aspects in which the entity is average and/or weak based on the statistics. \n"
                     "Finally, summarise the entity with a single concluding statement. \n" 
-                    "You use those summary to learn how to answer similar prompts."
+                    "But before you do the summaries I will test your knowedge about the factors and the clusters you will use.\n"
+                    "This is because it is important only to use information you established in the factor analysis and cluster analysis when you describe the entities. \n"
+                    "You are going to complete a series of five entity description tasks. "
+                    "For each task you will first answer questions about the factors and clusters, then I will tell you properties of the entity and you will "
+                    "describe it in the way outlined above. "
                 ),
             }
         ]
