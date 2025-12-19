@@ -458,43 +458,34 @@ def get_kaiser_criterion():
 
 # Horn's Parallel Analysis
 def HornParallelAnalysis(K=10, printEigenvalues=False):
-    # 1. Prepare the data
+    
     data = st.session_state.df_filtered.loc[:, st.session_state.features].values
     data = StandardScaler().fit_transform(data)
     n, m = data.shape
 
-    # 2. Function to get eigenvalues of the correlation matrix
+    # Function to get eigenvalues of the correlation matrix
     def get_ev(d):
-        # Eigenvalues of the correlation matrix are the standard 
-        # metric for Parallel Analysis
         corr_mtx = np.corrcoef(d, rowvar=False)
         ev = np.linalg.eigvalsh(corr_mtx)
         return np.sort(ev)[::-1] # Sort descending
 
-    # 3. Get eigenvalues for the actual data
+    # Get eigenvalues for the actual data
     dataEv = get_ev(data)
 
-    # 4. Run Parallel Analysis (K times over random noise)
+    # Run Parallel Analysis (K times over random noise)
     sumRandomEigens = np.zeros(m)
-    
     for runNum in range(K):
-        # Create random noise with same dimensions as data
         randomData = np.random.normal(size=(n, m))
         sumRandomEigens += get_ev(randomData)
-
     # Average over the number of runs
     avgRandomEigens = sumRandomEigens / K
 
-    # 5. Determine suggested factors
+    # Determine suggested factors
     # We compare the actual eigenvalues to the random ones
     suggestedFactors = np.sum(dataEv > avgRandomEigens)
 
-
-    if printEigenvalues:
-        print('Average Random Eigenvalues:', avgRandomEigens)
-        print('Actual Data Eigenvalues:', dataEv)
     
-    print(f'Parallel analysis suggests that the number of factors = {suggestedFactors}')
+    #print(f'Parallel analysis suggests that the number of factors = {suggestedFactors}')
 
     return suggestedFactors
 
