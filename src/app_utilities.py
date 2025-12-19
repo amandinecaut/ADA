@@ -22,7 +22,7 @@ import pandas as pd
 import numpy as np
 import itertools
 import openai
-import prince
+#import prince
 import json
 import ast
 import re
@@ -72,6 +72,11 @@ DATA_PATHS = {
         "map": "./data/demo_data/football/map-football.xlsx", 
         "entity": "football player"
     },
+    "Dogs Breeds": {
+        "data": "./data/demo_data/dogs/breed_traits.csv",
+        "map": "./data/demo_data/dogs/map.xlsx", 
+        "entity": "dog"
+    },
     "Mental health & social media": {
         "data": "./data/demo_data/mental_health/mental_health_social_media_sample.csv",
         "map": "./data/demo_data/mental_health/map.xlsx",
@@ -82,21 +87,21 @@ DATA_PATHS = {
         "map": "./data/demo_data/16_personality/map.xlsx", 
         "entity": "person"
     },
-    "Cardiovascular Disease": {
-        "data": "./data/demo_data/cardiovascular/cardio_train.csv",
-        "map": "./data/demo_data/cardiovascular/cardio_map.xlsx", 
-        "entity": "patient"
-    }, 
-    "Dogs Breeds": {
-        "data": "./data/demo_data/dogs/breed_traits.csv",
-        "map": "./data/demo_data/dogs/map.xlsx", 
-        "entity": "dog"
-    },
     "Rugby Players": {
         "data": "./data/demo_data/rugby/Statistic_rugby_players.csv",
         "map": "./data/demo_data/rugby/rugby_player_map.xlsx", 
         "entity": "rugby player"
     },
+    "Football test": {
+        "data": "./data/demo_data/football_test/team_stats.csv",
+        "map": "./data/demo_data/football_test/match_api_metric_map.json", 
+        "entity": "football player"
+    },
+    "Cardiovascular Disease": {
+        "data": "./data/demo_data/cardiovascular/cardio_train.csv",
+        "map": "./data/demo_data/cardiovascular/cardio_map.xlsx", 
+        "entity": "patient"
+    }
     # Add other datasets here
 }
 

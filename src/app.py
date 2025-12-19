@@ -257,7 +257,7 @@ with tab1:
             else: 
                 option_labels = st.session_state.df_full.loc[st.session_state.df_filtered.index, selected_from_ignore] 
             label_to_value = dict(zip(option_labels, option_row))
-            print("label_to_value", label_to_value)
+          
             st.session_state["label_to_value"] = label_to_value
             
      
