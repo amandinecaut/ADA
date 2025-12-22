@@ -330,6 +330,7 @@ class CreateWordalisation(Wordalisation):
         return self.synthetic_text 
 
     def get_prompt_messages(self):
+        entity = st.session_state.selected_entity
         prompt = (
             "Fantastic! That’s exactly what I needed.\n"
             f"Now, let’s return to your analysis. Your next task is to describe a specific {self.entity_id} based on the provided information.\n"
@@ -338,8 +339,8 @@ class CreateWordalisation(Wordalisation):
             f"The second sentence should describe the {self.entity_id}'s specific strengths based on the metrics. \n"
             f"The third sentence should describe aspects in which the {self.entity_id} is average and/or weak based on the statistics. \n"
             f"Finally, summarize the {self.entity_id} with a single concluding statement. \n" 
-            f"Here is the statistical description of the {self.entity_id}: ```{self.synthetic_text}´´´ \n"
-            f"Here is the informative description of {self.article} {self.entity_id} belongs to: ```{self.get_description_cluster_entity()}´´´"
+            f"Here is the statistical description of {entity}: ```{self.synthetic_text}´´´ \n"
+            f"Here is the informative description of {entity}: ```{self.get_description_cluster_entity()}´´´"
         )
 
         return [{"role": "user", "content": prompt}]
