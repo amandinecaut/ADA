@@ -266,55 +266,82 @@ with tab1:
 with tab2:
     if not st.session_state.get("tab1_done", False):
         st.warning("You must load your data first!")
+    if "df_full" not in st.session_state:
+        right_t2.write("Load data to perform Factor Analysis")
+    elif len(st.session_state.df_filtered) < 10:
+        right_t2.write("Not enough data to perform Factor Analysis")
+    
     else:
 
         left_t2, right_t2 = st.columns([0.3, 0.7])
         left_t2 = left_t2.container(height=height, border=0)
         right_t2 = right_t2.container(height=height, border=3)
-
-        left_t2.markdown("### Select a tool")
-
-        # Choose the analysis
-
+                
         if "analysis" not in st.session_state:
             st.session_state.analysis = None
-        # Update the selected analysis
-        if left_t2.button("Factor Analysis"):
-            st.session_state.analysis = "FA"
 
-        
+        left_t2.markdown("## 🧠 Data Intelligence Hub")
+        left_t2.markdown("Select your analytical path to begin.")
 
-        if st.session_state.analysis == "FA":
-            left_t2.markdown("### Factor Analysis")
+    with left_t2:
+        col1, col2 = st.columns(2)
 
-            # Ask user if they want to automatically find optimal number of factors
-            factor_auto = left_t2.radio(
-            "Would you like to find the optimal number of factors automatically?",
-            ("Yes", "No"),
-             index=1,  # Default to "No"
+        with col1:
+            st.markdown("#### 🧩 Factor Analysis")
+            st.write("Uncover the hidden patterns and latent structures in your data.")
+            if st.button("Explore Patterns", use_container_width=True):
+                st.session_state.analysis = "FA"
+        with col2:
+            st.markdown("#### 📉 Logistic Regression")
+            st.write("Predict outcomes and understand the probability of events.")
+            if st.button("Predict Outcomes", use_container_width=True):
+                st.session_state.analysis = "LR"
+        left_t2.markdown("---")
+
+
+
+
+    if st.session_state.analysis == "FA":
+        left_t2.markdown("### 🧩 Factor Analysis")
+        left_t2.markdown("###### 🛠️ Factor Configuration")
+        left_t2.markdown("Finding the right balance is key to a clean model.")
+
+        # Ask user if they want to automatically find optimal number of factors
+        factor_auto = left_t2.radio(
+            "🚀 Smart Suggestion: Should we calculate the ideal factors for you?",
+            ("Yes, let's optimize!", "No, I prefer manual control"),
+            index=0,
+            help="Automatic optimization uses statistical tests to find the best fit for your data."
             )
 
-            if factor_auto == "Yes":
-                kaiser_number = app_utilities.get_kaiser_criterion()
-                Horn = app_utilities.HornParallelAnalysis()
-                left_t2.write(f"The optimal number of factors with Kaiser is {kaiser_number}")
-                left_t2.write(f"The optimal number of factors with parallel analysis is {Horn}")
-                
-                col1, col2 = left_t2.columns(2)
+        if factor_auto == "Yes, let's optimize!":
+            kaiser_number = app_utilities.get_kaiser_criterion()
+            Horn = app_utilities.HornParallelAnalysis()
 
-                if col1.button(f"Proceed with Kaiser ({kaiser_number})"):
-                    st.session_state.factor_nb = kaiser_number
-                    st.success(f"Factor count set to {kaiser_number}")
-                    perform_FA()
+            # Section Header
+            left_t2.caption("We've analyzed your data structure. Choose the recommendation that fits your goal:")
 
-                if col2.button(f"Proceed with parallel analysis ({Horn})"):
-                    st.session_state.factor_nb = Horn
-                    st.success(f"Factor count set to {Horn}")
-                    perform_FA()
+            # Using metrics for a more "Dashboard" feel
+            m_col1, m_col2 = left_t2.columns(2)
+            m_col1.metric("Kaiser Criterion", f"{kaiser_number} Factors", help="A standard approach based on eigenvalues > 1.")
+            m_col2.metric("Parallel Analysis", f"{Horn} Factors", help="A more robust statistical simulation method.")
+
+            # Action Buttons
+            col1, col2 = left_t2.columns(2)
+
+            if col1.button(f"🎯 Use Kaiser ({kaiser_number})", use_container_width=True):
+                st.session_state.factor_nb = kaiser_number
+                st.toast(f"Applying Kaiser: {kaiser_number} factors", icon="✅")
+                perform_FA()
+
+            if col2.button(f"🚀 Use Parallel ({Horn})", use_container_width=True):
+                st.session_state.factor_nb = Horn
+                st.toast(f"Applying Parallel Analysis: {Horn} factors", icon="🔥")
+                perform_FA()
                           
-            else:
+        else:
 
-                factor_nb = left_t2.slider(
+            factor_nb = left_t2.slider(
                     "Select the number of components",
                     min_value=1,
                     max_value=default_max_components,
@@ -324,115 +351,123 @@ with tab2:
                     on_change=perform_FA,
                 )
 
-            #if left_t2.button("Run Factor Analysis"):
-            #    perform_FA()
+        
+        
 
-            if "df_full" not in st.session_state:
-                right_t2.write("Load data to perform Factor Analysis")
-            elif len(st.session_state.df_filtered) < 10:
-                right_t2.write("Not enough data to perform Factor Analysis")
-            elif "N" not in st.session_state:
-                right_t2.write("Select a number of factor to perform Factor Analysis")
-            elif "N" in st.session_state:
-                right_t2.write("## Automated labelling")
-                display_results(right_t2)
-
-                left_t2.write(
-                    f"Number of components: {st.session_state.N} (max {default_max_components})"
+        left_t2.write(
+                    f"Number of components: {st.session_state.factor_nb}."
                 )
+        if "factor_nb" in st.session_state:
+            right_t2.write("## Automated labelling")
+            display_results(right_t2)
 
-                right_t2.markdown("---")
+            right_t2.markdown("---")
+            right_t2.write("## Factor Analysis results")
 
-                right_t2.write("## Factor Analysis results")
+            expander_FA = right_t2.expander("Factor Analysis results")
+            expander_FA.write(st.session_state.df)
+            FA_done = True
 
-                expander_FA = right_t2.expander("Factor Analysis results")
-                expander_FA.write(st.session_state.df)
-                FA_done = True
+            expander_exp = right_t2.expander("Factors components")
+            expander_exp.write(st.session_state.components)
 
-                expander_exp = right_t2.expander("Factors components")
-                expander_exp.write(st.session_state.components)
-
-        if FA_done:
-
-            right_t2.write(
+    if FA_done:
+        right_t2.markdown("---")
+        right_t2.write("## Question and Answer pairs")
+        right_t2.write(
                 """
-                 ADA will now generate Question–Answer pairs for clustering and visualisation. 
-                 You may also provide additional information (e.g., the abstract of a related paper) to improve the generated pairs.  
-                 *Note: Adding extra information is optional.*
+                ADA will now generate Question–Answer pairs for clustering and visualisation. 
                 """
-                )
+            )
+        if right_t2.button("Generate Q&A"):
+                
+            QandA = create_QandA(text=None)
+
+            if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
+                # Display Q&A
+                for i, row in QandA.iterrows():
+                    right_t2.markdown(f"### **Question {i+1}:** {row['User']}")
+                    right_t2.markdown(f"**Answer:** {row['Assistant']}")
+                    right_t2.write("\n")
+
+            # Path to save the CSV
+            QandA_path = "./data/describe/generate/QandA_data.csv"
+            # Ensure the folder exists
+            os.makedirs(os.path.dirname(QandA_path), exist_ok=True)
+            # Save the DataFrame as a CSV file
+            QandA.to_csv(QandA_path, index=False)
+
+            st.success("Q&A generated and saved!")
+
+            # right_t2.write(
+            #     """
+            #      ADA will now generate Question–Answer pairs for clustering and visualisation. 
+            #      You may also provide additional information (e.g., the abstract of a related paper) to improve the generated pairs.  
+            #      *Note: Adding extra information is optional.*
+            #     """
+            #     )
 
                
-            activate = ["Yes", "No"]
-            introduction_choice = right_t2.radio(
-                "Do you want to add more informations?", activate, key="intro_choice"
-            )
+            # activate = ["Yes", "No"]
+            # introduction_choice = right_t2.radio(
+            #     "Do you want to add more informations?", activate, key="intro_choice"
+            # )
 
-            # Show text area only if "Yes" is selected
-            text = (
-                right_t2.text_area("Add more specific domain information here:")
-                if introduction_choice == "Yes"
-                else None
-            )
+            # # Show text area only if "Yes" is selected
+            # text = (
+            #     right_t2.text_area("Add more specific domain information here:")
+            #     if introduction_choice == "Yes"
+            #     else None
+            # )
 
-            # Disable button if "Yes" is selected but text is empty
-            generate_disabled = introduction_choice == "Yes" and (
-                not text or not text.strip()
-            )
+            # # Disable button if "Yes" is selected but text is empty
+            # generate_disabled = introduction_choice == "Yes" and (
+            #     not text or not text.strip()
+            # )
             
-            if right_t2.button("Generate Q&A", disabled=generate_disabled):
+            # if right_t2.button("Generate Q&A", disabled=generate_disabled):
                 
-                QandA = create_QandA(text)
+            #     QandA = create_QandA(text)
 
-                if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
-                    # Display Q&A
-                    for i, row in QandA.iterrows():
-                        right_t2.markdown(f"### **Question {i+1}:** {row['User']}")
-                        right_t2.markdown(f"**Answer:** {row['Assistant']}")
-                        right_t2.write("\n")
+            #     if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
+            #         # Display Q&A
+            #         for i, row in QandA.iterrows():
+            #             right_t2.markdown(f"### **Question {i+1}:** {row['User']}")
+            #             right_t2.markdown(f"**Answer:** {row['Assistant']}")
+            #             right_t2.write("\n")
 
-                # Path to save the CSV
-                QandA_path = "./data/describe/generate/QandA_data.csv"
-                # Ensure the folder exists
-                os.makedirs(os.path.dirname(QandA_path), exist_ok=True)
-                # Save the DataFrame as a CSV file
-                QandA.to_csv(QandA_path, index=False)
+            #     # Path to save the CSV
+            #     QandA_path = "./data/describe/generate/QandA_data.csv"
+            #     # Ensure the folder exists
+            #     os.makedirs(os.path.dirname(QandA_path), exist_ok=True)
+            #     # Save the DataFrame as a CSV file
+            #     QandA.to_csv(QandA_path, index=False)
 
-                st.success("Q&A generated and saved!")
-
-
-                embeddings = Embeddings()
-
-                directory = os.makedirs(os.path.dirname("./data/embeddings/"), exist_ok=True)
-                st.write("Starting to embedd ")
-
-           
-                
-
-                st.write("Updating all embeddings...")
-                #for root, name in file_walk(path_describe):
-                #    print_path = os.path.join(root, name).replace(path_describe, "")[1:]
-                #    embed(os.path.join(root, name), embeddings)
-
-                embed(QandA_path,embeddings)
+            #     st.success("Q&A generated and saved!")
 
 
-                st.session_state.tab2_done = True
-            else:
-                st.error("Failed to generate Q&A. Please check your input.")
+            embeddings = Embeddings()
+
+            directory = os.makedirs(os.path.dirname("./data/embeddings/"), exist_ok=True)
+            st.write("Starting to embedd ")
+            st.write("Updating all embeddings...")
+            embed(QandA_path,embeddings)
+
+
+            st.session_state.tab2_done = True
         else:
-            st.error("You must complete the Factor Analysis first!")
+            st.error("Failed to generate Q&A. Please check your input.")
+    else:
+        st.error("You must complete the Factor Analysis first!")
         
-        
-        if left_t2.button("Logistic Regression"):
-            st.session_state.analysis = "LR"
+    left_t2.markdown("---")
 
-        if st.session_state.analysis == "LR":
-            right_t2.markdown("---")
-            right_t2.write("## Work in progress")
+    if st.session_state.analysis == "LR":
+        right_t2.markdown("---")
+        left_t2.markdown("### 📉 Logistic Regression")
+        left_t2.write("#### Work in progress")
+        right_t2.write("### Work in progress")
 
-            right_t2.markdown("---")
-            right_t2.write("## Question and Answer pairs")
 
 
 # Clustering
@@ -451,12 +486,17 @@ with tab3:
 
         # Ask user if they want to automatically find optimal k
         use_elbow = left_t3.radio(
-            "Would you like to find the optimal number of clusters automatically?",
-            ("Yes", "No"),
-             index=1,  # Default to "No"
+            "🎯 **Let's find the 'Sweet Spot' for your clusters?**",
+            options=("Yes, run the Elbow Method", "No, I'll choose manually"),
+            index=1,
+            help=(
+                "The Elbow Method calculates the 'Within-Cluster Sum of Squares' (WCSS). "
+                "It helps you identify the point where adding more clusters no longer "
+                "significantly improves the model, ensuring your groups are statistically distinct."
             )
+        )   
 
-        if use_elbow == "Yes":
+        if use_elbow == "Yes, run the Elbow Method":
             optimal_k = app_utilities.find_optimal_k_elbow(st.session_state.df)
             left_t3.write(f"The optimal number of clusters is {optimal_k}")
             st.session_state.num_clusters = optimal_k
@@ -474,9 +514,20 @@ with tab3:
             )
 
         # Button to trigger clustering
-        if left_t3.button("Run Clustering"):
-            perform_clustering()
-            right_t3.write("Clustering complete")
+        # if left_t3.button("Run Clustering"):
+        #     perform_clustering()
+        #     right_t3.write("Clustering complete")
+        
+        if left_t3.button("🚀 Group My Data", use_container_width=True, type="primary"):
+            # The spinner will appear inside the left column
+            with st.spinner("🔮 Analyzing patterns and forming clusters..."):
+                perform_clustering()
+
+            # Success feedback with a "Toast" or an Icon
+            st.toast("Clustering complete!", icon="✅")
+            right_t3.success("✨ **Clustering Complete!** Your data has been organized into distinct groups.")
+
+            #st.balloons()
 
         # Factor selection for dimensions
         left_t3.markdown("#### Selection of factors for each dimension")

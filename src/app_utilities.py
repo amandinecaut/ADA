@@ -349,15 +349,15 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
        
         # st.session_state.exp_ratio = PCA.explained_variance_ratio_ ## This is only for PCA
 
-        st.session_state.N = components
+        st.session_state.factor_nb= components
 
         FA_component_dict = {}
         components = FA.components_
 
-        # first st.session_state.N columns of components
-        st.session_state.components = components[:, : st.session_state.N]
+        # first st.session_state.factor_nb columns of components
+        st.session_state.components = components[:, : st.session_state.factor_nb]
 
-        for i in range(st.session_state.N):
+        for i in range(st.session_state.factor_nb):
 
             # n = 1
             # c2 = components[i] ** 2  # np.abs(components[i])
