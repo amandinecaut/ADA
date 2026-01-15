@@ -7,6 +7,7 @@ from visualisation_utilities import (
     DistributionPlot
 )
 from wordalisation import ModelHandler, ClusterWordalisation, FALabel, QandAWordalisation,QandAWordalisation_from_text
+from factor_analysis import *
 
 from clustering import Cluster
 from sklearn.decomposition import FactorAnalysis
@@ -22,7 +23,6 @@ import pandas as pd
 import numpy as np
 import itertools
 import openai
-#import prince
 import json
 import ast
 import re
@@ -306,79 +306,71 @@ def choose_article(word):
 ### ----  Analysis tab utilities ---- ###
 
 # Factor Analysis utilities
-def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
-
+def perform_FA(factor_n=DEFAULT_FACTOR_NB,threshold=DEFAULT_THRESHOLD):
     if st.session_state.features != []:
-        x = st.session_state.df_filtered.loc[:, st.session_state.features].values
-        original_index = st.session_state.df_filtered.index
+        df = st.session_state.df_filtered.loc[:, st.session_state.features]
+        original_index = df.index
+        n_factors = st.session_state.get("factor_nb", 2)
 
-        x = StandardScaler().fit_transform(x)
-        if "factor_nb" in st.session_state:
-            components = st.session_state.factor_nb
+        model_name = st.session_state.get("strategy_name")
+
+        strategies = {
+            "FA": ContinuousFAStrategy(),
+            "Polychoric FA": PolychoricFAStrategy(),
+            "MCA": MCAStrategy(),
+            "FAMD": FAMDStrategy()
+        }
+        strategy_object = strategies[model_name]
+        model = strategy_object.fit(df, n_factors)
+
+
+        # 3. Standardize Factor Scores (Transform)
+        if hasattr(model, "transform"):
+            scores = model.transform(df)
+        elif hasattr(model, "row_coordinates"):
+            scores = model.row_coordinates(df).values
         else:
-            components = DEFAULT_FACTOR_NB
+            scores = None
 
-        # Factor Analysis
-        FA = FactorAnalysis(n_components=components)
-        principalComponents = FA.fit_transform(x)
+        if scores is not None:
+            principalDf = pd.DataFrame(
+                scores,
+                columns=[f"Factor {i+1}" for i in range(scores.shape[1])],
+                index=original_index
+            )
+            st.session_state.factor_scores = principalDf
 
-        #x = st.session_state.df_filtered.loc[:, st.session_state.features]
-        #x = x.apply(lambda col: pd.to_numeric(col, errors='ignore'))
+        # 4. Extract Loadings (Unified format: factors as rows, features as columns)
+        if hasattr(model, "loadings_"):
+            # factor_analyzer uses (features, factors), so we transpose
+            components = model.loadings_.T
+        elif hasattr(model, "components_"):
+            # sklearn uses (factors, features)
+            components = model.components_
+        elif hasattr(model, "column_correlations_"):
+            # prince uses (features, factors)
+            components = model.column_correlations_.values.T
+        else:
+            components = np.zeros((n_factors, len(df.columns)))
 
-        # famd = prince.FAMD(
-        # n_components=components,
-        # n_iter=10,
-        # copy=True,
-        # check_input=True,
-        # engine='auto',
-        # random_state=42
-        # )
-        # famd = famd.fit(x)
-        # principalComponents = famd.row_coordinates(x)
-        # principalComponents.columns = [f"Factor {i+1}" for i in range(components)]
-        # principalComponents.index = original_index
-
-        principalDf = pd.DataFrame(
-            data=principalComponents,
-            columns=[f"Factor {i+1}" for i in range(principalComponents.shape[-1])],
-            index=original_index,
-        )
-     
+        st.session_state.components = components
         
+        # 5. Diagnostics (Polychoric FA)
+        if hasattr(model, "adequacy_"):
+            st.session_state.kmo = model.adequacy_["kmo"]
+            st.session_state.bartlett_p = model.adequacy_["bartlett_p_value"]
+            st.session_state.rotation = model.rotation_
 
-       
-        # st.session_state.exp_ratio = PCA.explained_variance_ratio_ ## This is only for PCA
-
-        st.session_state.factor_nb= components
-
+        # 6. Build Feature Importance Dictionary
         FA_component_dict = {}
-        components = FA.components_
 
-        # first st.session_state.factor_nb columns of components
         st.session_state.components = components[:, : st.session_state.factor_nb]
 
+       
+        
+        
         for i in range(st.session_state.factor_nb):
 
-            # n = 1
-            # c2 = components[i] ** 2  # np.abs(components[i])
-            # while sum(c2[np.argsort(c2)[::-1][:n]]) < threshold:
-            #     n += 1
-            # # make n even
-            # if n % 2 != 0:
-            #     n += 1
-
-            # top_components = [
-            #    c for c in np.argsort(c2)[::-1][:n] if components[i][c] > 0
-            # ]
-            # bottom_components = [
-            #    c for c in np.argsort(c2)[::-1][:n] if components[i][c] < 0
-            # ]
-
-            #n = 2 # this is for the top 2 or bottom 2
-            #top_components = np.argsort(components[i])[::-1][:n]
-            #bottom_components = np.argsort(components[i])[:n]
-
-           
             top = np.where(components[i] > threshold)[0]
             bottom = np.where(components[i]< -threshold)[0]
             top_components = top[np.argsort(components[i][top])[::-1]]
@@ -446,6 +438,118 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     else:
         st.session_state.FA_component_dict = {}
         st.session_state.df = None
+
+
+
+
+def perform_FA1(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
+    
+    if st.session_state.features != []:
+        x = st.session_state.df_filtered.loc[:, st.session_state.features]#.values
+        original_index = st.session_state.df_filtered.index
+        x = StandardScaler().fit_transform(x)
+
+        if "factor_nb" in st.session_state:
+            components = st.session_state.factor_nb
+        else:
+            components = DEFAULT_FACTOR_NB
+
+        # Factor Analysis
+        FA = FactorAnalysis(n_components=components)
+        principalComponents = FA.fit_transform(x)
+
+        principalDf = pd.DataFrame(
+            data=principalComponents,
+            columns=[f"Factor {i+1}" for i in range(principalComponents.shape[-1])],
+            index=original_index,
+        )
+
+        st.session_state.factor_nb= components
+
+        FA_component_dict = {}
+        components = FA.components_
+
+        # first st.session_state.factor_nb columns of components
+        st.session_state.components = components[:, : st.session_state.factor_nb]
+
+       
+        
+        
+        for i in range(st.session_state.factor_nb):
+
+            top = np.where(components[i] > threshold)[0]
+            bottom = np.where(components[i]< -threshold)[0]
+            top_components = top[np.argsort(components[i][top])[::-1]]
+            bottom_components = bottom[np.argsort(components[i][bottom])]
+
+            # Keep only top 5
+            n = 5
+            if len(top_components) > n:
+                top_components = top_components[:n]
+
+
+            if len(bottom_components) > n:
+                bottom_components = bottom_components[:n]
+
+
+            #print(f"top: {top_components}")
+            #print(f"bottom: {bottom_components}")
+
+            # n = 5
+            # top_components = np.argsort(components[i])[::-1][:n]
+            top_values = [round(components[i][c], 2) for c in top_components]
+            top_features = [st.session_state.features[c] for c in top_components]
+            top_features = [
+                st.session_state.col_mapping.get(f, f) for f in top_features
+            ]
+
+            # n = 5
+            # bottom_components = np.argsort(components[i])[:n]
+            bottom_values = [round(components[i][c], 2) for c in bottom_components]
+            bottom_features = [st.session_state.features[c] for c in bottom_components]
+            bottom_features = [
+                st.session_state.col_mapping.get(f, f) for f in bottom_features
+            ]
+
+            # text = "Features:\n"
+            # text += ",\n".join(top_features + bottom_features)
+
+            text = "Bottom features:\n"
+            text += ", ".join(bottom_features)
+            text += "\n\nTop features:\n"
+            text += ", ".join(top_features)
+
+
+            FA_component_dict[f"Factor {i+1}"] = {
+                #"label": label,
+                "top": top_features,
+                "values_top": top_values,
+                "bottom": bottom_features,
+                "values_bottom": bottom_values,
+            }
+
+           
+        get_component_labels(FA_component_dict)
+        st.session_state.FA_component_dict = FA_component_dict
+        
+        st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
+        st.session_state.df_original = st.session_state.df.copy()
+        vis = DistributionPlot(
+            st.session_state.df,
+            {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
+        )
+        st.session_state.fig_base = vis.fig
+        st.session_state.df_z_scores = vis.df_z_scores
+
+    else:
+        st.session_state.FA_component_dict = {}
+        st.session_state.df = None
+
+
+
+
+
+
 
 # Get Kaiser criterion (eigenvalues > 1)
 def get_kaiser_criterion():
