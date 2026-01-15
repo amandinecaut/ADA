@@ -340,14 +340,14 @@ with tab2:
                 # Action Buttons
                 col1, col2 = left_t2.columns(2)
 
-                if col1.button(f"🎯 Use Kaiser ({kaiser_number})", use_container_width=True, help="Eigenvalues > 1"):
+                if col1.button(f"🎯 Use Kaiser", use_container_width=True, help="Eigenvalues > 1"):
                     st.session_state.factor_nb = kaiser_number
                     st.toast(f"Applying Kaiser", icon="✅")
                     perform_FA()
 
-                if col2.button(f"🚀 Use Parallel ({Horn})", use_container_width=True, help="Simulation-based"):
+                if col2.button(f"🚀 Use Parallel Analysis)", use_container_width=True, help="Simulation-based"):
                     st.session_state.factor_nb = Horn
-                    st.toast(f"Applying Parallel Analysis", icon="✅")
+                    st.toast(f"Applying Parallel Analysis f{Horn}", icon="✅")
                     perform_FA()
 
             elif strategy_name == 'MCA':
@@ -359,12 +359,12 @@ with tab2:
                 m_col1.metric("Optimal Dimensions", f"{suggested_mca}", help="Benzécri-corrected elbow method.")
                 m_col2.metric("90% Variance", f"{dims_for_90} Dims", help="Dimensions to reach 90% explained inertia.")
                 col1, col2 = left_t2.columns(2)
-                if col1.button(f"🎯 Use Elbow ({suggested_mca})", use_container_width=True):
+                if col1.button(f"🎯 Use Elbow)", use_container_width=True):
                     st.session_state.factor_nb = suggested_mca
                     st.toast(f"Applying Elbow Method", icon="✅")
                     perform_FA()
 
-                if col2.button(f"🚀 Use 90% ({dims_for_90})", use_container_width=True):
+                if col2.button(f"🚀 Use 90%", use_container_width=True):
                     st.session_state.factor_nb = dims_for_90
                     st.toast(f"Applying 90% Variance", icon="✅")
                     perform_FA()
@@ -379,20 +379,20 @@ with tab2:
                 
                 # Display metrics for context
                 m_col1, m_col2 = left_t2.columns(2)
-                m_col1.metric("Suggested Dimensions", f"{famd_suggested}", help="Optimal dimensions to capture significant variance in mixed data.")
-                m_col2.metric("Kaiser Criterion", f"{kaiser_famd_number} Factors", help="A standard approach based on eigenvalues > 1.")
+                m_col1.metric("Suggested factors", f"{famd_suggested}", help="Optimal factors to capture significant variance in mixed data.")
+                m_col2.metric("Kaiser Criterion", f"{kaiser_famd_number} factors", help="A standard approach based on eigenvalues > 1.")
 
                 # Action Buttons
                 col1, col2 = left_t2.columns(2)
                 
                 
-                if col1.button(f"🚀 Apply FAMD Strategy", use_container_width=True, key="btn_famd"):
+                if col1.button(f"🚀 Use selection heuristic", use_container_width=True):
                     st.session_state.factor_nb = famd_suggested
-                    st.toast(f"FAMD configured with {famd_suggested} dimensions", icon="✅")
+                    st.toast(f"Selection heuristic with {famd_suggested} factors", icon="✅")
                     perform_FA()
                 if col2.button(f"🎯 Use Kaiser", use_container_width=True):
                     st.session_state.factor_nb = kaiser_famd_number
-                    st.toast(f"Applying Kaiser: {kaiser_famd_number} factors", icon="✅")
+                    st.toast(f"Applying Kaiser with {kaiser_famd_number} factors", icon="✅")
                     perform_FA()
 
         else:

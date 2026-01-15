@@ -324,7 +324,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB,threshold=DEFAULT_THRESHOLD):
         model = strategy_object.fit(df, n_factors)
 
 
-        # 3. Standardize Factor Scores (Transform)
+        # 3. Standardise Factor Scores (Transform)
         if hasattr(model, "transform"):
             scores = model.transform(df)
         elif hasattr(model, "row_coordinates"):
@@ -355,11 +355,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB,threshold=DEFAULT_THRESHOLD):
 
         st.session_state.components = components
         
-        # 5. Diagnostics (Polychoric FA)
-        if hasattr(model, "adequacy_"):
-            st.session_state.kmo = model.adequacy_["kmo"]
-            st.session_state.bartlett_p = model.adequacy_["bartlett_p_value"]
-            st.session_state.rotation = model.rotation_
+
 
         # 6. Build Feature Importance Dictionary
         FA_component_dict = {}

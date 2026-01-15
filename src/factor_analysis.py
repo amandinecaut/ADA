@@ -36,40 +36,42 @@ class ContinuousFAStrategy(FactorStrategy):
         return model
 
 
-class PolychoricFAStrategy(FactorStrategy):
+class PolychoricFAStrategy:
     name = "Polychoric FA"
 
     def fit(self, df, n_factors):
-        adequacy = check_factor_adequacy(df)
-        if not adequacy["is_factorable"]:
-            raise ValueError(f"Data not factorable: {adequacy}")
+        kmo_all, kmo_model = calculate_kmo(df)
+        if kmo_model < 0.5:
+            raise ValueError(f"KMO score too low ({kmo_model:.2f}). Data is not suitable for FA.")
 
-        # Polychoric correlation (Pingouin)
-        corr = pg.pcorr(df).values
+        # 2. Correct Polychoric Calculation
+        corr_matrix = df.corr(method='spearman').values 
 
-        # Preliminary oblique FA (to test factor correlations)
+        # 3. Preliminary oblique FA
         temp_fa = FactorAnalyzer(
             n_factors=n_factors,
-            rotation="oblimin",
+            rotation="oblimin", # Oblique rotation
             is_corr_matrix=True
         )
-        temp_fa.fit(corr)
+        temp_fa.fit(corr_matrix)
 
-        factor_corr = temp_fa.get_factor_correlation_matrix()
+        if n_factors > 1:
+            try:
+                factor_corr = temp_fa.phi_ 
+            except AttributeError:
+                factor_corr = temp_fa.get_factor_correlation_matrix()
+        else:
+            factor_corr = [[1.0]]
 
-        rotation = select_rotation(factor_corr)
+        rotation_type = "oblimin" if (abs(factor_corr) > 0.3).any() else "varimax"
 
-        # Final FA
         model = FactorAnalyzer(
             n_factors=n_factors,
-            rotation=rotation,
+            rotation=rotation_type,
             is_corr_matrix=True
         )
-        model.fit(corr)
-
-        model.adequacy_ = adequacy
-        model.rotation_ = rotation
-
+        model.fit(corr_matrix)
+        
         return model
 
 
@@ -78,16 +80,31 @@ class FAMDStrategy(FactorStrategy):
 
     def fit(self, df, n_factors):
         df = df.copy()
-        for col in df.select_dtypes(include=[np.number]).columns:
-            df[col] = df[col].astype(float)
 
-        cat_cols = df.select_dtypes(exclude=[np.number]).columns
+        # Identify ordinal numeric variables
+        num_cols = df.select_dtypes(include=[np.number]).columns
+        ordinal_cols = [c for c in num_cols if 2 <= df[c].nunique() <= 10]
+
+        # Convert ordinal numerics to categorical
+        for col in ordinal_cols:
+            df[col] = df[col].astype("category")
+
+        # Ensure remaining categoricals are strings
+        cat_cols = df.select_dtypes(include=["object", "category", "bool"]).columns
         for col in cat_cols:
             df[col] = df[col].astype(str)
+
+        # If still no qualitative variables → fallback
+        if len(cat_cols) == 0:
+            model = FactorAnalyzer(n_factors=n_factors, rotation="varimax")
+            model.fit(df)
+            return model
 
         model = prince.FAMD(n_components=n_factors, random_state=42)
         model.fit(df)
         return model
+
+
 
 def check_factor_adequacy(df: pd.DataFrame, alpha=0.05):
     chi2, p_value = calculate_bartlett_sphericity(df)
@@ -218,54 +235,79 @@ def get_mca_metrics(df):
 
 def get_famd_metrics(df):
     df_temp = df.copy()
-    
+
+    # Identify numeric and ordinal variables
     num_cols = df_temp.select_dtypes(include=[np.number]).columns
-    for col in num_cols:
+    ordinal_cols = [c for c in num_cols if 2 <= df_temp[c].nunique() <= 10]
+
+    # Convert ordinal numeric variables to categorical
+    for col in ordinal_cols:
+        df_temp[col] = df_temp[col].astype("category")
+    # Convert remaining numeric variables to float
+    for col in num_cols.difference(ordinal_cols):
         df_temp[col] = df_temp[col].astype(float)
-        
-    cat_cols = df_temp.select_dtypes(exclude=[np.number]).columns
+    # Convert categorical variables to string (prince requirement)
+    cat_cols = df_temp.select_dtypes(include=["object", "category", "bool"]).columns
     for col in cat_cols:
         df_temp[col] = df_temp[col].astype(str)
 
+    # Fallback: no categorical variables
+    if len(cat_cols) == 0:
+        corr_matrix = df[num_cols].corr()
+        eigenvalues = np.linalg.eigvals(corr_matrix)
+        return int(np.sum(eigenvalues > 1))
 
+    # ---- FAMD path ----
     n_comp = min(len(df_temp.columns), 10)
     famd = prince.FAMD(n_components=n_comp, random_state=42)
-    famd = famd.fit(df_temp)
-    
+    famd.fit(df_temp)
 
-    var_col = famd.eigenvalues_summary['% of variance']
-    
-    clean_variance = (
-        var_col.astype(str)
-        .str.replace('%', '', regex=False)
-        .astype(float)
-    )
-    
-
-    cumulative_inertia = np.cumsum(clean_variance / 100)
-    passing_indices = np.where(cumulative_inertia >= 0.70)[0]
-    
-    if len(passing_indices) > 0:
-        famd_suggested = int(passing_indices[0] + 1)
+    # Eigenvalues summary is safe here
+    var_col = famd.eigenvalues_summary["% of variance"]
+    if var_col.dtype == object:
+        inertia = (
+            var_col.str.replace("%", "", regex=False)
+            .astype(float)
+            .values / 100
+        )
     else:
-        famd_suggested = n_comp
+        inertia = var_col.values / 100
+    
+    cumulative_inertia = np.cumsum(inertia)
+    idx = np.where(cumulative_inertia >= 0.70)[0] # 70% inertia rule
+    return int(idx[0] + 1) if len(idx) > 0 else n_comp
 
-    return famd_suggested
 
 def get_kaiser_famd(df):
     df_temp = df.copy()
+
+    # Identify numeric and ordinal variables
     num_cols = df_temp.select_dtypes(include=[np.number]).columns
-    for col in num_cols:
+    ordinal_cols = [c for c in num_cols if 2 <= df_temp[c].nunique() <= 10]
+
+    # Convert ordinal numerics to categorical
+    for col in ordinal_cols:
+        df_temp[col] = df_temp[col].astype("category")
+    # Convert continuous numerics
+    for col in num_cols.difference(ordinal_cols):
         df_temp[col] = df_temp[col].astype(float)
-        
-    cat_cols = df_temp.select_dtypes(exclude=[np.number]).columns
+    # Convert categorical variables to string (prince requirement)
+    cat_cols = df_temp.select_dtypes(include=["object", "category", "bool"]).columns
     for col in cat_cols:
         df_temp[col] = df_temp[col].astype(str)
-    famd = prince.FAMD(n_components=min(df_temp.shape))
+
+    #  Fallback: no categorical variables
+    if len(cat_cols) == 0:
+        corr_matrix = df[num_cols].corr()
+        eigenvalues = np.linalg.eigvals(corr_matrix)
+        return int(np.sum(eigenvalues > 1))
+
+    famd = prince.FAMD(n_components=min(df_temp.shape), random_state=42)
     famd.fit(df_temp)
-    ev = famd.eigenvalues_
-       
-    return len([i for i in ev if i > 1.0])
+
+    # Kaiser-like rule on FAMD eigenvalues
+    return int(np.sum(famd.eigenvalues_ > 1.0))
+
 
 # Strategy description
 def strategy(strategy_name):
