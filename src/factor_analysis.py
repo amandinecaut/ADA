@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 import prince
-import pingouin as pg
 
 from sklearn.decomposition import FactorAnalysis
 from factor_analyzer import FactorAnalyzer
