@@ -347,7 +347,7 @@ with tab2:
 
                 if col2.button(f"🚀 Use Parallel Analysis ({Horn})", use_container_width=True, help="Simulation-based"):
                     st.session_state.factor_nb = Horn
-                    st.toast(f"Applying Parallel Analysis f"{Horn}", icon="✅")
+                    st.toast(f"Applying Parallel Analysis ({Horn})", icon="✅")
                     perform_FA()
 
             elif strategy_name == 'MCA':
