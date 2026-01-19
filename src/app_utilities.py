@@ -306,7 +306,9 @@ def choose_article(word):
 ### ----  Analysis tab utilities ---- ###
 
 def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
-    # Handle empty feature selection (original else block logic)
+    if st.session_state.features != []:
+        df = st.session_state.df_filtered.loc[:, st.session_state.features]
+        features = st.session_state.features
     if not st.session_state.features:
         st.session_state.FA_component_dict = {}
         st.session_state.df = None
@@ -336,8 +338,6 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     if model_name == "FA":
         X_scaled = StandardScaler().fit_transform(df)
         scores = model.transform(X_scaled)
-        # Fix: match original slicing logic if needed, 
-        # but usually components_ is (n_components, n_features)
         components = model.components_ 
     elif model_name == "Polychoric FA":
         scores = model.transform(df)
@@ -345,11 +345,15 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     elif model_name == "MCA":
         scores = model.row_coordinates(df).values
         components = model.column_coordinates(df).values.T
+        features = model.column_coordinates(df).index.tolist()
+      
     elif model_name == "FAMD":
         scores = model.row_coordinates(df).values
-        components = model.column_coordinates_.values.T
+        components = model.column_coordinates(df).values.T
     else:
         raise ValueError("Unknown factor strategy")
+
+    
 
     # ------------------
     # Store results in Session State (Matching Original)
@@ -384,11 +388,11 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         if len(bottom_components) > n: bottom_components = bottom_components[:n]
 
         top_values = [round(components[i][c], 2) for c in top_components]
-        top_features = [st.session_state.features[c] for c in top_components]
+        top_features = [features[c] for c in top_components]
         top_features = [st.session_state.col_mapping.get(f, f) for f in top_features]
 
         bottom_values = [round(components[i][c], 2) for c in bottom_components]
-        bottom_features = [st.session_state.features[c] for c in bottom_components]
+        bottom_features = [features[c] for c in bottom_components]
         bottom_features = [st.session_state.col_mapping.get(f, f) for f in bottom_features]
 
         FA_component_dict[f"Factor {i+1}"] = {
@@ -406,6 +410,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     
     # Apply Z-score and store
     st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
+    
     st.session_state.df_original = st.session_state.df.copy()
     
     # Generate Plot
@@ -526,51 +531,6 @@ def perform_FA_original(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOL
 
 
 
-
-
-
-
-# Get Kaiser criterion (eigenvalues > 1)
-def get_kaiser_criterion():
-    x = st.session_state.df_filtered.loc[:, st.session_state.features].values
-    x = StandardScaler().fit_transform(x)
-    corr_matrix =  np.corrcoef(x, rowvar=False)
-    eigenvalues = np.linalg.eigh(corr_matrix)[0] 
-    kaiser_n = eigenvalues[eigenvalues > 1]
-    return len(kaiser_n)
-
-# Horn's Parallel Analysis
-def HornParallelAnalysis(K=10, printEigenvalues=False):
-    
-    data = st.session_state.df_filtered.loc[:, st.session_state.features].values
-    data = StandardScaler().fit_transform(data)
-    n, m = data.shape
-
-    # Function to get eigenvalues of the correlation matrix
-    def get_ev(d):
-        corr_mtx = np.corrcoef(d, rowvar=False)
-        ev = np.linalg.eigvalsh(corr_mtx)
-        return np.sort(ev)[::-1] # Sort descending
-
-    # Get eigenvalues for the actual data
-    dataEv = get_ev(data)
-
-    # Run Parallel Analysis (K times over random noise)
-    sumRandomEigens = np.zeros(m)
-    for runNum in range(K):
-        randomData = np.random.normal(size=(n, m))
-        sumRandomEigens += get_ev(randomData)
-    # Average over the number of runs
-    avgRandomEigens = sumRandomEigens / K
-
-    # Determine suggested factors
-    # We compare the actual eigenvalues to the random ones
-    suggestedFactors = np.sum(dataEv > avgRandomEigens)
-
-    
-    #print(f'Parallel analysis suggests that the number of factors = {suggestedFactors}')
-
-    return suggestedFactors
 
 
 

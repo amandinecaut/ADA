@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 import numpy as np
 import pandas as pd
 import prince
-
+import streamlit as st
 from sklearn.decomposition import FactorAnalysis
 from factor_analyzer import FactorAnalyzer
 from sklearn.preprocessing import StandardScaler
@@ -56,6 +56,28 @@ class FAMDStrategy(FactorStrategy):
     def fit(self, df, n_factors):
         
         df = df.copy()
+        num_cols = []
+        cat_cols = []
+        print(df.dtypes)
+        for col in df.columns:
+            if pd.api.types.is_numeric_dtype(df[col]):
+                num_cols.append(col)
+            else:
+                try:
+                    pd.to_numeric(df[col].dropna().head(100)) # Test sample for speed
+                    num_cols.append(col)
+                except (ValueError, TypeError):
+                    cat_cols.append(col)
+            if num_cols:
+                df[num_cols] = df[num_cols].apply(pd.to_numeric, errors='coerce')
+        
+                df[num_cols] = df[num_cols].fillna(df[num_cols].mean())
+    
+            if cat_cols:
+                df[cat_cols] = df[cat_cols].astype('object')
+                df[cat_cols] = df[cat_cols].fillna(df[cat_cols].mode().iloc[0])
+
+
         model = prince.FAMD(
             n_components=n_factors,
             n_iter=3,
@@ -92,16 +114,14 @@ def select_rotation(corr_matrix, threshold=0.3):
 
 # Strategy Selector
 def select_strategy(df: pd.DataFrame) -> FactorStrategy:
-   
+    
     all_cols = set(df.columns)
     num_cols = set(df.select_dtypes(include=[np.number]).columns)
     cat_cols = set(df.select_dtypes(include=['object', 'category', 'bool']).columns)
     
-    # Identify ordinal candidates (numeric but few unique values)
     ordinal_cols = {c for c in num_cols if 2 <= df[c].nunique() <= 10}
     continuous_cols = num_cols - ordinal_cols
 
-    
     # Case: Purely Continuous
     if len(num_cols) == len(all_cols) and len(ordinal_cols) == 0:
         return ContinuousFAStrategy() # Uses Pearson Correlation
@@ -113,10 +133,15 @@ def select_strategy(df: pd.DataFrame) -> FactorStrategy:
     # Case: Purely Nominal (Categorical)
     elif len(cat_cols) == len(all_cols):
         return MCAStrategy() # Multiple Correspondence Analysis
-    
-    # Case: Mixed Data 
+
+    # Case: NO Continuous variables
+    # This prevents the "All variables are qualitative" error in FAMD
+    elif len(continuous_cols) == 0:
+        return MCAStrategy() 
+
+    # Case: Truly Mixed Data (Categorical/Ordinal AND Continuous)
     else:
-        return FAMDStrategy() 
+        return FAMDStrategy()
 
 
 def export_loadings(model):
@@ -202,13 +227,15 @@ def get_mca_metrics(df):
 
 def get_famd_metrics(df):
     df_temp = df.copy()
+    print(df_temp.dtypes)
 
     num_cols = df_temp.select_dtypes(include=[np.number]).columns
     ordinal_cols = [c for c in num_cols if 2 <= df_temp[c].nunique() <= 10]
+    continuous_cols = num_cols.difference(ordinal_cols)
 
     for col in ordinal_cols:
         df_temp[col] = df_temp[col].astype("category")
-    for col in num_cols.difference(ordinal_cols):
+    for col in continuous_cols:
         df_temp[col] = df_temp[col].astype(float)
     cat_cols = df_temp.select_dtypes(include=["object", "category", "bool"]).columns
     for col in cat_cols:
@@ -237,6 +264,7 @@ def get_famd_metrics(df):
     idx = np.where(cumulative_inertia >= 0.70)[0] # 70% inertia rule
     return int(idx[0] + 1) if len(idx) > 0 else n_comp
 
+
 def get_kaiser_famd(df):
     df_temp = df.copy()
 
@@ -264,7 +292,7 @@ def get_kaiser_famd(df):
 # Strategy description
 def strategy(strategy_name):
     if strategy_name == 'MCA':
-        return "Your dataset has nominal variable, we will proceed with the multiple correspondence analysis method"
+        return "Your dataset has nominal variable or no continuous variable, we will proceed with the multiple correspondence analysis method"
     elif strategy_name == 'FA':
         return "All your variable are continuous, we will proceed with the factor analysis"
     elif strategy_name == "Polychoric FA":
