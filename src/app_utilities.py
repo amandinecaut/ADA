@@ -324,43 +324,26 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     model_name = st.session_state.get("strategy_name")
     strategies = {
         "FA": ContinuousFAStrategy(),
-        "Polychoric FA": PolychoricFAStrategy(),
-        "MCA": MCAStrategy(),
         "FAMD": FAMDStrategy()
     }
     
     strategy = strategies[model_name]
-    model = strategy.fit(df, n_factors)
+    model, scores = strategy.fit(df, n_factors)
 
     # ------------------
     # Extract scores & components
     # ------------------
     if model_name == "FA":
-        X_scaled = StandardScaler().fit_transform(df)
-        scores = model.transform(X_scaled)
-        components = model.components_ 
-    elif model_name == "Polychoric FA":
-        scores = model.transform(df)
-        components = model.loadings_.T
-    elif model_name == "MCA":
-        scores = model.row_coordinates(df).values
-        components = model.column_coordinates(df).values.T
-        features = model.column_coordinates(df).index.tolist()
-      
-    elif model_name == "FAMD":
-        scores = model.row_coordinates(df).values
-        components = model.column_coordinates(df).values.T
+        components = model.components_
     else:
-        raise ValueError("Unknown factor strategy")
+        components = model.column_coordinates_
 
     
-
     # ------------------
     # Store results in Session State (Matching Original)
     # ------------------
-    st.session_state.factor_nb = n_factors
-    # The original stores the components matrix slice
-    st.session_state.components = components[:n_factors, :]
+   
+    st.session_state.components = components
 
     if scores is not None:
         principalDf = pd.DataFrame(

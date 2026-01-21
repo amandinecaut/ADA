@@ -265,6 +265,10 @@ with tab1:
 
 # "Analysis Tools"
 with tab2:
+    left_t2, right_t2 = st.columns([0.3, 0.7])
+    left_t2 = left_t2.container(height=height, border=0)
+    right_t2 = right_t2.container(height=height, border=3)
+                
     if not st.session_state.get("tab1_done", False):
         st.warning("You must load your data first!")
     if "df_full" not in st.session_state:
@@ -273,15 +277,10 @@ with tab2:
         st.markdown("Not enough data to perform Factor Analysis")
     
     else:
-
-        left_t2, right_t2 = st.columns([0.3, 0.7])
-        left_t2 = left_t2.container(height=height, border=0)
-        right_t2 = right_t2.container(height=height, border=3)
-                
         if "analysis" not in st.session_state:
             st.session_state.analysis = None
 
-        left_t2.markdown("## 🧠 Data Intelligence Hub")
+        left_t2.markdown("### 🧠 Data Intelligence Hub")
         left_t2.markdown("Select your analytical path to begin.")
 
     with left_t2:
@@ -300,38 +299,37 @@ with tab2:
         left_t2.markdown("---")
 
 
-
-
     if st.session_state.analysis == "FA":
-        left_t2.markdown("### 🧩 Factor Analysis")
-        left_t2.markdown("###### 🛠️ Factor Configuration")
+        left_t2.markdown("## 🧩 Factor Analysis")
+        left_t2.markdown("#### 🛠️ Factor Configuration")
 
         # Factor analysis choice
         data_to_analyse = st.session_state.df_filtered.loc[:, st.session_state.features]
         strategy_name = select_strategy(data_to_analyse).name
         st.session_state.strategy_name = strategy_name
         
-        left_t2.markdown(strategy(strategy_name))
+        left_t2.markdown(get_strategy_description(strategy_name))
 
 
         # Number of factors
-        left_t2.markdown("Finding the right balance is key to a clean model.")
+        left_t2.markdown("##### ✨ **Finding the right balance is key to a clean model:**")
 
         # Ask user if they want to automatically find optimal number of factors
         factor_auto = left_t2.radio(
             "🚀 Smart Suggestion: Should we calculate the ideal factors for you?",
             ("Yes, let's optimize!", "No, I prefer manual control"),
             index=0,
-            help="Automatic optimization uses statistical tests to find the best fit for your data."
+            help="Automatic optimisation uses statistical tests to find the best fit for your data."
             )
 
         if factor_auto == "Yes, let's optimize!":
-            if strategy_name in ["FA", "Polychoric FA"]:
+            left_t2.caption("Recommendation for your data:")
+           
+            if strategy_name in "FA":
                 with st.spinner("Calculating optimal factors..."):
                     kaiser_number = get_kaiser_criterion()
                     Horn = HornParallelAnalysis()
-                # Section Header
-                left_t2.caption("Recommendation for Continuous/Ordinal data:")
+              
                 # Using metrics for a more "Dashboard" feel
                 m_col1, m_col2 = left_t2.columns(2)
                 m_col1.metric("Kaiser Criterion", f"{kaiser_number} Factors", help="A standard approach based on eigenvalues > 1.")
@@ -339,7 +337,6 @@ with tab2:
 
                 # Action Buttons
                 col1, col2 = left_t2.columns(2)
-
                 if col1.button(f"🎯 Use Kaiser ({kaiser_number})", use_container_width=True, help="Eigenvalues > 1"):
                     st.session_state.factor_nb = kaiser_number
                     st.toast(f"Applying Kaiser", icon="✅")
@@ -350,34 +347,12 @@ with tab2:
                     st.toast(f"Applying Parallel Analysis ({Horn})", icon="✅")
                     perform_FA()
 
-            elif strategy_name == 'MCA':
-                with st.spinner("Calculating MCA metrics..."):
-                    suggested_mca, dims_for_90 = get_mca_metrics(data_to_analyse)
-                
-                left_t2.caption("Recommendation for Categorical data:")
-                m_col1, m_col2 = left_t2.columns(2)
-                m_col1.metric("Optimal Dimensions", f"{suggested_mca}", help="Benzécri-corrected elbow method.")
-                m_col2.metric("90% Variance", f"{dims_for_90} Dims", help="Dimensions to reach 90% explained inertia.")
-                col1, col2 = left_t2.columns(2)
-                if col1.button(f"🎯 Use Elbow ({suggested_mca})", use_container_width=True):
-                    st.session_state.factor_nb = suggested_mca
-                    st.toast(f"Applying Elbow Method", icon="✅")
-                    perform_FA()
-
-                if col2.button(f"🚀 Use 90% Variance ({dims_for_90})", use_container_width=True):
-                    st.session_state.factor_nb = dims_for_90
-                    st.toast(f"Applying 90% Variance", icon="✅")
-                    perform_FA()
 
             elif strategy_name == 'FAMD':
                 with st.spinner("Analyzing mixed data structure..."):
-                    # Calculate the optimal dimensions using the Prince-based logic
                     famd_suggested = get_famd_metrics(data_to_analyse)
                     kaiser_famd_number = get_kaiser_famd(data_to_analyse)
-                
-                left_t2.caption("Recommendation for Mixed data:")
-                
-                # Display metrics for context
+
                 m_col1, m_col2 = left_t2.columns(2)
                 m_col1.metric("Suggested Factors", f"{famd_suggested} factors", help="The number of factors required to reach the 70% Cumulative Inertia threshold.")
                 m_col2.metric("Kaiser Criterion", f"{kaiser_famd_number} factors", help="A standard approach based on eigenvalues > 1.")
@@ -409,11 +384,8 @@ with tab2:
 
         
         
-
-        left_t2.write(
-                    f"Number of components: {st.session_state.factor_nb}."
-                )
         if "factor_nb" in st.session_state:
+            left_t2.write(f"Number of components: {st.session_state.factor_nb}.")
             right_t2.write("## Automated labelling")
             display_results(right_t2)
 
@@ -425,7 +397,19 @@ with tab2:
             FA_done = True
 
             expander_exp = right_t2.expander("Factors components")
-            expander_exp.write(st.session_state.components)
+            if strategy_name == "FA":
+                expander_exp.write(
+                    pd.DataFrame(
+                        st.session_state.components,
+                        columns=st.session_state.features,
+                        index=[
+                            f"Factor {i+1}"
+                            for i in range(st.session_state.factor_nb)
+                        ],
+                    )
+                )
+            else:
+                expander_exp.write(st.session_state.components.T)
 
     if FA_done:
         right_t2.markdown("---")
@@ -544,7 +528,7 @@ with tab3:
         use_elbow = left_t3.radio(
             "🎯 **Let's find the 'Sweet Spot' for your clusters?**",
             options=("Yes, run the Elbow Method", "No, I'll choose manually"),
-            index=1,
+            index=0,
             help=(
                 "The Elbow Method calculates the 'Within-Cluster Sum of Squares' (WCSS). "
                 "It helps you identify the point where adding more clusters no longer "
