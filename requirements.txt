@@ -61,6 +61,8 @@ openai==0.28.1
 openpyxl==3.1.5
 packaging==24.2
 pandas==2.2.3
+prince==0.16.0
+factor_analyzer==0.5.1
 parso==0.8.4
 pillow==11.0.0
 platformdirs==4.3.6

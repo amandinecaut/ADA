@@ -7,6 +7,7 @@ from visualisation_utilities import (
     DistributionPlot
 )
 from wordalisation import ModelHandler, ClusterWordalisation, FALabel, QandAWordalisation,QandAWordalisation_from_text
+from factor_analysis import *
 
 from clustering import Cluster
 from sklearn.decomposition import FactorAnalysis
@@ -22,7 +23,6 @@ import pandas as pd
 import numpy as np
 import itertools
 import openai
-#import prince
 import json
 import ast
 import re
@@ -305,14 +305,117 @@ def choose_article(word):
 
 ### ----  Analysis tab utilities ---- ###
 
-# Factor Analysis utilities
-def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
-
+def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     if st.session_state.features != []:
-        x = st.session_state.df_filtered.loc[:, st.session_state.features].values
-        original_index = st.session_state.df_filtered.index
+        df = st.session_state.df_filtered.loc[:, st.session_state.features]
+        features = st.session_state.features
+    if not st.session_state.features:
+        st.session_state.FA_component_dict = {}
+        st.session_state.df = None
+        return
 
+    df = st.session_state.df_filtered.loc[:, st.session_state.features].copy()
+    original_index = df.index
+    n_factors = st.session_state.get("factor_nb", factor_n)
+
+    # ------------------
+    # Fit model
+    # ------------------
+    model_name = st.session_state.get("strategy_name")
+    strategies = {
+        "FA": ContinuousFAStrategy(),
+        "FAMD": FAMDStrategy()
+    }
+    
+    strategy = strategies[model_name]
+    model, scores = strategy.fit(df, n_factors)
+
+    # ------------------
+    # Extract scores & components
+    # ------------------
+    if model_name == "FA":
+        components = model.components_
+    else:
+        components = model.column_coordinates_
+
+    
+    # ------------------
+    # Store results in Session State (Matching Original)
+    # ------------------
+   
+    st.session_state.components = components
+
+    if scores is not None:
+        principalDf = pd.DataFrame(
+            data=scores,
+            columns=[f"Factor {i+1}" for i in range(n_factors)],
+            index=original_index,
+        )
+
+    # ------------------
+    # Build Component Dictionary
+    # ------------------
+    FA_component_dict = {}
+    
+    for i in range(n_factors):
+        # Logic for top/bottom features based on threshold
+        top = np.where(components[i] > threshold)[0]
+        bottom = np.where(components[i] < -threshold)[0]
+        
+        top_components = top[np.argsort(components[i][top])[::-1]]
+        bottom_components = bottom[np.argsort(components[i][bottom])]
+
+        # Keep only top 5
+        n = 5
+        if len(top_components) > n: top_components = top_components[:n]
+        if len(bottom_components) > n: bottom_components = bottom_components[:n]
+
+        top_values = [round(components[i][c], 2) for c in top_components]
+        top_features = [features[c] for c in top_components]
+        top_features = [st.session_state.col_mapping.get(f, f) for f in top_features]
+
+        bottom_values = [round(components[i][c], 2) for c in bottom_components]
+        bottom_features = [features[c] for c in bottom_components]
+        bottom_features = [st.session_state.col_mapping.get(f, f) for f in bottom_features]
+
+        FA_component_dict[f"Factor {i+1}"] = {
+            "top": top_features,
+            "values_top": top_values,
+            "bottom": bottom_features,
+            "values_bottom": bottom_values,
+        }
+
+    # ------------------
+    # Finalize and Visualize (Outside the loop)
+    # ------------------
+    get_component_labels(FA_component_dict)
+    st.session_state.FA_component_dict = FA_component_dict
+    
+    # Apply Z-score and store
+    st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
+    
+    st.session_state.df_original = st.session_state.df.copy()
+    
+    # Generate Plot
+    vis = DistributionPlot(
+        st.session_state.df,
+        {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
+    )
+    st.session_state.fig_base = vis.fig
+    st.session_state.df_z_scores = vis.df_z_scores
+
+
+
+
+
+
+def perform_FA_original(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
+    
+    if st.session_state.features != []:
+        x = st.session_state.df_filtered.loc[:, st.session_state.features]#.values
+        original_index = st.session_state.df_filtered.index
         x = StandardScaler().fit_transform(x)
+
         if "factor_nb" in st.session_state:
             components = st.session_state.factor_nb
         else:
@@ -322,32 +425,11 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         FA = FactorAnalysis(n_components=components)
         principalComponents = FA.fit_transform(x)
 
-        #x = st.session_state.df_filtered.loc[:, st.session_state.features]
-        #x = x.apply(lambda col: pd.to_numeric(col, errors='ignore'))
-
-        # famd = prince.FAMD(
-        # n_components=components,
-        # n_iter=10,
-        # copy=True,
-        # check_input=True,
-        # engine='auto',
-        # random_state=42
-        # )
-        # famd = famd.fit(x)
-        # principalComponents = famd.row_coordinates(x)
-        # principalComponents.columns = [f"Factor {i+1}" for i in range(components)]
-        # principalComponents.index = original_index
-
         principalDf = pd.DataFrame(
             data=principalComponents,
             columns=[f"Factor {i+1}" for i in range(principalComponents.shape[-1])],
             index=original_index,
         )
-     
-        
-
-       
-        # st.session_state.exp_ratio = PCA.explained_variance_ratio_ ## This is only for PCA
 
         st.session_state.factor_nb= components
 
@@ -357,28 +439,11 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         # first st.session_state.factor_nb columns of components
         st.session_state.components = components[:, : st.session_state.factor_nb]
 
+       
+        
+        
         for i in range(st.session_state.factor_nb):
 
-            # n = 1
-            # c2 = components[i] ** 2  # np.abs(components[i])
-            # while sum(c2[np.argsort(c2)[::-1][:n]]) < threshold:
-            #     n += 1
-            # # make n even
-            # if n % 2 != 0:
-            #     n += 1
-
-            # top_components = [
-            #    c for c in np.argsort(c2)[::-1][:n] if components[i][c] > 0
-            # ]
-            # bottom_components = [
-            #    c for c in np.argsort(c2)[::-1][:n] if components[i][c] < 0
-            # ]
-
-            #n = 2 # this is for the top 2 or bottom 2
-            #top_components = np.argsort(components[i])[::-1][:n]
-            #bottom_components = np.argsort(components[i])[:n]
-
-           
             top = np.where(components[i] > threshold)[0]
             bottom = np.where(components[i]< -threshold)[0]
             top_components = top[np.argsort(components[i][top])[::-1]]
@@ -447,47 +512,8 @@ def perform_FA(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         st.session_state.FA_component_dict = {}
         st.session_state.df = None
 
-# Get Kaiser criterion (eigenvalues > 1)
-def get_kaiser_criterion():
-    x = st.session_state.df_filtered.loc[:, st.session_state.features].values
-    x = StandardScaler().fit_transform(x)
-    corr_matrix =  np.corrcoef(x, rowvar=False)
-    eigenvalues = np.linalg.eigh(corr_matrix)[0] 
-    kaiser_n = eigenvalues[eigenvalues > 1]
-    return len(kaiser_n)
 
-# Horn's Parallel Analysis
-def HornParallelAnalysis(K=10, printEigenvalues=False):
-    
-    data = st.session_state.df_filtered.loc[:, st.session_state.features].values
-    data = StandardScaler().fit_transform(data)
-    n, m = data.shape
 
-    # Function to get eigenvalues of the correlation matrix
-    def get_ev(d):
-        corr_mtx = np.corrcoef(d, rowvar=False)
-        ev = np.linalg.eigvalsh(corr_mtx)
-        return np.sort(ev)[::-1] # Sort descending
-
-    # Get eigenvalues for the actual data
-    dataEv = get_ev(data)
-
-    # Run Parallel Analysis (K times over random noise)
-    sumRandomEigens = np.zeros(m)
-    for runNum in range(K):
-        randomData = np.random.normal(size=(n, m))
-        sumRandomEigens += get_ev(randomData)
-    # Average over the number of runs
-    avgRandomEigens = sumRandomEigens / K
-
-    # Determine suggested factors
-    # We compare the actual eigenvalues to the random ones
-    suggestedFactors = np.sum(dataEv > avgRandomEigens)
-
-    
-    #print(f'Parallel analysis suggests that the number of factors = {suggestedFactors}')
-
-    return suggestedFactors
 
 
 
