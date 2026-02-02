@@ -832,7 +832,7 @@ class FA(Wordalisation):
             text = "The first features we look at should primarily be used to name the x pole. "
             text += "The higher the value of the association, the more important the feature is for naming the x pole. "
             text += "Here is a list of the features and how important they are for naming the x pole: "
-            descriptions = [f"the feature that {feature} is " + self.describe_level_FA(value, 'the x pole') for feature, value in zip(bottom_features, bottom_values)]
+            descriptions = [f"the feature {feature} is " + self.describe_level_FA(value, 'the x pole') for feature, value in zip(bottom_features, bottom_values)]
             text += ", ".join(descriptions) + ". "
         else:
             text = "There are no features primarily be used to name the x pole. "
@@ -844,7 +844,7 @@ class FA(Wordalisation):
             text += "The next features we look at should primarily be used to name the y pole. "
             text += "The higher the value of the association, the more important the feature is for naming the y pole. "
             text += "Here is a list of the features and how important they are for naming the y pole: "
-            descriptions = [f"the feature that {feature} is " + self.describe_level_FA(value, 'the y pole')  for feature, value in zip(top_features, top_values)]
+            descriptions = [f"the feature {feature} is " + self.describe_level_FA(value, 'the y pole')  for feature, value in zip(top_features, top_values)]
             text += ", ".join(descriptions) + "."
         else:
             text += "There are no features used to name the y pole. "

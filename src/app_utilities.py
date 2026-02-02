@@ -337,6 +337,10 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         components = model.components_
     else:
         components = model.column_coordinates_
+        components = components.T
+        components= components.to_numpy()
+    
+
 
     
     # ------------------
@@ -385,8 +389,10 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
             "values_bottom": bottom_values,
         }
 
+
+ 
     # ------------------
-    # Finalize and Visualize (Outside the loop)
+    # Finalise and Visualise (Outside the loop)
     # ------------------
     get_component_labels(FA_component_dict)
     st.session_state.FA_component_dict = FA_component_dict

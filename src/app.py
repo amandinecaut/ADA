@@ -19,7 +19,7 @@ import app_utilities
 from app_utilities import *
 
 from embeddings import Embeddings, embed
-from factor_analysis import select_strategy
+from factor_analysis import select_strategy, get_kaiser_criterion, HornParallelAnalysis, get_famd_metrics, get_kaiser_famd, get_strategy_description
 
 
 st.set_page_config(layout="wide")
@@ -397,19 +397,9 @@ with tab2:
             FA_done = True
 
             expander_exp = right_t2.expander("Factors components")
-            if strategy_name == "FA":
-                expander_exp.write(
-                    pd.DataFrame(
-                        st.session_state.components,
-                        columns=st.session_state.features,
-                        index=[
-                            f"Factor {i+1}"
-                            for i in range(st.session_state.factor_nb)
-                        ],
-                    )
-                )
-            else:
-                expander_exp.write(st.session_state.components.T)
+            expander_exp.write(pd.DataFrame(st.session_state.components,columns=st.session_state.features,
+                    index=[f"Factor {i+1}" for i in range(st.session_state.factor_nb)],))
+
 
     if FA_done:
         right_t2.markdown("---")
