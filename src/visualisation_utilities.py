@@ -156,7 +156,7 @@ class ClusterVisualisation:
         dim_y = getattr(st.session_state, "dim_y", None)
 
         # Check if required data is available
-        if u_labels.size == 0 or ind_col_map is None:
+        if ind_col_map is None:
             st.warning("Clustering not yet run. Please run clustering first.")
             return
         if centroids is None:
@@ -179,6 +179,8 @@ class ClusterVisualisation:
                 [name] for name in point_labels
             ]
            
+            
+
             hovertext=(
                 "<b> %{customdata[0]}: </b><br>" +
                 f"<b>{self.list_cluster_name[i]}</b><br>" +
@@ -359,9 +361,11 @@ class DistributionPlot:
 
         
         dataframe = self.df_z_scores
+        print(dataframe.head())
 
         # Ensure correct order by using FA_label_map
-        dataframe = dataframe[list(self.FA_label_map.values())]
+        #dataframe = dataframe[list(self.FA_label_map.values())]
+
         df = self.df_z_scores.iloc[0, :].to_frame().T
       
         cols = dataframe.columns.tolist()
@@ -377,7 +381,7 @@ class DistributionPlot:
 
 
         for i, col in enumerate(dataframe.columns):
-           
+            
             self.fig.add_trace(
                 go.Violin(
                     x=dataframe[col].tolist(),

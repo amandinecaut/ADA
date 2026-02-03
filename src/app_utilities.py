@@ -389,7 +389,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
             "values_bottom": bottom_values,
         }
 
-
+    
  
     # ------------------
     # Finalise and Visualise (Outside the loop)
@@ -401,6 +401,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
     
     st.session_state.df_original = st.session_state.df.copy()
+    print(df.head())
     
     # Generate Plot
     vis = DistributionPlot(

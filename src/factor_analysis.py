@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from pyexpat import model
 import numpy as np
 import pandas as pd
 import prince
@@ -52,6 +53,7 @@ class FAMDStrategy(FactorStrategy):
         )
         model.fit(df)
         scores = model.row_coordinates(df).values
+        
         return model, scores
   
 
