@@ -358,16 +358,13 @@ class DistributionPlot:
     def set_visualisation(self):
 
         colors = px.colors.qualitative.Set2
-
-        
         dataframe = self.df_z_scores
-        print(dataframe.head())
-
+    
         # Ensure correct order by using FA_label_map
         #dataframe = dataframe[list(self.FA_label_map.values())]
 
         df = self.df_z_scores.iloc[0, :].to_frame().T
-      
+    
         cols = dataframe.columns.tolist()
      
        

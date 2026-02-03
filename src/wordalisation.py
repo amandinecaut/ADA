@@ -297,6 +297,8 @@ class CreateWordalisation(Wordalisation):
              k for k, v in dictionary.items() if v in component["bottom"]
             ]
 
+            print(bottom_map_list)
+
             # Fast argmax / argmin
             if value > 1 and top_map_list:
                 top_values = st.session_state.df_filtered.loc[indice, top_map_list].values

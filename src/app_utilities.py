@@ -95,7 +95,7 @@ DATA_PATHS = {
     "Football test": {
         "data": "./data/demo_data/football_test/team_stats.csv",
         "map": "./data/demo_data/football_test/match_api_metric_map.json", 
-        "entity": "football player"
+        "entity": "football club"
     },
     "Cardiovascular Disease": {
         "data": "./data/demo_data/cardiovascular/cardio_train.csv",
