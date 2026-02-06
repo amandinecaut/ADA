@@ -1,0 +1,200 @@
+================================================================================
+ANTOINE DUPONT - QUICK REFERENCE CARD
+================================================================================
+
+PLAYER DETAILS:
+  Name:           Antoine Dupont
+  Position:       Scrumhalf
+  Nationality:    France
+  Age:            27
+  Height:         1.74m
+  Weight:         86kg
+  Club:           Stade Toulousain
+
+CLUSTER ASSIGNMENT:
+  Cluster 5: National Team Leaders
+  Cluster Rank: 1st overall (among 13 members) for National Team Selection
+
+================================================================================
+THE THREE-SENTENCE SUMMARY
+================================================================================
+
+✓ STRENGTHS (Sentence 1):
+"Antoine Dupont demonstrates exceptional strengths in national team 
+performance & selection and other tournament performance, exemplifying 
+world-class performance at both club and international levels."
+
+✗ WEAKNESSES (Sentence 2):
+"His areas for improvement include physical attributes (size & build) 
+and club match results, where performance falls below population averages."
+
+★ CONCLUSION (Sentence 3):
+"Overall, Antoine Dupont is a National Team Leader (Cluster 5) who excels 
+in international and tournament competition while maintaining strong club 
+engagement, making him a premier world-class player."
+
+================================================================================
+TOP 3 STRENGTHS (Factor Scores):
+================================================================================
+
+1. ⭐ National Team Performance & Selection: +2.468
+   → Ranked 1st of 13 in cluster
+   → Perfect international record (2-0)
+   → Elite-level national team representation
+
+2. ⭐ Other Tournament Performance: +1.862
+   → Ranked 2nd of 13 in cluster
+   → Perfect 8-0 record in Champions Cup ⭐
+   → 5 tries and 25 points in tournament play
+
+3. ✓ Scoring Performance: +0.316
+   → Ranked 2nd of 13 in cluster
+   → 30 club points + 25 tournament points
+   → Solid attacking contribution
+
+================================================================================
+TOP 3 WEAKNESSES (Factor Scores):
+================================================================================
+
+1. ✗ Physical Attributes (Size & Build): -1.827
+   → Ranked 13th (LAST) of 13 in cluster
+   → At 1.74m, smallest in elite peer group
+   → NOTE: Position-appropriate for scrumhalf
+
+2. ✗ Club Match Results: -0.787
+   → Ranked 11th of 13 in cluster
+   → 78.6% club win rate (11 wins, 3 losses)
+   → Below some elite peers
+
+3. ✗ Club Playing Time & Attacking: -0.599
+   → Modest club attacking numbers
+   → Only 9 games started in 14 appearances
+   → Limited minutes relative to elite standards
+
+================================================================================
+KEY RUGBY STATISTICS:
+================================================================================
+
+                    CLUB        TOURNAMENT      NATIONAL      TOTAL
+Matches Played:     14          8               2             24
+Win Rate:           78.6%       100%!           100%!         95.8%
+Tries Scored:       6           5               0             11
+Points Scored:      30          25              0             55
+Minutes:            866         627             127           1,620
+Games Started:      9           8               2             19
+Discipline:         0 cards     0 cards         0 cards       ✓ Perfect
+
+HIGHLIGHTS:
+  ✓ Perfect 8-0 record in Champions Cup
+  ✓ Perfect 2-0 international record
+  ✓ Zero disciplinary cards across all competitions
+  ✓ Plays for champion Toulouse club
+
+================================================================================
+CLUSTER PROFILE:
+================================================================================
+
+Cluster Name:     National Team Leaders
+Cluster ID:       5
+Cluster Size:     13 players
+Antoine's Rank:   #1 for National Team Selection
+                  #2 for Tournament Performance
+
+Peer Members:
+  • Will Skelton (Australian lock)
+  • Courtney Lawes (England forward)
+  • Levani Botia (Fiji center)
+  • Lukhayno Am (South Africa hooker)
+  + 8 other elite international players
+
+Cluster Characteristics:
+  → Strong international presence
+  → Excellent tournament/competition performance
+  → Mix of forwards and backs
+  → World-class elite performers
+
+================================================================================
+COMPARATIVE RANKINGS IN CLUSTER:
+================================================================================
+
+Factor                          Rank    Score    Assessment
+───────────────────────────────────────────────────────────
+National Team Selection         1 ⭐    +2.468   Elite (#1)
+Tournament Performance          2 ⭐    +1.862   Excellent
+Scoring Performance             2 ⭐    +0.316   Good
+National Perf (Alternative)     9      +0.172   Average
+Club Frequency                  11     +0.106   Below Average
+Club Attacking                  7      -0.599   Weak
+Club Match Results             11      -0.787   Very Weak
+National Losses                11      -0.674   Very Weak
+Physical Attributes            13 ✗    -1.827   Extreme Weakness
+
+OVERALL CLUSTER FIT DISTANCE: 2.970 (distinctive profile)
+
+================================================================================
+ONE-MINUTE ASSESSMENT:
+================================================================================
+
+PLAYER TYPE: Emerging World-Class International Specialist
+
+STRENGTHS:
+  ✓ Elite international performer (2-0 perfect record)
+  ✓ Tournament specialist (8-0 Champions Cup record)
+  ✓ Clean, disciplined player
+  ✓ Playing for champion club (Toulouse)
+
+WEAKNESSES:
+  ✗ Physically smaller than elite forwards (standard for position)
+  ✗ Limited club appearances (9 starts in 14 matches)
+  ✗ Limited national experience (only 2 caps)
+  ✗ Below-average scoring for club level
+
+VERDICT:
+Antoine Dupont is an emerging international rugby talent with exceptional
+performance when given opportunity (perfect tournament record). His placement
+in National Team Leaders cluster validates elite status. Limited national
+experience suggests significant upside potential. Position-appropriate physical
+profile (scrumhalf) means size is not a true limitation.
+
+STATUS: Rising Star ⭐
+TRAJECTORY: Ascending
+POTENTIAL: High
+
+================================================================================
+USING THE PYTHON CODE:
+================================================================================
+
+The script: antoine_dupont_analysis.py
+
+Generates:
+  ✓ Detailed factor score analysis
+  ✓ Three-sentence summary (strengths, weaknesses, conclusion)
+  ✓ Cluster context and comparison
+  ✓ Original statistics breakdown
+  ✓ Comparative rankings in cluster
+  ✓ Detailed interpretation
+
+To run:
+  python antoine_dupont_analysis.py
+
+Output:
+  • Terminal display with full analysis
+  • Can be easily modified to analyze other players
+  • Reproducible, automated analysis
+
+================================================================================
+KEY TAKEAWAY:
+================================================================================
+
+Antoine Dupont is a world-class emerging international rugby player who excels
+in high-stakes tournaments and international competition. His perfect records
+in Champions Cup (8-0) and international play (2-0) demonstrate exceptional
+ability when given opportunity. While physically smaller than typical elite
+forwards (appropriate for scrumhalf position) and with limited club starts,
+his trajectory is strongly upward with significant potential for expanded
+international role.
+
+RECOMMENDATION: Core player for France national team; valuable asset in
+tournament and high-pressure matches. Monitor for continued development.
+
+================================================================================

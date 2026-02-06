@@ -1,0 +1,284 @@
+================================================================================
+CLUSTER ANALYSIS RESULTS
+================================================================================
+
+CLUSTER 0: Balanced Performers
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 12 players is characterized by excellence in national team performance (alternative). Key strengths include national team performance (alternative) and club match frequency & playing time. Notable limitations include national team performance & selection and national team performance (losses).
+
+Cluster Size: 12 players (12.4%)
+
+Members:
+  1. Handre Pollard
+  2. Tadhg Beirne
+  3. Siya Kolisi
+  4. Peter OMahony
+  5. Willie Le-Roux
+  6. Gael Fickou
+  7. Jamie George
+  8. Charles Ollivon
+  9. Steven Kitshoff
+  10. Louis Bielle-Biarrey
+  11. Zander Fagerson
+  12. Uini Antonio
+
+Strengths:
+  • National Team Performance (Alternative): 1.023
+  • Club Match Frequency & Playing Time: 0.667
+  • Club Playing Time & Attacking Contribution: 0.521
+
+Weaknesses:
+  • National Team Performance & Selection: -1.029
+  • National Team Performance (Losses): -0.733
+
+================================================================================
+
+CLUSTER 1: Tournament Specialists
+--------------------------------------------------------------------------------
+
+Description:
+This medium cluster of 17 players is characterized by excellence in other tournament performance. The primary strength of this cluster is other tournament performance. A notable limitation is club match frequency & playing time.
+
+Cluster Size: 17 players (17.5%)
+
+Members:
+  1. Caelen Doris
+  2. Eben Etzebeth
+  3. Dan Sheehan
+  4. Hugo Keenan
+  5. Jamison Gibson-Park
+  6. Ox Nche
+  7. Josh van-der-Flier
+  8. Tadhg Furlong
+  9. Cyrill Baille
+  10. Blair Kinghorn
+  11. James Lowe
+  12. Garry Ringrose
+  13. Robbie Henshaw
+  14. Peato Mauvaka
+  15. Joe McCarthy
+  16. James Ryan
+  17. Alex Mitchell
+
+Strengths:
+  • Other Tournament Performance: 1.096
+
+Weaknesses:
+  • Club Match Frequency & Playing Time: -1.064
+
+================================================================================
+
+CLUSTER 2: Balanced Performers
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 7 players is characterized by excellence in club match results. Key strengths include club match results and club playing time & attacking contribution. Notable limitations include physical attributes and other tournament performance.
+
+Cluster Size: 7 players (7.2%)
+
+Members:
+  1. Angus Bell
+  2. Taniela Tupou
+  3. Ethan de-Groot
+  4. Paolo Garbisi
+  5. Ben Tameifuna
+  6. Fletcher Newell
+  7. Dewi Lake
+
+Strengths:
+  • Club Match Results: 1.812
+  • Club Playing Time & Attacking Contribution: 0.939
+  • Club Match Frequency & Playing Time: 0.822
+  • National Team Performance (Losses): 0.610
+  • National Team Performance & Selection: 0.504
+
+Weaknesses:
+  • Physical Attributes: -1.008
+  • Other Tournament Performance: -0.646
+
+================================================================================
+
+CLUSTER 3: Attacking Specialists
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 7 players is characterized by excellence in scoring performance. Key strengths include scoring performance and physical attributes. Notable limitations include club playing time & attacking contribution and national team performance (losses).
+
+Cluster Size: 7 players (7.2%)
+
+Members:
+  1. Finn Russell
+  2. Thomas Ramos
+  3. Owen Farrell
+  4. Damian McKenzie
+  5. Jack Crowley
+  6. Marcus Smith
+  7. Manie Libbok
+
+Strengths:
+  • Scoring Performance: 2.157
+  • Physical Attributes: 0.851
+  • Club Match Frequency & Playing Time: 0.655
+
+Weaknesses:
+  • Club Playing Time & Attacking Contribution: -0.903
+  • National Team Performance (Losses): -0.561
+
+================================================================================
+
+CLUSTER 4: Physically Dominant
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 3 players is characterized by excellence in physical attributes. Key strengths include physical attributes and club playing time & attacking contribution. A notable limitation is club match frequency & playing time.
+
+Cluster Size: 3 players (3.1%)
+
+Members:
+  1. Ronan Kelleher
+  2. Jack Conan
+  3. Julian Marchand
+
+Strengths:
+  • Physical Attributes: 2.972
+  • Club Playing Time & Attacking Contribution: 2.916
+  • Other Tournament Performance: 1.146
+
+Weaknesses:
+  • Club Match Frequency & Playing Time: -0.691
+
+================================================================================
+
+CLUSTER 5: National Team Leaders
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 13 players is characterized by excellence in national team performance & selection. Key strengths include national team performance & selection and other tournament performance. A notable limitation is club playing time & attacking contribution.
+
+Cluster Size: 13 players (13.4%)
+
+Members:
+  1. Antoine Dupont
+  2. Will Skelton
+  3. Courtney Lawes
+  4. Levani Botia
+  5. Lukhayno Am
+  6. Jack Willis
+  7. Pita Ahki
+  8. Tommy Freeman
+  9. Henry Slade
+  10. Sevu Reece
+  11. Immanuel Feyi-Waboso
+  12. George Furbank
+  13. Uluoano Seuteni
+
+Strengths:
+  • National Team Performance & Selection: 1.225
+  • Other Tournament Performance: 0.854
+  • National Team Performance (Alternative): 0.763
+  • Club Match Frequency & Playing Time: 0.507
+
+Weaknesses:
+  • Club Playing Time & Attacking Contribution: -0.544
+
+================================================================================
+
+CLUSTER 6: Club Workhorses
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 13 players is characterized by excellence in club match frequency & playing time. The primary strength of this cluster is club match frequency & playing time. Notable limitations include national team performance (alternative) and club match results.
+
+Cluster Size: 13 players (13.4%)
+
+Members:
+  1. Damian Penaud
+  2. Damian Willemse
+  3. Jordie Barrett
+  4. RG Snyman
+  5. Kurt Lee-Arendse
+  6. Ange Capuozzo
+  7. Sam Underhill
+  8. Gregory Alldritt
+  9. Mark Telea
+  10. Sione Tuipulotu
+  11. Reiko Ioane
+  12. Canan Moodie
+  13. Tom Wright
+
+Strengths:
+  • Club Match Frequency & Playing Time: 0.755
+
+Weaknesses:
+  • National Team Performance (Alternative): -0.943
+  • Club Match Results: -0.884
+  • Scoring Performance: -0.555
+  • Other Tournament Performance: -0.528
+
+================================================================================
+
+CLUSTER 7: Balanced Performers
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 10 players is characterized by excellence in national team performance (losses). The primary strength of this cluster is national team performance (losses). Notable limitations include national team performance & selection and scoring performance.
+
+Cluster Size: 10 players (10.3%)
+
+Members:
+  1. Ben Earl
+  2. Tommasso Menoncello
+  3. Julian Montoya
+  4. Marcos Kremer
+  5. George Martin
+  6. Ollie Lawrence
+  7. Tommy Reffell
+  8. Rory Darge
+  9. Michelle Lamaro
+  10. Duhan van-der-Merwe
+
+Strengths:
+  • National Team Performance (Losses): 1.537
+
+Weaknesses:
+  • National Team Performance & Selection: -1.028
+  • Scoring Performance: -0.543
+
+================================================================================
+
+CLUSTER 8: Balanced Performers
+--------------------------------------------------------------------------------
+
+Description:
+This small cluster of 15 players shows balanced but moderate performance across all factors. The cluster shows no particularly distinctive strengths. Notable limitations include other tournament performance and club match frequency & playing time.
+
+Cluster Size: 15 players (15.5%)
+
+Members:
+  1. Ardie Savea
+  2. Will Jordan
+  3. Cheslin Kolbe
+  4. Bundee Aki
+  5. Romain Ntamack
+  6. Richie Mounga
+  7. Scott Barrett
+  8. Semi Radradra
+  9. Tom Curry
+  10. Damian De-Allende
+  11. Waisea Nayacalevu
+  12. Kwagga Smith
+  13. Mack Hansen
+  14. Faf de-Klerk
+  15. Jac Morgan
+
+Strengths:
+  • None identified
+
+Weaknesses:
+  • Other Tournament Performance: -1.291
+  • Club Match Frequency & Playing Time: -1.213
+
+================================================================================
+

@@ -97,12 +97,16 @@ DATA_PATHS = {
         "map": "./data/demo_data/football_test/match_api_metric_map.json", 
         "entity": "football club"
     },
-    "Cardiovascular Disease": {
-        "data": "./data/demo_data/cardiovascular/cardio_train.csv",
-        "map": "./data/demo_data/cardiovascular/cardio_map.xlsx", 
-        "entity": "patient"
-    }
-    # Add other datasets here
+    "Cat Breeds": {
+        "data": "./data/demo_data/cats/cat_breeds.csv",
+        "map": "./data/demo_data/cats/map.xlsx",
+        "entity": "cat"
+    },
+    #"Cardiovascular Disease": {
+    #    "data": "./data/demo_data/cardiovascular/cardio_train.csv",
+    #    "map": "./data/demo_data/cardiovascular/cardio_map.xlsx", 
+    #    "entity": "patient"
+    #},
 }
 
 ### ---- Load data tab utilities ---- ###
@@ -315,6 +319,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
         return
 
     df = st.session_state.df_filtered.loc[:, st.session_state.features].copy()
+    print("Original df head:\n", df.head())
     original_index = df.index
     n_factors = st.session_state.get("factor_nb", factor_n)
 
@@ -336,9 +341,14 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     if model_name == "FA":
         components = model.components_
     else:
-        components = model.column_coordinates_
-        components = components.T
-        components= components.to_numpy()
+        components = model.components_
+        features = st.session_state.df_filtered.columns.tolist()
+        st.session_state.features = features
+        df = st.session_state.df_filtered.copy()
+        
+        #components = model.column_coordinates_
+        #components = components.T
+        #components= components.to_numpy()
     
 
 
@@ -401,7 +411,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
     
     st.session_state.df_original = st.session_state.df.copy()
-    print(df.head())
+   
     
     # Generate Plot
     vis = DistributionPlot(

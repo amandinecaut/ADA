@@ -1,0 +1,36 @@
+Optimal number of factors (>=80% variance): 7
+Best number of clusters (silhouette): k=8
+
+Cluster descriptions:
+Cluster 0 — Size & Longevity / Lower Sociability & Behavior Breeds
+  This cluster comprises breeds that are balanced across factors.
+  Its main strength is a balanced profile without pronounced extremes.
+  No clear weaknesses emerge; trade‑offs are minimal across the measured factors.
+Cluster 1 — Size & Longevity / Sociability & Behavior Breeds
+  This cluster comprises breeds that are higher on Size & Longevity.
+  It excels in Size & Longevity, suggesting favorable traits on these dimensions.
+  No clear weaknesses emerge; trade‑offs are minimal across the measured factors.
+Cluster 2 — Sociability & Behavior / Lower Size & Longevity Breeds
+  This cluster comprises breeds that are higher on Sociability & Behavior and lower on Size & Longevity.
+  It excels in Sociability & Behavior, suggesting favorable traits on these dimensions.
+  Potential weaknesses include relatively lower scores on Size & Longevity.
+Cluster 3 — Size & Longevity / Sociability & Behavior Breeds
+  This cluster comprises breeds that are higher on Size & Longevity.
+  It excels in Size & Longevity, suggesting favorable traits on these dimensions.
+  No clear weaknesses emerge; trade‑offs are minimal across the measured factors.
+Cluster 4 — Sociability & Behavior / Lower Size & Longevity Breeds
+  This cluster comprises breeds that are higher on Sociability & Behavior and lower on Size & Longevity.
+  It excels in Sociability & Behavior, suggesting favorable traits on these dimensions.
+  Potential weaknesses include relatively lower scores on Size & Longevity.
+Cluster 5 — Lower Size & Longevity / Sociability & Behavior Breeds
+  This cluster comprises breeds that are lower on Size & Longevity.
+  Its main strength is a balanced profile without pronounced extremes.
+  Potential weaknesses include relatively lower scores on Size & Longevity.
+Cluster 6 — Lower Sociability & Behavior / Lower Size & Longevity Breeds
+  This cluster comprises breeds that are lower on Size & Longevity, Sociability & Behavior.
+  Its main strength is a balanced profile without pronounced extremes.
+  Potential weaknesses include relatively lower scores on Size & Longevity, Sociability & Behavior.
+Cluster 7 — Lower Size & Longevity / Sociability & Behavior Breeds
+  This cluster comprises breeds that are balanced across factors.
+  Its main strength is a balanced profile without pronounced extremes.
+  No clear weaknesses emerge; trade‑offs are minimal across the measured factors.

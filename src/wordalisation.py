@@ -297,7 +297,6 @@ class CreateWordalisation(Wordalisation):
              k for k, v in dictionary.items() if v in component["bottom"]
             ]
 
-            print(bottom_map_list)
 
             # Fast argmax / argmin
             if value > 1 and top_map_list:
@@ -825,7 +824,6 @@ class FA(Wordalisation):
         top_values = FA_component_dict.get("values_top", [])
         bottom_features = FA_component_dict.get("bottom", [])
         bottom_values = FA_component_dict.get("values_bottom", [])
-
 
         text = ''
 

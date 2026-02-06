@@ -26,8 +26,40 @@ class ContinuousFAStrategy(FactorStrategy):
         scores = model.fit_transform(scaled_data)
         
         return model, scores
-
+    
 class FAMDStrategy(FactorStrategy):
+    """Path 2: Factor Analysis of Mixed Data for datasets with text/categories and numbers."""
+    name = "FAMD"
+
+    def fit(self, df, n_factors):
+       
+        num_cols = df.select_dtypes(include=[np.number]).columns
+    
+        if len(num_cols) == 0:
+            df['__dummy_numeric__'] = 1.0
+        for col in df.columns:
+            if pd.api.types.is_numeric_dtype(df[col]):
+                df[col] = df[col].astype(float).fillna(0)
+            else:
+                df[col] = df[col].astype(object).fillna("Unknown")
+                # get dummies for categorical variables
+                dummies = pd.get_dummies(df[col], prefix=col, dtype=int)
+                dummies.columns = [c.replace('_', ' ').lower() for c in dummies.columns]
+                df = pd.concat([df, dummies], axis=1)
+                df.drop(columns=[col], inplace=True)
+        
+        st.session_state.df_filtered = df
+        
+
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(df)
+        
+        model = FactorAnalysis(n_components=n_factors)
+        scores = model.fit_transform(scaled_data)
+        
+        return model, scores
+
+class FAMDStrategy_original(FactorStrategy):
     """Path 2: Factor Analysis of Mixed Data for datasets with text/categories and numbers."""
     name = "FAMD"
 

@@ -32,20 +32,14 @@ class Visualisation:
     def __init__(self, df_FA, FA_label_map):
 
         cols = [k for k in FA_label_map.keys()]
-        self.df_FA = df_FA[cols]
-        self.FA_label_map = FA_label_map
-        
-        
         self.df_z_scores = df_FA[cols]
-        #self.df_z_scores = self.get_z_scores()
-        # map self.df_z_scores using FA_label_map
+        self.FA_label_map = FA_label_map
         self.df_z_scores.rename(columns=self.FA_label_map, inplace=True)
 
         self.fig = go.Figure()
         self.set_visualisation()
 
-    def get_z_scores(self):
-        return self.df_FA.apply(zscore, nan_policy="omit")
+   
 
     def set_visualisation(self):
         # streamlit primary color
@@ -322,12 +316,10 @@ class DistributionPlot:
         self.background = hex_to_rgb("#faf9ed")
        
         cols = [k for k in FA_label_map.keys()]
-        #self.df_FA = df_FA[cols]
 
         self.FA_label_map = FA_label_map
 
-        #self.df_z_scores = self.get_z_scores()
-        #self.df_z_scores.rename(columns=self.FA_label_map, inplace=True)
+
         self.df_z_scores = df_FA[cols]
         self.df_z_scores.rename(columns=self.FA_label_map, inplace=True)
 
@@ -351,8 +343,7 @@ class DistributionPlot:
             zerolinecolor=rgb_to_color(hex_to_rgb("#ffffff")),
         )
 
-    def get_z_scores(self):
-        return self.df_FA.apply(zscore, nan_policy="omit")
+
 
 
     def set_visualisation(self):
@@ -376,18 +367,15 @@ class DistributionPlot:
             vertical_spacing=0.0
         )
 
-
-        for i, col in enumerate(dataframe.columns):
-            
+        for i, col in enumerate(dataframe.columns):            
             self.fig.add_trace(
                 go.Violin(
-                    x=dataframe[col].tolist(),
+                    x=dataframe[[col]].values.flatten().tolist(),
                     name=cols[i],
                     marker=dict(color=colors[i % len(colors)]),
                     opacity=0.65,
                     side='positive',
                     showlegend = False,
-                    #hovertemplate=f"<b>{cols[i]}</b><br>Value: %{{x}}<br>Count: %{{y}}<extra></extra>",
                     hoverinfo="skip", hovertemplate=None,
                     points=False,
                 ),

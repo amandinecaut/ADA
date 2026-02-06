@@ -1,0 +1,237 @@
+================================================================================
+CLUSTER ANALYSIS SUMMARY - CLUSTER DESCRIPTIONS
+================================================================================
+
+CLUSTER 0: BALANCED OPERATORS (33 teams - 16.8%)
+────────────────────────────────────────────────
+Examples: Ajax, Feyenoord, Real Madrid, Juventus, PSG, Manchester United
+
+Description:
+This cluster represents teams with well-rounded performance across tactical 
+dimensions, showing consistency without dominant specialization in any particular 
+area. These teams demonstrate reliable all-around performance, maintaining 
+competitive levels across attacking output, defensive solidity, and possession 
+management without critical gaps. However, these teams may lack the specialized 
+expertise or tactical dominance found in more focused tactical groups, 
+potentially exposed when facing highly specialized opponents.
+
+Key Characteristics:
+• Attacking Efficiency: +0.46
+• Defensive Prowess: +0.32
+• Balanced across multiple factors
+• Weak in Box Dominance and Recovery transitions
+
+
+CLUSTER 1: TRANSITION SPECIALISTS (8 teams - 4.1%)
+────────────────────────────────────────────────────
+Examples: Wolverhampton Wanderers, Holstein Kiel, Strasbourg, Dallas, Moreirense
+
+Description:
+This cluster represents teams with distinctive tactical characteristics, excelling 
+in specific domains while showing variable performance in complementary areas. 
+These teams demonstrate strong proficiency in their specialized tactical areas, 
+leveraging unique approaches to neutralize opposition and create competitive 
+advantages within their strength domains. These teams show targeted weaknesses in 
+complementary tactical areas, potentially vulnerable when opponents exploit less 
+developed dimensions of their play.
+
+Key Characteristics:
+• Recovery & Transition: +1.66 (Highest strength)
+• Possession Control sub-factor: +0.85
+• Exceptional at quick transitions and counter-play
+• Weak in core attacking efficiency (-0.65)
+
+
+CLUSTER 2: BOX DOMINATORS (21 teams - 10.7%)
+──────────────────────────────────────────────
+Examples: NAC Breda, Rayo Vallecano, West Ham United, Lecce, Genk, Fluminense
+
+Description:
+This cluster represents teams that establish commanding control within the final 
+third, generating numerous box touches and penetrating opportunities through 
+varied attacking approaches. These teams excel at creating frequent box entries, 
+generating high-volume shooting situations, establishing presence through crosses 
+and carries, and creating dangerous opportunities from set pieces and movement 
+play. These teams often show defensive instability outside the box, potentially 
+vulnerable to quick counter-attacks and organized defensive units that limit 
+space in wide areas.
+
+Key Characteristics:
+• Box Dominance: +0.84 (Highest strength)
+• Attacking Efficiency sub-factors: +0.54
+• Strong in possession control: +0.25
+• Weak in defensive prowess (-0.64)
+• Weak in recovery transitions (-0.82)
+
+
+CLUSTER 3: ELITE ATTACKERS (14 teams - 7.1%)
+───────────────────────────────────────────────
+Examples: Barcelona, Manchester City, Liverpool, Arsenal, Chelsea, Bayern Munich
+
+Description:
+This cluster represents teams that establish commanding control within the final 
+third, generating numerous box touches and penetrating opportunities through 
+varied attacking approaches. These teams excel at creating frequent box entries, 
+generating high-volume shooting situations, establishing presence through crosses 
+and carries, and creating dangerous opportunities from set pieces and movement 
+play. These teams often show defensive instability outside the box, potentially 
+vulnerable to quick counter-attacks and organized defensive units that limit 
+space in wide areas.
+
+Key Characteristics:
+• Attacking Efficiency sub-factor: +1.82 (Highest in dataset)
+• Attacking Output: +1.13
+• Strong in multiple attacking dimensions
+• Balanced across recovery and possession
+• Top competitive teams globally
+
+
+CLUSTER 4: DEFENSIVE STALWARTS (26 teams - 13.2%)
+───────────────────────────────────────────────────
+Examples: Roma, Fiorentina, Empoli, Getafe, Nottingham Forest, Union Berlin
+
+Description:
+This cluster represents teams with distinctive tactical characteristics, excelling 
+in specific domains while showing variable performance in complementary areas. 
+These teams demonstrate strong proficiency in their specialized tactical areas, 
+leveraging unique approaches to neutralize opposition and create competitive 
+advantages within their strength domains. These teams show targeted weaknesses in 
+complementary tactical areas, potentially vulnerable when opponents exploit less 
+developed dimensions of their play.
+
+Key Characteristics:
+• Defensive Prowess: +0.94 (2nd highest)
+• Multiple Attacking Efficiency sub-factors: +0.48 to +0.51
+• Box Dominance: +0.44
+• Weak in Attacking Output (-0.59)
+• Weak in possession-based play (-0.38)
+
+
+CLUSTER 5: POSSESSION ARCHITECTS (21 teams - 10.7%)
+─────────────────────────────────────────────────────
+Examples: AZ, Brighton, Bayer Leverkusen, Atalanta, Benfica, Sporting CP
+
+Description:
+This cluster represents teams that specialize in possession control with moderate 
+performance in other tactical dimensions. These teams excel in possession control, 
+demonstrating strong performance in attacking efficiency and transition capability. 
+These teams show areas for development in defensive prowess, with potential 
+vulnerabilities exposed when facing teams with complementary tactical approaches.
+
+Key Characteristics:
+• Possession Control: +1.00 (Highest strength)
+• Attacking Efficiency sub-factor: +0.76
+• Strong Recovery Transitions: +0.49
+• Weak in Defensive Prowess (-0.36)
+• Weak in specialized attacking efficiency (-0.81)
+
+
+CLUSTER 6: CREATIVE PLAYMAKERS (22 teams - 11.2%)
+──────────────────────────────────────────────────
+Examples: Villarreal, Crystal Palace, Werder Bremen, Borussia M'gladbach, Nice
+
+Description:
+This cluster represents teams with distinctive tactical characteristics, excelling 
+in specific domains while showing variable performance in complementary areas. 
+These teams demonstrate strong proficiency in their specialized tactical areas, 
+leveraging unique approaches to neutralize opposition and create competitive 
+advantages within their strength domains. These teams show targeted weaknesses in 
+complementary tactical areas, potentially vulnerable when opponents exploit less 
+developed dimensions of their play.
+
+Key Characteristics:
+• Attacking Efficiency sub-factor: +0.98
+• Possession Control sub-factor: +0.66
+• Moderate attacking output: +0.37
+• Weak in core possession control (-0.91)
+• Balanced in most other dimensions
+
+
+CLUSTER 7: MIDTABLE COMPETITORS (17 teams - 8.6%)
+───────────────────────────────────────────────────
+Examples: Almere City, Montpellier, Palmeiras, Corinthians, Cruzeiro, Vitória
+
+Description:
+This cluster represents teams with well-rounded performance across tactical 
+dimensions, showing consistency without dominant specialization in any particular 
+area. These teams demonstrate reliable all-around performance, maintaining 
+competitive levels across attacking output, defensive solidity, and possession 
+management without critical gaps. However, these teams may lack the specialized 
+expertise or tactical dominance found in more focused tactical groups, potentially 
+exposed when facing highly specialized opponents.
+
+Key Characteristics:
+• Multiple Attacking Efficiency factors: +0.38 to +0.44
+• Attacking Output sub-factor: +0.43
+• Weak in possession control (-0.54)
+• Weak in core attacking efficiency (-0.20)
+• Weak in recovery transitions (-1.29)
+
+
+CLUSTER 8: EXPLOSIVE STRIKERS (11 teams - 5.6%)
+─────────────────────────────────────────────────
+Examples: RKC Waalwijk, RB Leipzig, Leicester City, Southampton, Ipswich Town
+
+Description:
+This cluster represents teams that establish commanding control within the final 
+third, generating numerous box touches and penetrating opportunities through 
+varied attacking approaches. These teams excel at creating frequent box entries, 
+generating high-volume shooting situations, establishing presence through crosses 
+and carries, and creating dangerous opportunities from set pieces and movement 
+play. These teams often show defensive instability outside the box, potentially 
+vulnerable to quick counter-attacks and organized defensive units that limit 
+space in wide areas.
+
+Key Characteristics:
+• Attacking Output sub-factor: +0.89
+• Attacking Efficiency factor: +0.57
+• Box Dominance: +0.52
+• Strong recovery-to-attack: +0.44
+• Weak in possession transitions (-1.19)
+• Weak in core attacking output (-1.34)
+
+
+CLUSTER 9: EFFICIENT SCORERS (24 teams - 12.2%)
+─────────────────────────────────────────────────
+Examples: PSV, Bayern Munich, Borussia Dortmund, Brentford, Fulham, Bologna
+
+Description:
+This cluster represents teams with distinctive tactical characteristics, excelling 
+in specific domains while showing variable performance in complementary areas. 
+These teams demonstrate strong proficiency in their specialized tactical areas, 
+leveraging unique approaches to neutralize opposition and create competitive 
+advantages within their strength domains. These teams show targeted weaknesses in 
+complementary tactical areas, potentially vulnerable when opponents exploit less 
+developed dimensions of their play.
+
+Key Characteristics:
+• Attacking Efficiency sub-factors: +0.81 and +0.80 (Dual strengths)
+• Recovery & Transition: +0.64 and +0.44 (Strong transitions)
+• Attacking Output: +0.37
+• Weak in possession-based play (-0.01)
+• Weak in specific attacking efficiency dimensions (-0.57)
+
+================================================================================
+CLUSTER SEGMENTATION SUMMARY
+================================================================================
+
+PREMIUM TIER (Elite/High-performing):
+• Cluster 3: Elite Attackers (14 teams) - Top global teams with superior 
+             attacking capability
+• Cluster 5: Possession Architects (21 teams) - Control-oriented with technical excellence
+
+STRONG TIER (Above-average):
+• Cluster 0: Balanced Operators (33 teams) - Consistent, well-rounded performers
+• Cluster 4: Defensive Stalwarts (26 teams) - Defensively organized, compact units
+• Cluster 9: Efficient Scorers (24 teams) - High attacking efficiency and transitions
+
+SPECIALIST TIER (Niche/Specialized):
+• Cluster 1: Transition Specialists (8 teams) - Counter-attacking experts
+• Cluster 2: Box Dominators (21 teams) - Penetrative, direct play style
+• Cluster 6: Creative Playmakers (22 teams) - Technical, possession-based creators
+
+DEVELOPING TIER (Lower-level):
+• Cluster 7: Midtable Competitors (17 teams) - Emerging/mid-tier teams
+• Cluster 8: Explosive Strikers (11 teams) - Inconsistent but dangerous in final third
+
+================================================================================

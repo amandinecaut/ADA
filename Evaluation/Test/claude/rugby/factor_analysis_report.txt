@@ -1,0 +1,201 @@
+================================================================================
+RUGBY PLAYER FACTOR ANALYSIS REPORT
+================================================================================
+
+DATASET INFORMATION
+--------------------------------------------------------------------------------
+Number of players: 97
+Number of variables: 29
+Optimal number of factors: 9
+
+SUITABILITY TESTS
+--------------------------------------------------------------------------------
+Bartlett's Test p-value: 0.00e+00
+KMO Test: 0.5476 (Miserable)
+
+EIGENVALUES AND VARIANCE EXPLAINED
+--------------------------------------------------------------------------------
+Factor          Eigenvalue           Variance %           Cumulative %        
+Factor 1          5.9195               11.48                11.48               
+Factor 2          3.9434               11.48                22.95               
+Factor 3          3.7457               11.46                34.42               
+Factor 4          2.7061               11.46                45.87               
+Factor 5          1.6997               11.42                57.30               
+Factor 6          1.4624               11.21                68.51               
+Factor 7          1.3117               11.19                79.71               
+Factor 8          1.1000               10.76                90.46               
+Factor 9          1.0006               9.54                 100.00              
+
+Total Variance Explained: 100.00%
+
+FACTOR NAMES AND INTERPRETATION
+--------------------------------------------------------------------------------
+
+Factor 1 (11.48% variance explained)
+Name: Other Tournament Performance
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+other-match               0.9734          total number of games played in other competition with the club
+other_W                   0.9497          wins in other competition with the club 
+other_Min                 0.8953          number of minutes on the field in other competition with the club
+other_starter             0.8484          number of tenures in other competition with the club
+other_try                 0.5991          number of tries scored in other competition with the club
+other_points              0.4694          number of points scored in other competition with the club
+club_W                    0.4347          wins in the tournament with their club  
+club-match                0.3555          number of match played in the tournament with their club
+
+Factor 2 (11.48% variance explained)
+Name: Club Match Frequency & Playing Time
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+club-match                0.9332          number of match played in the tournament with their club
+club_Min                  0.8955          number of minutes on the field in the tournament with their club
+club_starter              0.8864          number of tenures in the tournament with their club
+club_W                    0.7803          wins in the tournament with their club  
+club_L                    0.7088           losses in the tournament with their club
+other_L                   0.3790          losses in other competition with the club
+club_points               0.3730          number of points scored in the tournament with their club
+club_try                  0.3568          number of tries scored in the tournament with their club
+
+Factor 3 (11.46% variance explained)
+Name: National Team Performance & Selection
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+National_match            -0.8835         number of selections in the national team
+National_W                -0.7771         number of wins with national team       
+National_min              -0.7152         number of minutes on the field with the national team
+other_L                   -0.5808         losses in other competition with the club
+National_starter          -0.5429         number of tenures with the national team
+National_L                -0.3778         number of losses with national team     
+other_D                   -0.3212         drawn in other competition with the club
+club_try                  0.2863          number of tries scored in the tournament with their club
+
+Factor 4 (11.46% variance explained)
+Name: National Team Performance & Selection
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+other_L                   0.6898          losses in other competition with the club
+National_match            -0.4517         number of selections in the national team
+National_W                -0.3916         number of wins with national team       
+age                       0.3464          age                                     
+club_try                  -0.3120         number of tries scored in the tournament with their club
+National_starter          -0.2978         number of tenures with the national team
+National_min              -0.2977         number of minutes on the field with the national team
+yellow card               0.2323          yellow card                             
+
+Factor 5 (11.42% variance explained)
+Name: Club Match Frequency & Playing Time
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+club_L                    0.6715           losses in the tournament with their club
+club_W                    -0.4200         wins in the tournament with their club  
+weight                    0.2232          weight                                  
+other_D                   -0.1874         drawn in other competition with the club
+age                       -0.1173         age                                     
+club_D                    0.1170          drawn in the tournament with their club 
+other_points              0.0863          number of points scored in other competition with the club
+National_D                0.0831          number of drawn with national team      
+
+Factor 6 (11.21% variance explained)
+Name: Club Playing Time & Attacking Contribution
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+weight                    0.5310          weight                                  
+other_points              -0.4015         number of points scored in other competition with the club
+club_points               -0.3546         number of points scored in the tournament with their club
+club_Min                  -0.3055         number of minutes on the field in the tournament with their club
+other_try                 -0.3006         number of tries scored in other competition with the club
+other_Min                 -0.2938         number of minutes on the field in other competition with the club
+National_Points           -0.2842         number of points scored with the national team
+club_starter              -0.2776         number of tenures in the tournament with their club
+
+Factor 7 (11.19% variance explained)
+Name: National Team Performance & Selection
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+National_L                0.7504          number of losses with national team     
+National_W                -0.4328         number of wins with national team       
+National_starter          0.2560          number of tenures with the national team
+age                       -0.2285         age                                     
+National_min              0.2143          number of minutes on the field with the national team
+other_D                   -0.1612         drawn in other competition with the club
+club_points               -0.1593         number of points scored in the tournament with their club
+weight                    0.1308          weight                                  
+
+Factor 8 (10.76% variance explained)
+Name: Physical Attributes (Size & Build)
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+club_points               0.3336          number of points scored in the tournament with their club
+weight                    -0.3120         weight                                  
+other_starter             -0.2788         number of tenures in other competition with the club
+club_try                  0.1798          number of tries scored in the tournament with their club
+other_Min                 -0.1766         number of minutes on the field in other competition with the club
+club_starter              0.1696          number of tenures in the tournament with their club
+club_Min                  0.1659          number of minutes on the field in the tournament with their club
+tall(m)                   -0.1410         size                                    
+
+Factor 9 (9.54% variance explained)
+Name: Physical Attributes (Size & Build)
+
+Top 8 Contributing Variables:
+Variable                  Loading         Description                             
+--------------------------------------------------------------------------------
+National_Points           0.7404          number of points scored with the national team
+club_points               0.5219          number of points scored in the tournament with their club
+other_points              0.3994          number of points scored in other competition with the club
+weight                    -0.3035         weight                                  
+other_D                   0.2760          drawn in other competition with the club
+National_try              0.2648          number of tries scored with the national team
+yellow card               -0.2105         yellow card                             
+National_D                0.1073          number of drawn with national team      
+
+================================================================================
+FACTOR LOADINGS MATRIX
+================================================================================
+                  Factor 1  Factor 2  Factor 3  Factor 4  Factor 5  Factor 6  Factor 7  Factor 8  Factor 9
+age               0.025177 -0.090919 -0.145964  0.346404 -0.117347  0.221209 -0.228495  0.004188 -0.043992
+tall(m)           0.140065 -0.131474 -0.139259 -0.085778  0.032332 -0.094988 -0.061767 -0.140969 -0.073039
+weight            0.032903  0.115850 -0.064692  0.122113  0.223175  0.530964  0.130794 -0.311990 -0.303527
+club-match        0.355516  0.933171  0.014114 -0.021784  0.043853  0.006732 -0.001677 -0.004138  0.000531
+club_W            0.434729  0.780309  0.027962 -0.153398 -0.420012  0.014649  0.005564 -0.006181  0.001457
+club_D            0.234370  0.169133  0.105977 -0.014137  0.116988  0.120729 -0.062720 -0.046542 -0.050867
+club_L            0.052449  0.708798 -0.025354  0.177713  0.671529 -0.022792 -0.003370  0.006500  0.005366
+club_starter      0.245999  0.886387 -0.016293  0.044353 -0.059631 -0.277559 -0.016861  0.169553 -0.079674
+club_try          0.161773  0.356806  0.286322 -0.312027 -0.082543 -0.239746 -0.046768  0.179798 -0.013149
+club_points       0.139499  0.372966  0.033415 -0.160448 -0.051808 -0.354646 -0.159339  0.333626  0.521946
+club_Min          0.252552  0.895485  0.023163  0.045915 -0.062008 -0.305483 -0.025133  0.165915 -0.031927
+other-match       0.973361 -0.093651 -0.137064  0.156593 -0.014776  0.010298 -0.000165  0.005054  0.001397
+other_W           0.949732 -0.259815  0.114124 -0.130213  0.020024 -0.002621  0.000583  0.000550 -0.001185
+other_D          -0.007976  0.105973 -0.321193  0.163627 -0.187450 -0.043499 -0.161225 -0.073484  0.276017
+other_L           0.159628  0.378973 -0.580768  0.689783 -0.061263  0.038083  0.019326  0.021081 -0.029817
+other_starter     0.848361 -0.048432 -0.144883  0.215132 -0.021755 -0.260264  0.002885 -0.278765  0.014730
+other_try         0.599071 -0.117344  0.017510 -0.040728  0.046065 -0.300589  0.044452 -0.102681  0.079151
+other_points      0.469354  0.009265 -0.069101 -0.017741  0.086306 -0.401550  0.001332  0.112339  0.399350
+other_Min         0.895330 -0.068680 -0.149043  0.217972 -0.039054 -0.293819  0.006974 -0.176621 -0.001822
+National_match   -0.041319 -0.054083 -0.883468 -0.451705  0.047765 -0.008291  0.083851  0.004050 -0.001203
+National_W       -0.015088 -0.220644 -0.777079 -0.391650  0.008624  0.007385 -0.432831 -0.014634 -0.008350
+National_D        0.173360  0.132932 -0.094284 -0.216740  0.083100  0.159534  0.034828  0.015949  0.107267
+National_L       -0.060214  0.227035 -0.377806 -0.186858  0.030197 -0.095520  0.750397  0.056602  0.055992
+National_starter -0.027552  0.022420 -0.542916 -0.297754  0.063284 -0.109839  0.256026 -0.090234 -0.036508
+National_try     -0.108767  0.020203 -0.127803 -0.225213 -0.045415 -0.219061  0.024578  0.034636  0.264777
+National_Points  -0.076017  0.189323 -0.182598 -0.214675  0.003939 -0.284155 -0.128517  0.135718  0.740377
+National_min     -0.033410 -0.003445 -0.715183 -0.297658  0.006552 -0.255604  0.214330 -0.040810  0.028537
+yellow card       0.075589  0.030003 -0.133844  0.232265  0.013381 -0.012056  0.073762  0.127745 -0.210503
+red card         -0.178012  0.086909  0.025561  0.017823  0.033569  0.136527 -0.023035 -0.095707  0.006477

@@ -1,0 +1,468 @@
+================================================================================
+CLUSTER ANALYSIS REPORT
+================================================================================
+
+OPTIMAL CLUSTERING CONFIGURATION
+--------------------------------------------------------------------------------
+Number of Clusters: 10
+Silhouette Score: 0.0512
+Davies-Bouldin Index: 2.5225
+Calinski-Harabasz Score: 6.8563
+
+================================================================================
+CLUSTER 0: BALANCED OPERATORS
+================================================================================
+
+Cluster Size: 33 teams (16.8%)
+
+Teams in Cluster:
+  1. Ajax
+  2. Feyenoord
+  3. Heerenveen
+  4. Groningen
+  5. Valencia
+  6. Real Madrid
+  7. Atlético Madrid
+  8. Sevilla
+  9. Real Betis
+  10. Celta de Vigo
+  11. Girona
+  12. Manchester United
+  13. Augsburg
+  14. Juventus
+  15. Lazio
+  16. Napoli
+  17. Como
+  18. PSG
+  19. Rennes
+  20. São Paulo
+  21. Internacional
+  22. Atlético Mineiro
+  23. Flamengo
+  24. Colorado Rapids
+  25. Columbus Crew
+  26. New York RB
+  27. Seattle Sounders
+  28. Orlando City
+  29. Minnesota United
+  30. CF Montréal
+  31. Gil Vicente
+  32. Famalicão
+  33. Toronto
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with well-rounded performance across tactical dimensions, showing consistency without dominant specialization in any particular area.
+2. These teams demonstrate reliable all-around performance, maintaining competitive levels across attacking output, defensive solidity, and possession management without critical gaps.
+3. However, these teams may lack the specialized expertise or tactical dominance found in more focused tactical groups, potentially exposed when facing highly specialized opponents..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency: 0.4594
+  2. Defensive_Prowess: 0.3237
+  3. Attacking_Efficiency.5: 0.2898
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency.3: -0.2653
+  2. Box_Dominance: -0.8859
+  3. Recovery_&_Transition.1: -0.9918
+
+================================================================================
+CLUSTER 1: TACTICAL SPECIALISTS
+================================================================================
+
+Cluster Size: 8 teams (4.1%)
+
+Teams in Cluster:
+  1. Wolverhampton Wanderers
+  2. Holstein Kiel
+  3. Strasbourg
+  4. Dallas
+  5. Moreirense
+  6. Estoril
+  7. Casa Pia AC
+  8. Inter Miami
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with distinctive tactical characteristics, excelling in specific domains while showing variable performance in complementary areas.
+2. These teams demonstrate strong proficiency in their specialized tactical areas, leveraging unique approaches to neutralize opposition and create competitive advantages within their strength domains.
+3. These teams show targeted weaknesses in complementary tactical areas, potentially vulnerable when opponents exploit less developed dimensions of their play..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Recovery_&_Transition: 1.6623
+  2. Possession_Control.1: 0.8507
+  3. Attacking_Efficiency.6: 0.5189
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency: -0.6484
+  2. Attacking_Efficiency.3: -1.1148
+  3. Attacking_Efficiency.1: -1.2140
+
+================================================================================
+CLUSTER 2: BOX DOMINATORS
+================================================================================
+
+Cluster Size: 21 teams (10.7%)
+
+Teams in Cluster:
+  1. NAC Breda
+  2. PEC Zwolle
+  3. Sparta Rotterdam
+  4. Leganés
+  5. Rayo Vallecano
+  6. Las Palmas
+  7. West Ham United
+  8. Bochum
+  9. Lecce
+  10. Venezia
+  11. Genk
+  12. Antwerp
+  13. OH Leuven
+  14. Beerschot-Wilrijk
+  15. Fluminense
+  16. Houston Dynamo
+  17. Nacional
+  18. Farense
+  19. Arouca
+  20. Estrela Amadora
+  21. AVS 
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams that establish commanding control within the final third, generating numerous box touches and penetrating opportunities through varied attacking approaches.
+2. These teams excel at creating frequent box entries, generating high-volume shooting situations, establishing presence through crosses and carries, and creating dangerous opportunities from set pieces and movement play.
+3. These teams often show defensive instability outside the box, potentially vulnerable to quick counter-attacks and organized defensive units that limit space in wide areas..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Box_Dominance: 0.8381
+  2. Attacking_Efficiency.5: 0.5423
+  3. Possession_Control.1: 0.4323
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Attacking_Output: -0.5429
+  2. Defensive_Prowess: -0.6415
+  3. Recovery_&_Transition: -0.8187
+
+================================================================================
+CLUSTER 3: TACTICAL SPECIALISTS
+================================================================================
+
+Cluster Size: 14 teams (7.1%)
+
+Teams in Cluster:
+  1. Barcelona
+  2. Arsenal
+  3. Chelsea
+  4. Liverpool
+  5. Newcastle United
+  6. Aston Villa
+  7. Tottenham Hotspur
+  8. Manchester City
+  9. Stuttgart
+  10. Milan
+  11. Internazionale
+  12. Olympique Lyonnais
+  13. Olympique Marseille
+  14. Porto
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with distinctive tactical characteristics, excelling in specific domains while showing variable performance in complementary areas.
+2. These teams demonstrate strong proficiency in their specialized tactical areas, leveraging unique approaches to neutralize opposition and create competitive advantages within their strength domains.
+3. These teams show targeted weaknesses in complementary tactical areas, potentially vulnerable when opponents exploit less developed dimensions of their play..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency.2: 1.8154
+  2. Attacking_Output: 1.1271
+  3. Attacking_Efficiency.1: 0.7541
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency: 0.0313
+  2. Attacking_Efficiency.3: -0.2203
+  3. Possession_Control.1: -0.2506
+
+================================================================================
+CLUSTER 4: TACTICAL SPECIALISTS
+================================================================================
+
+Cluster Size: 26 teams (13.2%)
+
+Teams in Cluster:
+  1. Willem II
+  2. Espanyol
+  3. Getafe
+  4. Everton
+  5. Nottingham Forest
+  6. St. Pauli
+  7. Union Berlin
+  8. Roma
+  9. Parma
+  10. Udinese
+  11. Cagliari
+  12. Fiorentina
+  13. Empoli
+  14. Torino
+  15. Hellas Verona
+  16. Auxerre
+  17. Nantes
+  18. Angers SCO
+  19. Reims
+  20. Standard Liège
+  21. Grêmio
+  22. Fortaleza
+  23. Cuiabá
+  24. Vancouver Whitecaps
+  25. Charlotte FC
+  26. Austin FC
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with distinctive tactical characteristics, excelling in specific domains while showing variable performance in complementary areas.
+2. These teams demonstrate strong proficiency in their specialized tactical areas, leveraging unique approaches to neutralize opposition and create competitive advantages within their strength domains.
+3. These teams show targeted weaknesses in complementary tactical areas, potentially vulnerable when opponents exploit less developed dimensions of their play..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Defensive_Prowess: 0.9448
+  2. Attacking_Efficiency.4: 0.5074
+  3. Attacking_Efficiency.3: 0.4783
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Possession_Control: -0.3802
+  2. Attacking_Output: -0.5905
+  3. Attacking_Output.1: -0.8979
+
+================================================================================
+CLUSTER 5: TACTICAL SPECIALISTS
+================================================================================
+
+Cluster Size: 21 teams (10.7%)
+
+Teams in Cluster:
+  1. AZ
+  2. Athletic Bilbao
+  3. Real Sociedad
+  4. Brighton
+  5. Bayer Leverkusen
+  6. Freiburg
+  7. Mainz 05
+  8. Atalanta
+  9. Genoa
+  10. Lens
+  11. Lille
+  12. Cercle Brugge
+  13. Sint-Truiden
+  14. Chicago Fire
+  15. Sporting KC
+  16. DC United
+  17. Benfica
+  18. Sporting Braga
+  19. Monaco
+  20. New York City
+  21. Cincinnati
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with distinctive tactical characteristics, excelling in specific domains while showing variable performance in complementary areas.
+2. These teams demonstrate strong proficiency in their specialized tactical areas, leveraging unique approaches to neutralize opposition and create competitive advantages within their strength domains.
+3. These teams show targeted weaknesses in complementary tactical areas, potentially vulnerable when opponents exploit less developed dimensions of their play..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Possession_Control: 0.9974
+  2. Attacking_Efficiency.1: 0.7567
+  3. Recovery_&_Transition.1: 0.4867
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Defensive_Prowess: -0.3551
+  2. Possession_Control.2: -0.5768
+  3. Attacking_Efficiency.2: -0.8076
+
+================================================================================
+CLUSTER 6: TACTICAL SPECIALISTS
+================================================================================
+
+Cluster Size: 22 teams (11.2%)
+
+Teams in Cluster:
+  1. Go Ahead Eagles
+  2. Villarreal
+  3. Crystal Palace
+  4. Werder Bremen
+  5. Borussia M'gladbach
+  6. Eintracht Frankfurt
+  7. Heidenheim
+  8. Nice
+  9. Toulouse
+  10. Charleroi
+  11. Club Brugge
+  12. Mechelen
+  13. Bahia
+  14. Los Angeles Galaxy
+  15. SJ Earthquakes
+  16. Philadelphia Union
+  17. Portland Timbers
+  18. Boavista
+  19. Vitória Guimarães
+  20. Santa Clara
+  21. Nashville SC
+  22. Atlanta United
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with distinctive tactical characteristics, excelling in specific domains while showing variable performance in complementary areas.
+2. These teams demonstrate strong proficiency in their specialized tactical areas, leveraging unique approaches to neutralize opposition and create competitive advantages within their strength domains.
+3. These teams show targeted weaknesses in complementary tactical areas, potentially vulnerable when opponents exploit less developed dimensions of their play..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency.1: 0.9805
+  2. Possession_Control.2: 0.6573
+  3. Attacking_Output.1: 0.3732
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Recovery_&_Transition.1: -0.2706
+  2. Attacking_Efficiency.5: -0.7843
+  3. Possession_Control: -0.9060
+
+================================================================================
+CLUSTER 7: BALANCED OPERATORS
+================================================================================
+
+Cluster Size: 17 teams (8.6%)
+
+Teams in Cluster:
+  1. Almere City
+  2. Montpellier
+  3. Cruzeiro
+  4. Criciúma
+  5. Vitória
+  6. Palmeiras
+  7. Juventude
+  8. Athletico Paranaense
+  9. Corinthians
+  10. Vasco da Gama
+  11. Botafogo
+  12. Red Bull Bragantino
+  13. Atlético GO
+  14. New England
+  15. Real Salt Lake
+  16. Los Angeles FC
+  17. St. Louis City 
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with well-rounded performance across tactical dimensions, showing consistency without dominant specialization in any particular area.
+2. These teams demonstrate reliable all-around performance, maintaining competitive levels across attacking output, defensive solidity, and possession management without critical gaps.
+3. However, these teams may lack the specialized expertise or tactical dominance found in more focused tactical groups, potentially exposed when facing highly specialized opponents..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency.3: 0.4406
+  2. Attacking_Output.1: 0.4279
+  3. Attacking_Efficiency.4: 0.3910
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency.5: -0.5472
+  2. Attacking_Efficiency.1: -1.0345
+  3. Recovery_&_Transition: -1.2853
+
+================================================================================
+CLUSTER 8: BOX DOMINATORS
+================================================================================
+
+Cluster Size: 11 teams (5.6%)
+
+Teams in Cluster:
+  1. RKC Waalwijk
+  2. Heracles
+  3. Real Valladolid
+  4. Southampton
+  5. Leicester City
+  6. Ipswich Town
+  7. RB Leipzig
+  8. Monza
+  9. Saint-Étienne
+  10. Gent
+  11. Rio Ave
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams that establish commanding control within the final third, generating numerous box touches and penetrating opportunities through varied attacking approaches.
+2. These teams excel at creating frequent box entries, generating high-volume shooting situations, establishing presence through crosses and carries, and creating dangerous opportunities from set pieces and movement play.
+3. These teams often show defensive instability outside the box, potentially vulnerable to quick counter-attacks and organized defensive units that limit space in wide areas..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Attacking_Output.1: 0.8927
+  2. Attacking_Efficiency.2: 0.5708
+  3. Box_Dominance: 0.5198
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Recovery_&_Transition.1: -0.5981
+  2. Possession_Control.1: -1.1925
+  3. Attacking_Output: -1.3433
+
+================================================================================
+CLUSTER 9: TACTICAL SPECIALISTS
+================================================================================
+
+Cluster Size: 24 teams (12.2%)
+
+Teams in Cluster:
+  1. PSV
+  2. Twente
+  3. Utrecht
+  4. NEC
+  5. Fortuna Sittard
+  6. Osasuna
+  7. Mallorca
+  8. Deportivo Alavés
+  9. Fulham
+  10. Bournemouth
+  11. Brentford
+  12. Bayern München
+  13. Borussia Dortmund
+  14. Wolfsburg
+  15. Hoffenheim
+  16. Bologna
+  17. Le Havre
+  18. Brest
+  19. Anderlecht
+  20. Westerlo
+  21. Kortrijk
+  22. Union Saint-Gilloise
+  23. Dender
+  24. Sporting CP
+
+CLUSTER DESCRIPTION
+--------------------------------------------------------------------------------
+1. This cluster represents teams with distinctive tactical characteristics, excelling in specific domains while showing variable performance in complementary areas.
+2. These teams demonstrate strong proficiency in their specialized tactical areas, leveraging unique approaches to neutralize opposition and create competitive advantages within their strength domains.
+3. These teams show targeted weaknesses in complementary tactical areas, potentially vulnerable when opponents exploit less developed dimensions of their play..
+
+TOP STRENGTHS
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency.5: 0.8101
+  2. Attacking_Efficiency.3: 0.8004
+  3. Recovery_&_Transition.1: 0.6358
+
+TOP WEAKNESSES
+--------------------------------------------------------------------------------
+  1. Attacking_Efficiency.2: -0.2734
+  2. Possession_Control.1: -0.3990
+  3. Attacking_Efficiency.4: -0.5651
+

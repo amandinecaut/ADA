@@ -1,0 +1,200 @@
+======================================================================
+FACTOR ANALYSIS SUMMARY REPORT
+======================================================================
+
+Data: 197 teams, 97 variables
+After cleaning: 197 observations
+
+FACTORABILITY TESTS
+----------------------------------------------------------------------
+Bartlett's Test Chi-square: 48350.69
+Bartlett's Test p-value: 0.00e+00
+Suitable for Factor Analysis: True
+KMO Index: 0.0000
+
+OPTIMAL NUMBER OF FACTORS
+----------------------------------------------------------------------
+Kaiser Criterion (eigenvalue > 1): 16
+Factors for 80% variance: 15
+Factors for 90% variance: 27
+Selected: 16 factors
+Total variance explained: 81.90%
+
+FACTOR NAMES AND INTERPRETATIONS
+----------------------------------------------------------------------
+
+Factor 1: Attacking Output
+  Variance Explained: 39.47%
+  Top Positive Indicators:
+    - Goal difference: 0.9520
+    - Win probability %: 0.9374
+    - xPoints: 0.9340
+  Top Negative Indicators:
+    - Opp. xG: -0.7064
+    - Opp. np Shots: -0.6986
+    - opp_corners: -0.6938
+
+Factor 2: Attacking Output
+  Variance Explained: 47.13%
+  Top Positive Indicators:
+    - Opp. np Goals: 0.7323
+    - Opp. Goals: 0.7256
+    - Opp. High opportunity shots: 0.4868
+  Top Negative Indicators:
+    - opp_box_entries_from_crosses_pct: -0.4628
+    - Points - xPoints: -0.3694
+    - opp_shots_from_outside_box_pct: -0.3664
+
+Factor 3: Recovery & Transition
+  Variance Explained: 51.50%
+  Top Positive Indicators:
+    - np xG per shot: 0.5253
+    - Points - xPoints: 0.3922
+    - Goals: 0.3910
+  Top Negative Indicators:
+    - shots_from_outside_box_pct: -0.3549
+    - Long ball %: -0.3236
+    - final_third_entry_within_10s_after_recovery_own_half_pct: -0.3201
+
+Factor 4: Attacking Efficiency
+  Variance Explained: 53.66%
+  Top Positive Indicators:
+    - penalties: 0.8836
+    - opp_red_cards: 0.2487
+    - shots_from_outside_box_pct: 0.2331
+  Top Negative Indicators:
+    - Opp. Final third to box %: -0.2250
+    - Opp. Possessions to box within 10s after recovery: -0.1942
+    - Opp. xT: -0.1678
+
+Factor 5: Attacking Efficiency
+  Variance Explained: 57.10%
+  Top Positive Indicators:
+    - np xG per shot: 0.6597
+    - High opportunity shots: 0.3875
+    - Final third to box %: 0.3578
+  Top Negative Indicators:
+    - shots_from_outside_box_pct: -0.5811
+    - Points - xPoints: -0.2769
+    - Opp. Box to shot %: -0.2244
+
+Factor 6: Box Dominance
+  Variance Explained: 62.92%
+  Top Positive Indicators:
+    - Opp. np xG: 0.5250
+    - Opp. Final third to box %: 0.5205
+    - Opp. Box touches: 0.5148
+  Top Negative Indicators:
+    - Defensive action height (m): -0.3375
+    - Fouls committed: -0.2811
+    - Turnover line height (m): -0.2636
+
+Factor 7: Possession Control
+  Variance Explained: 70.08%
+  Top Positive Indicators:
+    - Opp. np xG per shot: 0.5229
+    - Field tilt %: 0.4368
+    - Defensive action height (m): 0.4283
+  Top Negative Indicators:
+    - shots_per_final_third_pass: -0.6182
+    - Box to shot %: -0.5033
+    - Opp. Possessions to final third %: -0.4749
+
+Factor 8: Attacking Efficiency
+  Variance Explained: 75.61%
+  Top Positive Indicators:
+    - median_time_to_first_forward_pass_own_half_s: 0.3212
+    - shots_from_sustained_attacks_pct: 0.2827
+    - Ball possession %: 0.2608
+  Top Negative Indicators:
+    - Recoveries: -0.6691
+    - Possessions to final third within 10s after recovery: -0.6299
+    - Turnovers: -0.5713
+
+Factor 9: Recovery & Transition
+  Variance Explained: 82.71%
+  Top Positive Indicators:
+    - Recoveries within 5s %: 0.5586
+    - forward_passes_from_middle_third_pct: 0.4943
+    - num_throwins_final_third: 0.4778
+  Top Negative Indicators:
+    - Ball-in-play minutes: -0.5983
+    - Time to recovery (s): -0.5491
+    - Possessions retained after 5s %: -0.4734
+
+Factor 10: Possession Control
+  Variance Explained: 84.48%
+  Top Positive Indicators:
+    - opp_penalties: 0.5127
+    - PPDA: 0.2143
+    - Pass tempo: 0.1775
+  Top Negative Indicators:
+    - Possessions to final third %: -0.2012
+    - opp_shots_per_final_third_pass: -0.1960
+    - Recovery line height (m): -0.1825
+
+Factor 11: Defensive Prowess
+  Variance Explained: 88.63%
+  Top Positive Indicators:
+    - PPDA: 0.4715
+    - Opp. np xG per shot: 0.4590
+    - Time to defensive action (s): 0.4452
+  Top Negative Indicators:
+    - opp_shots_per_final_third_pass: -0.5268
+    - Defensive intensity: -0.4570
+    - opp_shots_from_outside_box_pct: -0.4060
+
+Factor 12: Attacking Efficiency
+  Variance Explained: 91.44%
+  Top Positive Indicators:
+    - crosses_per_final_third_possession: 0.6890
+    - box_entries_from_crosses_pct: 0.5086
+    - Final third to box %: 0.2780
+  Top Negative Indicators:
+    - box_entries_from_carries_pct: -0.2684
+    - shots_per_final_third_pass: -0.2676
+    - opp_yellow_cards: -0.2337
+
+Factor 13: Attacking Efficiency
+  Variance Explained: 94.14%
+  Top Positive Indicators:
+    - final_third_entry_within_10s_after_recovery_own_half_pct: 0.3486
+    - box_entries_from_carries_pct: 0.3263
+    - Possessions to final third %: 0.2891
+  Top Negative Indicators:
+    - crosses_per_final_third_possession: -0.3944
+    - box_entries_from_crosses_pct: -0.3616
+    - Box to shot %: -0.3304
+
+Factor 14: Attacking Efficiency
+  Variance Explained: 96.40%
+  Top Positive Indicators:
+    - median_time_to_first_forward_pass_own_half_s: 0.3013
+    - box_entries_from_carries_pct: 0.2915
+    - dribbles_per_final_third_possession: 0.2866
+  Top Negative Indicators:
+    - Opp. Box to shot %: -0.3578
+    - Offsides: -0.3124
+    - opp_shots_per_final_third_pass: -0.3101
+
+Factor 15: Possession Control
+  Variance Explained: 98.03%
+  Top Positive Indicators:
+    - opp_final_third_entry_within_10s_after_recovery_own_half_pct: 0.4665
+    - Opp. Possessions to final third within 10s after recovery: 0.3548
+    - Opp. Possessions to final third %: 0.2947
+  Top Negative Indicators:
+    - median_time_to_first_forward_pass_own_half_s: -0.2811
+    - shots_per_final_third_pass: -0.1968
+    - dribbles_per_final_third_possession: -0.1843
+
+Factor 16: Attacking Efficiency
+  Variance Explained: 100.00%
+  Top Positive Indicators:
+    - match_duration_minutes: 0.4125
+    - box_entry_within_10_after_recovery_att_half_pct: 0.4087
+    - buildups_from_goalkicks_pct: 0.2789
+  Top Negative Indicators:
+    - median_time_to_first_forward_pass_own_half_s: -0.2807
+    - Long ball %: -0.2494
+    - Possessions retained after 5s %: -0.1995

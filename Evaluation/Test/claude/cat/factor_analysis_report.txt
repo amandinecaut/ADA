@@ -1,0 +1,45 @@
+
+FACTOR ANALYSIS SUMMARY REPORT
+================================================================================
+
+Dataset: Cat Breeds
+Number of observations: 62
+Number of original features: 12
+Number of factors extracted: 4
+
+================================================================================
+FACTOR NAMES AND INTERPRETATION
+================================================================================
+
+
+Factor 1: Factor 1: max_weight, min_weight
+Variance Explained: 29.39%
+Top Contributing Features:
+  1. max_weight: 0.905
+  2. min_weight: 0.891
+  3. min_life_expectancy: 0.445
+
+Factor 2: Factor 2: max_life_expectancy, min_life_expectancy
+Variance Explained: 25.76%
+Top Contributing Features:
+  1. max_life_expectancy: 0.777
+  2. min_life_expectancy: 0.668
+  3. grooming: 0.269
+
+Factor 3: Intelligence & Engagement
+Variance Explained: 24.50%
+Top Contributing Features:
+  1. playfulness: -0.664
+  2. other_pets_friendly: -0.618
+  3. children_friendly: -0.522
+
+Factor 4: Factor 4: grooming, shedding
+Variance Explained: 20.36%
+Top Contributing Features:
+  1. grooming: -0.594
+  2. shedding: 0.418
+  3. other_pets_friendly: 0.311
+
+================================================================================
+Total Variance Explained: 26.23%
+================================================================================

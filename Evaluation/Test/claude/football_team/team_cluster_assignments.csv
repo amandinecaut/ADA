@@ -1,0 +1,198 @@
+Team,Cluster_ID,Cluster_Name
+Ajax,0,Balanced Operators
+AZ,5,Tactical Specialists
+PSV,9,Tactical Specialists
+Feyenoord,0,Balanced Operators
+Heerenveen,0,Balanced Operators
+Willem II,4,Tactical Specialists
+Twente,9,Tactical Specialists
+Utrecht,9,Tactical Specialists
+NAC Breda,2,Box Dominators
+RKC Waalwijk,8,Box Dominators
+Groningen,0,Balanced Operators
+NEC,9,Tactical Specialists
+PEC Zwolle,2,Box Dominators
+Sparta Rotterdam,2,Box Dominators
+Heracles,8,Box Dominators
+Go Ahead Eagles,6,Tactical Specialists
+Fortuna Sittard,9,Tactical Specialists
+Almere City,7,Balanced Operators
+Valencia,0,Balanced Operators
+Real Madrid,0,Balanced Operators
+Barcelona,3,Tactical Specialists
+Athletic Bilbao,5,Tactical Specialists
+Atlético Madrid,0,Balanced Operators
+Sevilla,0,Balanced Operators
+Osasuna,9,Tactical Specialists
+Villarreal,6,Tactical Specialists
+Real Betis,0,Balanced Operators
+Mallorca,9,Tactical Specialists
+Real Sociedad,5,Tactical Specialists
+Real Valladolid,8,Box Dominators
+Espanyol,4,Tactical Specialists
+Celta de Vigo,0,Balanced Operators
+Deportivo Alavés,9,Tactical Specialists
+Getafe,4,Tactical Specialists
+Leganés,2,Box Dominators
+Rayo Vallecano,2,Box Dominators
+Las Palmas,2,Box Dominators
+Girona,0,Balanced Operators
+Arsenal,3,Tactical Specialists
+Chelsea,3,Tactical Specialists
+Manchester United,0,Balanced Operators
+Liverpool,3,Tactical Specialists
+Newcastle United,3,Tactical Specialists
+Aston Villa,3,Tactical Specialists
+Fulham,9,Tactical Specialists
+Southampton,8,Box Dominators
+Everton,4,Tactical Specialists
+Tottenham Hotspur,3,Tactical Specialists
+Manchester City,3,Tactical Specialists
+Crystal Palace,6,Tactical Specialists
+Wolverhampton Wanderers,1,Tactical Specialists
+Leicester City,8,Box Dominators
+West Ham United,2,Box Dominators
+Ipswich Town,8,Box Dominators
+Nottingham Forest,4,Tactical Specialists
+Brighton,5,Tactical Specialists
+Bournemouth,9,Tactical Specialists
+Brentford,9,Tactical Specialists
+Werder Bremen,6,Tactical Specialists
+Bayern München,9,Tactical Specialists
+Stuttgart,3,Tactical Specialists
+Bayer Leverkusen,5,Tactical Specialists
+Borussia Dortmund,9,Tactical Specialists
+Bochum,2,Box Dominators
+Wolfsburg,9,Tactical Specialists
+Freiburg,5,Tactical Specialists
+Borussia M'gladbach,6,Tactical Specialists
+Mainz 05,5,Tactical Specialists
+Eintracht Frankfurt,6,Tactical Specialists
+Augsburg,0,Balanced Operators
+Hoffenheim,9,Tactical Specialists
+St. Pauli,4,Tactical Specialists
+Holstein Kiel,1,Tactical Specialists
+Union Berlin,4,Tactical Specialists
+Heidenheim,6,Tactical Specialists
+RB Leipzig,8,Box Dominators
+Milan,3,Tactical Specialists
+Roma,4,Tactical Specialists
+Juventus,0,Balanced Operators
+Parma,4,Tactical Specialists
+Internazionale,3,Tactical Specialists
+Lazio,0,Balanced Operators
+Udinese,4,Tactical Specialists
+Bologna,9,Tactical Specialists
+Lecce,2,Box Dominators
+Atalanta,5,Tactical Specialists
+Cagliari,4,Tactical Specialists
+Fiorentina,4,Tactical Specialists
+Empoli,4,Tactical Specialists
+Torino,4,Tactical Specialists
+Napoli,0,Balanced Operators
+Venezia,2,Box Dominators
+Genoa,5,Tactical Specialists
+Hellas Verona,4,Tactical Specialists
+Como,0,Balanced Operators
+Monza,8,Box Dominators
+Olympique Lyonnais,3,Tactical Specialists
+PSG,0,Balanced Operators
+Auxerre,4,Tactical Specialists
+Nantes,4,Tactical Specialists
+Olympique Marseille,3,Tactical Specialists
+Lens,5,Tactical Specialists
+Rennes,0,Balanced Operators
+Nice,6,Tactical Specialists
+Lille,5,Tactical Specialists
+Strasbourg,1,Tactical Specialists
+Toulouse,6,Tactical Specialists
+Saint-Étienne,8,Box Dominators
+Montpellier,7,Balanced Operators
+Le Havre,9,Tactical Specialists
+Angers SCO,4,Tactical Specialists
+Reims,4,Tactical Specialists
+Brest,9,Tactical Specialists
+Gent,8,Box Dominators
+Anderlecht,9,Tactical Specialists
+Cercle Brugge,5,Tactical Specialists
+Charleroi,6,Tactical Specialists
+Club Brugge,6,Tactical Specialists
+Genk,2,Box Dominators
+Sint-Truiden,5,Tactical Specialists
+Standard Liège,4,Tactical Specialists
+Westerlo,9,Tactical Specialists
+Antwerp,2,Box Dominators
+Kortrijk,9,Tactical Specialists
+Mechelen,6,Tactical Specialists
+Union Saint-Gilloise,9,Tactical Specialists
+OH Leuven,2,Box Dominators
+Dender,9,Tactical Specialists
+Beerschot-Wilrijk,2,Box Dominators
+São Paulo,0,Balanced Operators
+Cruzeiro,7,Balanced Operators
+Criciúma,7,Balanced Operators
+Vitória,7,Balanced Operators
+Internacional,0,Balanced Operators
+Palmeiras,7,Balanced Operators
+Fluminense,2,Box Dominators
+Grêmio,4,Tactical Specialists
+Juventude,7,Balanced Operators
+Athletico Paranaense,7,Balanced Operators
+Atlético Mineiro,0,Balanced Operators
+Flamengo,0,Balanced Operators
+Corinthians,7,Balanced Operators
+Vasco da Gama,7,Balanced Operators
+Botafogo,7,Balanced Operators
+Fortaleza,4,Tactical Specialists
+Bahia,6,Tactical Specialists
+Red Bull Bragantino,7,Balanced Operators
+Cuiabá,4,Tactical Specialists
+Atlético GO,7,Balanced Operators
+Los Angeles Galaxy,6,Tactical Specialists
+Chicago Fire,5,Tactical Specialists
+Sporting KC,5,Tactical Specialists
+SJ Earthquakes,6,Tactical Specialists
+DC United,5,Tactical Specialists
+Colorado Rapids,0,Balanced Operators
+New England,7,Balanced Operators
+Columbus Crew,0,Balanced Operators
+Dallas,1,Tactical Specialists
+Real Salt Lake,7,Balanced Operators
+Houston Dynamo,2,Box Dominators
+New York RB,0,Balanced Operators
+Philadelphia Union,6,Tactical Specialists
+Seattle Sounders,0,Balanced Operators
+Orlando City,0,Balanced Operators
+Minnesota United,0,Balanced Operators
+Portland Timbers,6,Tactical Specialists
+CF Montréal,0,Balanced Operators
+Porto,3,Tactical Specialists
+Benfica,5,Tactical Specialists
+Sporting CP,9,Tactical Specialists
+Nacional,2,Box Dominators
+Sporting Braga,5,Tactical Specialists
+Rio Ave,8,Box Dominators
+Boavista,6,Tactical Specialists
+Moreirense,1,Tactical Specialists
+Vitória Guimarães,6,Tactical Specialists
+Estoril,1,Tactical Specialists
+Santa Clara,6,Tactical Specialists
+Farense,2,Box Dominators
+Gil Vicente,0,Balanced Operators
+Famalicão,0,Balanced Operators
+Casa Pia AC,1,Tactical Specialists
+Arouca,2,Box Dominators
+Toronto,0,Balanced Operators
+Vancouver Whitecaps,4,Tactical Specialists
+Monaco,5,Tactical Specialists
+Nashville SC,6,Tactical Specialists
+New York City,5,Tactical Specialists
+Cincinnati,5,Tactical Specialists
+Atlanta United,6,Tactical Specialists
+Los Angeles FC,7,Balanced Operators
+Inter Miami,1,Tactical Specialists
+Estrela Amadora,2,Box Dominators
+Charlotte FC,4,Tactical Specialists
+Austin FC,4,Tactical Specialists
+St. Louis City ,7,Balanced Operators
+AVS ,2,Box Dominators
