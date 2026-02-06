@@ -85,7 +85,7 @@ with tab1:
         on_change=load_map,
     )
 
-    # GET ENTITY
+   
     with left_t1:
         st.markdown("#### Variable name input")
         user_input = st.text_input("Enter your variable name:", key="entity_id")
@@ -215,8 +215,6 @@ with tab1:
             expander_map = right_t1.expander("Column mapping")
             expander_map.write(st.session_state.col_mapping)
 
-
-            #print("ignore cols", st.session_state.ignore_cols)
             if "entity_radio" not in st.session_state:
                 st.session_state.entity_radio = "No"
                 
@@ -394,14 +392,14 @@ with tab2:
 
             expander_FA = right_t2.expander("Factor Analysis results")
             expander_FA.write(st.session_state.df)
-            FA_done = True
+            st.session_state.FA_done = True
 
             expander_exp = right_t2.expander("Factors components")
+            
             expander_exp.write(pd.DataFrame(st.session_state.components,columns=st.session_state.features,
                     index=[f"Factor {i+1}" for i in range(st.session_state.factor_nb)],))
 
-
-    if FA_done:
+    if st.session_state.get("FA_done", True):
         right_t2.markdown("---")
         right_t2.write("## Question and Answer pairs")
         right_t2.write(
@@ -428,52 +426,6 @@ with tab2:
             QandA.to_csv(QandA_path, index=False)
 
             st.success("Q&A generated and saved!")
-
-            # right_t2.write(
-            #     """
-            #      ADA will now generate Question–Answer pairs for clustering and visualisation. 
-            #      You may also provide additional information (e.g., the abstract of a related paper) to improve the generated pairs.  
-            #      *Note: Adding extra information is optional.*
-            #     """
-            #     )
-
-               
-            # activate = ["Yes", "No"]
-            # introduction_choice = right_t2.radio(
-            #     "Do you want to add more informations?", activate, key="intro_choice"
-            # )
-
-            # # Show text area only if "Yes" is selected
-            # text = (
-            #     right_t2.text_area("Add more specific domain information here:")
-            #     if introduction_choice == "Yes"
-            #     else None
-            # )
-
-            # # Disable button if "Yes" is selected but text is empty
-            # generate_disabled = introduction_choice == "Yes" and (
-            #     not text or not text.strip()
-            # )
-            
-            # if right_t2.button("Generate Q&A", disabled=generate_disabled):
-                
-            #     QandA = create_QandA(text)
-
-            #     if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
-            #         # Display Q&A
-            #         for i, row in QandA.iterrows():
-            #             right_t2.markdown(f"### **Question {i+1}:** {row['User']}")
-            #             right_t2.markdown(f"**Answer:** {row['Assistant']}")
-            #             right_t2.write("\n")
-
-            #     # Path to save the CSV
-            #     QandA_path = "./data/describe/generate/QandA_data.csv"
-            #     # Ensure the folder exists
-            #     os.makedirs(os.path.dirname(QandA_path), exist_ok=True)
-            #     # Save the DataFrame as a CSV file
-            #     QandA.to_csv(QandA_path, index=False)
-
-            #     st.success("Q&A generated and saved!")
 
 
             embeddings = Embeddings()

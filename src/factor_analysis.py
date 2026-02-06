@@ -49,7 +49,10 @@ class FAMDStrategy(FactorStrategy):
                 df.drop(columns=[col], inplace=True)
         
         st.session_state.df_filtered = df
-        
+        st.session_state.df_full = df
+       
+        st.session_state.features = df.columns.tolist()
+
 
         scaler = StandardScaler()
         scaled_data = scaler.fit_transform(df)

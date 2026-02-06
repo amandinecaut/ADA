@@ -48,6 +48,7 @@ default_values = {
     "tab2_done": False,
     "tab3_done": False,
     "tab4_done": False,
+    "FA_done": False,
     "data_loading": False,
     "indice": 0,
     "selected_entity" : None,
@@ -213,6 +214,8 @@ def load_data(file=None):
     st.session_state.data_loading = False
 
 def update_df(ignore_cols=[]):
+    if st.session_state.get("FA_done", True):
+        return
     df = st.session_state.df_full.copy()
 
     # if "ignore_cols" in st.session_state:
@@ -312,14 +315,12 @@ def choose_article(word):
 def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     if st.session_state.features != []:
         df = st.session_state.df_filtered.loc[:, st.session_state.features]
-        features = st.session_state.features
     if not st.session_state.features:
         st.session_state.FA_component_dict = {}
         st.session_state.df = None
         return
 
     df = st.session_state.df_filtered.loc[:, st.session_state.features].copy()
-    print("Original df head:\n", df.head())
     original_index = df.index
     n_factors = st.session_state.get("factor_nb", factor_n)
 
@@ -338,18 +339,15 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     # ------------------
     # Extract scores & components
     # ------------------
-    if model_name == "FA":
-        components = model.components_
-    else:
-        components = model.components_
-        features = st.session_state.df_filtered.columns.tolist()
-        st.session_state.features = features
-        df = st.session_state.df_filtered.copy()
-        
+    #if model_name == "FA":
+    #    components = model.components_
+    #else:
         #components = model.column_coordinates_
         #components = components.T
         #components= components.to_numpy()
-    
+
+    components = model.components_
+    df = st.session_state.df_filtered.copy()
 
 
     
@@ -358,6 +356,9 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     # ------------------
    
     st.session_state.components = components
+    features = st.session_state.df_filtered.columns.tolist()
+    st.session_state.features = features 
+  
 
     if scores is not None:
         principalDf = pd.DataFrame(
@@ -404,6 +405,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     # ------------------
     # Finalise and Visualise (Outside the loop)
     # ------------------
+    print('FA_component_dict before labeling:', FA_component_dict)  # Debug print
     get_component_labels(FA_component_dict)
     st.session_state.FA_component_dict = FA_component_dict
     
@@ -411,7 +413,8 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
     
     st.session_state.df_original = st.session_state.df.copy()
-   
+    print("DEBUG: visualisation step")
+    print(st.session_state.df.head())
     
     # Generate Plot
     vis = DistributionPlot(
@@ -420,115 +423,6 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     )
     st.session_state.fig_base = vis.fig
     st.session_state.df_z_scores = vis.df_z_scores
-
-
-
-
-
-
-def perform_FA_original(factor_n = DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
-    
-    if st.session_state.features != []:
-        x = st.session_state.df_filtered.loc[:, st.session_state.features]#.values
-        original_index = st.session_state.df_filtered.index
-        x = StandardScaler().fit_transform(x)
-
-        if "factor_nb" in st.session_state:
-            components = st.session_state.factor_nb
-        else:
-            components = DEFAULT_FACTOR_NB
-
-        # Factor Analysis
-        FA = FactorAnalysis(n_components=components)
-        principalComponents = FA.fit_transform(x)
-
-        principalDf = pd.DataFrame(
-            data=principalComponents,
-            columns=[f"Factor {i+1}" for i in range(principalComponents.shape[-1])],
-            index=original_index,
-        )
-
-        st.session_state.factor_nb= components
-
-        FA_component_dict = {}
-        components = FA.components_
-
-        # first st.session_state.factor_nb columns of components
-        st.session_state.components = components[:, : st.session_state.factor_nb]
-
-       
-        
-        
-        for i in range(st.session_state.factor_nb):
-
-            top = np.where(components[i] > threshold)[0]
-            bottom = np.where(components[i]< -threshold)[0]
-            top_components = top[np.argsort(components[i][top])[::-1]]
-            bottom_components = bottom[np.argsort(components[i][bottom])]
-
-            # Keep only top 5
-            n = 5
-            if len(top_components) > n:
-                top_components = top_components[:n]
-
-
-            if len(bottom_components) > n:
-                bottom_components = bottom_components[:n]
-
-
-            #print(f"top: {top_components}")
-            #print(f"bottom: {bottom_components}")
-
-            # n = 5
-            # top_components = np.argsort(components[i])[::-1][:n]
-            top_values = [round(components[i][c], 2) for c in top_components]
-            top_features = [st.session_state.features[c] for c in top_components]
-            top_features = [
-                st.session_state.col_mapping.get(f, f) for f in top_features
-            ]
-
-            # n = 5
-            # bottom_components = np.argsort(components[i])[:n]
-            bottom_values = [round(components[i][c], 2) for c in bottom_components]
-            bottom_features = [st.session_state.features[c] for c in bottom_components]
-            bottom_features = [
-                st.session_state.col_mapping.get(f, f) for f in bottom_features
-            ]
-
-            # text = "Features:\n"
-            # text += ",\n".join(top_features + bottom_features)
-
-            text = "Bottom features:\n"
-            text += ", ".join(bottom_features)
-            text += "\n\nTop features:\n"
-            text += ", ".join(top_features)
-
-
-            FA_component_dict[f"Factor {i+1}"] = {
-                #"label": label,
-                "top": top_features,
-                "values_top": top_values,
-                "bottom": bottom_features,
-                "values_bottom": bottom_values,
-            }
-
-           
-        get_component_labels(FA_component_dict)
-        st.session_state.FA_component_dict = FA_component_dict
-        
-        st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
-        st.session_state.df_original = st.session_state.df.copy()
-        vis = DistributionPlot(
-            st.session_state.df,
-            {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
-        )
-        st.session_state.fig_base = vis.fig
-        st.session_state.df_z_scores = vis.df_z_scores
-
-    else:
-        st.session_state.FA_component_dict = {}
-        st.session_state.df = None
-
 
 
 
@@ -546,15 +440,9 @@ def get_component_labels(FA_component_dict):
         label = FALabeler.stream_gpt().lower()
 
         list_FA_labels.append(label)
-        
         # update the dict directly
         FA_component_dict[key]["label"] = label
-        #dict_label.append({"User": f"What does the factor '{label}' mean?", "Assistant": f"{FALabeler.tell_it_what_data_to_use(details)}" })
-    
-    #path = "./data/describe/generate/tell_it_what_it_knows.csv"
-    #os.makedirs(os.path.dirname(path), exist_ok=True)
-    #df_label = pd.DataFrame.from_dict(dict_label)
-    #df_label.to_csv(path, index=False)
+
 
 def display_results(component):
     results_dict = st.session_state.FA_component_dict
