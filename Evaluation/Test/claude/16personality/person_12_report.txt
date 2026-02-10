@@ -1,0 +1,37 @@
+================================================================================
+PERSON 12 - COMPREHENSIVE PERSONALITY ANALYSIS
+================================================================================
+
+BASIC INFORMATION:
+  Respondent ID: 12
+  Assigned Cluster: Creative Initiators (Cluster 3)
+  Cluster Size: 6,145 respondents
+
+THREE-SENTENCE SUMMARY:
+  1. Person 12 demonstrates exceptional strengths in 4 and 7, positioning them as particularly adept at understanding nuanced perspectives and maintaining emotional connection with others.
+
+  2. In contrast, they show relative weakness in 21 and 2, and perform at approximately average levels across 10 other personality dimensions.
+
+  3. Overall, Person 12 represents a creative initiators personality type who is compassionate and emotionally aware, yet may benefit from developing greater assertiveness and emotional resilience in high-pressure situations.
+
+
+DETAILED FACTOR BREAKDOWN:
+STRENGTHS (Top 5):                                          
+  1. Factor 4: 0.854 (z-score: 1.07)
+  2. Factor 7: 0.711 (z-score: 0.95)
+  3. Factor 5: 0.468 (z-score: 0.60)
+  4. Factor 12: 0.381 (z-score: 0.58)
+
+AVERAGE (Sample of 10):                                     
+  1. Factor 9: 0.350 (z-score: 0.48)
+  2. Factor 14: -0.283 (z-score: -0.47)
+  3. Factor 25: -0.111 (z-score: -0.45)
+  4. Factor 19: 0.173 (z-score: 0.40)
+  5. Factor 23: 0.111 (z-score: 0.36)
+
+WEAKNESSES (Bottom 5):                                      
+  1. Factor 21: -0.852 (z-score: -2.36)
+  2. Factor 2: -1.882 (z-score: -2.26)
+  3. Factor 16: -1.072 (z-score: -1.94)
+  4. Factor 11: -1.167 (z-score: -1.68)
+  5. Factor 10: -0.947 (z-score: -1.34)

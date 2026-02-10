@@ -1,0 +1,242 @@
+================================================================================
+FACTOR ANALYSIS SUMMARY REPORT
+16 Personality Types Dataset
+================================================================================
+
+Dataset Information:
+  Number of observations: 59999
+  Number of variables: 60
+  Optimal number of factors: 25
+  Total variance explained: 23.57%
+
+================================================================================
+FACTOR NAMES AND CHARACTERISTICS
+================================================================================
+
+--------------------------------------------------------------------------------
+FACTOR 1
+--------------------------------------------------------------------------------
+Name: Extraversion & Social Engagement
+Description: Preference for social interaction, group activities, and external engagement
+Variance Explained: 2.57%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 2
+--------------------------------------------------------------------------------
+Name: Conscientious Planning & Organization
+Description: Tendency to plan ahead, organize tasks, and follow structured approaches
+Variance Explained: 2.42%
+
+Top 10 Loading Variables:
+   1. ↑   0.421  You usually prefer just doing what you feel like at any given moment instead of planning a particular daily routine.
+   2. ↑   0.420  You often make a backup plan for a backup plan.
+
+--------------------------------------------------------------------------------
+FACTOR 3
+--------------------------------------------------------------------------------
+Name: Emotional Reactivity & Sensitivity
+Description: Tendency to experience strong emotions, worry, and emotional sensitivity
+Variance Explained: 2.01%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 4
+--------------------------------------------------------------------------------
+Name: Logical Thinking & Rationality
+Description: Preference for logical analysis over emotional decision-making
+Variance Explained: 1.88%
+
+Top 10 Loading Variables:
+   1. ↑   0.420  You like books and movies that make you come up with your own interpretation of the ending.
+
+--------------------------------------------------------------------------------
+FACTOR 5
+--------------------------------------------------------------------------------
+Name: Imaginative & Theoretical Thinking
+Description: Interest in abstract concepts, theory, and creative interpretation
+Variance Explained: 1.66%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 6
+--------------------------------------------------------------------------------
+Name: Emotional Stability & Confidence
+Description: Emotional resilience, lack of self-doubt, and overall confidence
+Variance Explained: 1.68%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 7
+--------------------------------------------------------------------------------
+Name: Latent Factor 7
+Description: Interpret based on loadings above
+Variance Explained: 1.43%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 8
+--------------------------------------------------------------------------------
+Name: Latent Factor 8
+Description: Interpret based on loadings above
+Variance Explained: 1.31%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 9
+--------------------------------------------------------------------------------
+Name: Latent Factor 9
+Description: Interpret based on loadings above
+Variance Explained: 1.25%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 10
+--------------------------------------------------------------------------------
+Name: Latent Factor 10
+Description: Interpret based on loadings above
+Variance Explained: 1.06%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 11
+--------------------------------------------------------------------------------
+Name: Latent Factor 11
+Description: Interpret based on loadings above
+Variance Explained: 1.02%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 12
+--------------------------------------------------------------------------------
+Name: Latent Factor 12
+Description: Interpret based on loadings above
+Variance Explained: 0.87%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 13
+--------------------------------------------------------------------------------
+Name: Latent Factor 13
+Description: Interpret based on loadings above
+Variance Explained: 0.81%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 14
+--------------------------------------------------------------------------------
+Name: Latent Factor 14
+Description: Interpret based on loadings above
+Variance Explained: 0.63%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 15
+--------------------------------------------------------------------------------
+Name: Latent Factor 15
+Description: Interpret based on loadings above
+Variance Explained: 0.50%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 16
+--------------------------------------------------------------------------------
+Name: Latent Factor 16
+Description: Interpret based on loadings above
+Variance Explained: 0.50%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 17
+--------------------------------------------------------------------------------
+Name: Latent Factor 17
+Description: Interpret based on loadings above
+Variance Explained: 0.46%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 18
+--------------------------------------------------------------------------------
+Name: Latent Factor 18
+Description: Interpret based on loadings above
+Variance Explained: 0.35%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 19
+--------------------------------------------------------------------------------
+Name: Latent Factor 19
+Description: Interpret based on loadings above
+Variance Explained: 0.25%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 20
+--------------------------------------------------------------------------------
+Name: Latent Factor 20
+Description: Interpret based on loadings above
+Variance Explained: 0.24%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 21
+--------------------------------------------------------------------------------
+Name: Latent Factor 21
+Description: Interpret based on loadings above
+Variance Explained: 0.18%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 22
+--------------------------------------------------------------------------------
+Name: Latent Factor 22
+Description: Interpret based on loadings above
+Variance Explained: 0.16%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 23
+--------------------------------------------------------------------------------
+Name: Latent Factor 23
+Description: Interpret based on loadings above
+Variance Explained: 0.13%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 24
+--------------------------------------------------------------------------------
+Name: Latent Factor 24
+Description: Interpret based on loadings above
+Variance Explained: 0.11%
+
+Top 10 Loading Variables:
+
+--------------------------------------------------------------------------------
+FACTOR 25
+--------------------------------------------------------------------------------
+Name: Latent Factor 25
+Description: Interpret based on loadings above
+Variance Explained: 0.09%
+
+Top 10 Loading Variables:

@@ -1,0 +1,123 @@
+================================================================================
+DETAILED CLUSTER DESCRIPTIONS (3 SENTENCES EACH)
+================================================================================
+
+================================================================================
+CLUSTER 0: ARTISTIC EMPATHS
+================================================================================
+Size: 5,802 respondents (9.7%)
+
+Sentence 1: This cluster (9.7% of respondents) comprises individuals with exceptionally high Artistic Appreciation and Emotional Empathy, representing the creative and feeling-oriented segment of the population.
+
+Sentence 2: They excel in understanding others' emotions and appreciating nuanced, subjective perspectives, making them naturally suited to roles requiring emotional intelligence and creative expression.
+
+Sentence 3: However, their relative weakness in Social Initiation and Emotional Stability may hinder their effectiveness in high-pressure situations and in taking charge of social or professional dynamics.
+
+
+================================================================================
+CLUSTER 1: BALANCED AESTHETES
+================================================================================
+Size: 5,908 respondents (9.8%)
+
+Sentence 1: This cluster (9.8% of respondents) consists of individuals who combine Aesthetic Appreciation with Emotional Stability, displaying a measured and thoughtful personality profile.
+
+Sentence 2: Their strengths lie in both subjective interpretation and emotional composure, enabling them to navigate complex interpersonal situations with grace and resilience.
+
+Sentence 3: Yet their lower Emotional Empathy and aversion to Organizational Tools suggest they may struggle with deeply understanding others' feelings and may prefer less structured approaches to work.
+
+
+================================================================================
+CLUSTER 2: EMPATHIC LEADERS
+================================================================================
+Size: 6,103 respondents (10.2%)
+
+Sentence 1: This cluster (10.2% of respondents) features individuals high in Emotional Volatility and Empathy & Conscientiousness, representing emotionally expressive yet responsible personalities.
+
+Sentence 2: Members excel at combining emotional awareness with conscientiousness, making them effective at building relationships while maintaining reliability and following through on commitments.
+
+Sentence 3: Their weakness in Conflict Engagement and lower Aesthetic Appreciation means they may shy away from direct confrontation and prefer practical over artistic endeavors.
+
+
+================================================================================
+CLUSTER 3: CREATIVE INITIATORS
+================================================================================
+Size: 6,145 respondents (10.2%)
+
+Sentence 1: This cluster (10.2% of respondents) comprises individuals with high Aesthetic Appreciation and Social Initiation, representing the outgoing creative segment.
+
+Sentence 2: They shine in generating ideas, taking social leadership, and bringing creative visions to life, thriving in dynamic and collaborative environments.
+
+Sentence 3: However, their lower Spontaneity-Planning balance and reduced Emotional Stability may lead to disorganization and difficulty managing stress in high-pressure contexts.
+
+
+================================================================================
+CLUSTER 4: STEADY NURTURERS
+================================================================================
+Size: 6,135 respondents (10.2%)
+
+Sentence 1: This cluster (10.2% of respondents) consists of individuals with high Emotional Stability and Emotional Empathy, representing the reliable and caring members of the population.
+
+Sentence 2: They demonstrate exceptional ability to remain calm while deeply understanding and supporting others, making them ideal for caregiving, mentoring, and emotionally demanding roles.
+
+Sentence 3: Their tendency toward lower Spontaneity-Planning and weaker Thinking Orientation suggests they prefer structure and may rely more on intuitive, feeling-based decision-making.
+
+
+================================================================================
+CLUSTER 5: RATIONAL ASSERTIVES
+================================================================================
+Size: 5,812 respondents (9.7%)
+
+Sentence 1: This cluster (9.7% of respondents) features individuals high in Thinking Orientation and Conflict Engagement, representing the logical and direct segment.
+
+Sentence 2: They excel at objective analysis, taking assertive action, and engaging in straightforward debate or discussion without emotional avoidance.
+
+Sentence 3: Their relative weakness in Aesthetic Appreciation and Social Introversion may indicate a preference for practical matters over subjective interpretation, and potential social reserve.
+
+
+================================================================================
+CLUSTER 6: THOUGHTFUL SKEPTICS
+================================================================================
+Size: 4,166 respondents (6.9%)
+
+Sentence 1: This cluster (6.9% of respondents, the smallest) comprises individuals with high Thinking Orientation and Emotional Volatility, representing introspective yet emotionally reactive personalities.
+
+Sentence 2: They bring rigorous analytical thinking combined with passionate emotional responses, often questioning conventions and exploring existential matters deeply.
+
+Sentence 3: However, their lower Empathy & Conscientiousness and reduced Conflict Engagement suggest difficulty in empathizing with others and may cause hesitation in assertive leadership situations.
+
+
+================================================================================
+CLUSTER 7: DIRECT PRAGMATISTS
+================================================================================
+Size: 8,545 respondents (14.2%)
+
+Sentence 1: This cluster (14.2% of respondents, the largest) features individuals high in Conflict Engagement and preference against Organizational Tools, representing action-oriented free spirits.
+
+Sentence 2: They demonstrate boldness in confrontation and preference for spontaneous approaches, often challenging norms and traditional structures with confidence.
+
+Sentence 3: Their weakness in Aesthetic Appreciation and lower Emotional Stability indicates they may overlook creative subtlety and struggle with emotional composure under stress.
+
+
+================================================================================
+CLUSTER 8: COMPASSIONATE NETWORKERS
+================================================================================
+Size: 5,540 respondents (9.2%)
+
+Sentence 1: This cluster (9.2% of respondents) consists of individuals with high Emotional Empathy and Empathy & Conscientiousness, representing the warmhearted and socially conscientious segment.
+
+Sentence 2: They excel at genuine human connection, reliability in relationships, and taking responsibility for group welfare, making them effective team members and trusted colleagues.
+
+Sentence 3: Their relative weakness in Conflict Engagement and lower Social Initiation means they may avoid confrontation and wait for others to take the lead in social situations.
+
+
+================================================================================
+CLUSTER 9: ORGANIZED CONNECTORS
+================================================================================
+Size: 5,843 respondents (9.7%)
+
+Sentence 1: This cluster (9.7% of respondents) comprises individuals with high Spontaneity (organized planning) and Social Initiation, representing the proactive and systematic segment.
+
+Sentence 2: They combine the ability to plan effectively with the drive to initiate social and professional activities, making them natural coordinators and organizers of group efforts.
+
+Sentence 3: However, their lower Emotional Volatility control and weaker Empathy & Conscientiousness suggest they may be less attuned to emotional nuances and group harmony.
+
