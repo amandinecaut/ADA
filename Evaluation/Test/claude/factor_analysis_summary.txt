@@ -1,0 +1,30 @@
+================================================================================
+FACTOR ANALYSIS SUMMARY REPORT
+16 Personality Types Dataset
+================================================================================
+
+Dataset Information:
+  Observations: 59999
+  Variables: 60
+  Optimal factors: 25
+  Total variance explained: 23.57%
+
+================================================================================
+FACTOR CHARACTERISTICS
+================================================================================
+
+FACTOR 1
+  Variance: 2.57%
+
+  Name: Extraversion & Social Engagement
+  Description: Preference for social interaction, group activities, external engagement
+
+  Top Variables:
+
+FACTOR 2
+  Variance: 2.42%
+
+  Name: Conscientious Planning & Organization
+  Description: Tendency to plan ahead, organize tasks, structured approaches
+
+  Top Variables:

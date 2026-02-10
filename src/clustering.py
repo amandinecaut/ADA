@@ -13,7 +13,6 @@ from wordalisation import ClusterWordalisation, Clusterlabel
 
 class Cluster:
     def __init__(self, df, FA_label_map, num_clusters):
-        cols = [k for k in FA_label_map.keys()]
         self.df = df
         self.df_values = df.values
         self.FA_label_map = FA_label_map
@@ -23,15 +22,13 @@ class Cluster:
 
     def clustering(self):
         """Perform K-Means clustering and store results."""
-        #optimal_k = self.find_optimal_k_elbow(self.df)
-        #print(f"Optimal number of clusters (k) determined by Elbow Method: {optimal_k}")
+
         
         kmeans = KMeans(n_clusters=st.session_state.num_clusters, init='k-means++', max_iter=100, n_init=50, random_state=42)
-        # Fit and predict cluster labels
+
         
         labels = kmeans.fit_predict(self.df)
         self.df['Cluster'] = labels
-        # Store centroids and unique labels
         self.centroids = kmeans.cluster_centers_
 
         self.desc = ClusterWordalisation() 
@@ -42,18 +39,15 @@ class Cluster:
          # Get the cluster name        
         self.list_cluster_name = self.name_the_cluster(self.list_description_cluster)
 
-        #self.u_labels = self.df['Cluster'].unique()
+      
         self.u_labels = sorted(self.df['Cluster'].unique())
         
-        # Create cluster color map
-        #self.ind_col_map = {label: color for label, color in zip(self.u_labels, plotly.colors.qualitative.Set1[:len(self.u_labels)])}
-        
-
         colors = plotly.colors.qualitative.Set1[:len(self.u_labels)]
         self.ind_col_map = dict(zip(self.u_labels, colors))
 
         st.session_state.u_labels, st.session_state.centroids, st.session_state.ind_col_map = self.u_labels , self.centroids,  self.ind_col_map
-        st.session_state.df = self.df
+        st.session_state.df_FA = self.df
+        print("DEBUG- clustering", self.df.head())
         st.session_state.list_cluster_name =  self.list_cluster_name
         st.session_state.list_description_cluster = self.list_description_cluster
 

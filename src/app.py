@@ -215,6 +215,8 @@ with tab1:
             expander_map = right_t1.expander("Column mapping")
             expander_map.write(st.session_state.col_mapping)
 
+
+            #print("ignore cols", st.session_state.ignore_cols)
             if "entity_radio" not in st.session_state:
                 st.session_state.entity_radio = "No"
                 
@@ -396,7 +398,7 @@ with tab2:
 
             expander_exp = right_t2.expander("Factors components")
             
-            expander_exp.write(pd.DataFrame(st.session_state.components,columns=st.session_state.features,
+            expander_exp.write(pd.DataFrame(st.session_state.components,columns=st.session_state.features_FA,
                     index=[f"Factor {i+1}" for i in range(st.session_state.factor_nb)],))
 
     if st.session_state.get("FA_done", True):
@@ -479,7 +481,7 @@ with tab3:
         )   
 
         if use_elbow == "Yes, run the Elbow Method":
-            optimal_k = app_utilities.find_optimal_k_elbow(st.session_state.df)
+            optimal_k = app_utilities.find_optimal_k_elbow(st.session_state.df_FA)
             left_t3.write(f"The optimal number of clusters is {optimal_k}")
             st.session_state.num_clusters = optimal_k
         
@@ -504,6 +506,7 @@ with tab3:
             # The spinner will appear inside the left column
             with st.spinner("🔮 Analyzing patterns and forming clusters..."):
                 perform_clustering()
+
 
             # Success feedback with a "Toast" or an Icon
             st.toast("Clustering complete!", icon="✅")
@@ -543,7 +546,7 @@ with tab3:
 
             # Create cluster visualization
             vis_cluster = ClusterVisualisation(
-                st.session_state.df,
+                st.session_state.df_FA,
                 {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
                 st.session_state.u_labels,
                 st.session_state.centroids,
@@ -596,7 +599,7 @@ with tab3:
             # Create cluster visualization
             if plot_choice == "2D":
                 vis_cluster = ClusterVisualisation(
-                    st.session_state.df,
+                    st.session_state.df_FA,
                     {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
                     st.session_state.u_labels,
                     st.session_state.centroids,
@@ -608,7 +611,7 @@ with tab3:
                     right_t3.plotly_chart(fig_cluster, use_container_width=True, theme="streamlit")
             else:  # 3D
                 vis_cluster3d = ClusterVisualisation3D(
-                    st.session_state.df,
+                    st.session_state.df_FA,
                     {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
                     st.session_state.u_labels,
                     st.session_state.centroids,

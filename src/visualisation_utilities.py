@@ -123,6 +123,133 @@ class Visualisation:
         )
 
 class ClusterVisualisation:
+
+    def __init__(self, df, FA_label_map, u_labels, centroids, ind_col_map):
+        self.df = df
+        self.FA_label_map = FA_label_map
+        self.u_labels = u_labels
+        self.centroids = centroids  
+        self.ind_col_map = ind_col_map
+        self.list_cluster_name = st.session_state.list_cluster_name
+   
+        self.fig = go.Figure()
+        self.set_visualization_cluster()
+
+    def set_visualization_cluster(self):
+        """Visualize K-Means clustering results using Plotly."""
+
+       
+        centroids = getattr(st.session_state, "centroids", None)
+       
+        ind_col_map = getattr(st.session_state, "ind_col_map", None)
+        FA_component_dict = getattr(st.session_state, "FA_component_dict", {})
+        label_to_value = getattr(st.session_state, "label_to_value", {})
+        dim_x = getattr(st.session_state, "dim_x", None)
+        dim_y = getattr(st.session_state, "dim_y", None)
+
+        # Check if required data is available
+        if ind_col_map is None:
+            st.warning("Clustering not yet run. Please run clustering first.")
+            return
+        if centroids is None:
+            st.info("Centroids not yet available. Only plotting cluster points.")
+        if not dim_x or not dim_y:
+            st.warning("Select dimensions (dim_x and dim_y) before plotting.")
+            return
+
+        component_keys = list(FA_component_dict.keys())
+        label_to_idx = {}
+        for idx, key in enumerate(component_keys):
+            label = FA_component_dict[key].get("label", key)
+            label_to_idx[label] = idx
+
+       
+        
+        # Plot points for each cluster
+        for i in st.session_state.u_labels:
+            cluster_points = self.df[self.df['Cluster'] == i]
+           
+            if len(cluster_points) == 0:
+                print(f"DEBUG - Cluster {i} is empty, skipping")  # DEBUG
+                continue
+            try:
+                x_values = cluster_points[dim_x].values
+                y_values = cluster_points[dim_y].values
+               
+            except KeyError as e:
+                print(f"ERROR - Column not found: {e}")
+                st.error(f"Column not found: {dim_x} or {dim_y}")
+                return
+            
+          
+            
+            # Get point labels for hover text
+            point_names = cluster_points.index.tolist()
+            index_to_label = {v: k for k, v in label_to_value.items()}
+            point_labels = [index_to_label.get(idx, "Unknown") for idx in point_names]
+            custom_data = [[name] for name in point_labels]
+            
+           
+            hovertext=(
+                "<b> %{customdata[0]}: </b><br>" +
+                f"<b>{self.list_cluster_name[i]}</b><br>" +
+                f"{dim_x}: %{{x}}<br>" +  
+                f"{dim_y}: %{{y}}<extra></extra>"
+            )
+            
+            self.fig.add_trace(
+                go.Scatter(
+                    x=x_values,
+                    y=y_values,
+                    mode='markers',
+                    marker=dict(
+                        color=st.session_state.ind_col_map[i], 
+                        size=5, 
+                        opacity=0.3
+                    ),
+                    hovertemplate=hovertext,
+                    customdata=custom_data,
+                    name=self.list_cluster_name[i]
+                )
+            )
+       
+       
+        dim_x_idx = label_to_idx.get(dim_x, 0)
+        dim_y_idx = label_to_idx.get(dim_y, 1)
+        
+
+        
+        self.fig.add_trace(
+            go.Scatter(
+                x=st.session_state.centroids[:, dim_x_idx],
+                y=st.session_state.centroids[:, dim_y_idx],
+                mode='markers',
+                marker=dict(color='black', size=6, symbol='x'),
+                name='Centroids'
+            ))
+  
+        try:
+            x_min = self.df[dim_x].min()
+            x_max = self.df[dim_x].max()
+            y_min = self.df[dim_y].min()
+            y_max = self.df[dim_y].max()
+        except KeyError as e:
+            st.error(f"Error getting axis ranges: {e}")
+            return
+
+        self.fig.update_layout(
+            title='K-Means Clustering Visualization',
+            xaxis_title=dim_x,
+            yaxis_title=dim_y,
+            legend_title='Clusters',
+            width=900,
+            height=900,
+            legend={'itemsizing': 'constant'},
+            xaxis=dict(range=[x_min, x_max]),
+            yaxis=dict(range=[y_min, y_max])
+        )
+
+class ClusterVisualisation_original:
     def __init__(self, df, FA_label_map, u_labels, centroids, ind_col_map):
         self.df = df
         if len(self.df) > 100:
@@ -164,6 +291,7 @@ class ClusterVisualisation:
         for i in st.session_state.u_labels:
             #cluster_points = st.session_state.df[st.session_state.df['Cluster'] == i]
             cluster_points = self.df[self.df['Cluster'] == i]
+   
 
         
             point_names = cluster_points.index.tolist()
@@ -224,6 +352,144 @@ class ClusterVisualisation:
         )
 
 class ClusterVisualisation3D:
+    def __init__(self, df, FA_label_map, u_labels, centroids, ind_col_map):
+        self.df = df
+        # ✅ Store the FA label map for later use
+        self.FA_label_map = FA_label_map
+        self.u_labels = u_labels
+        self.centroids = centroids  
+        self.ind_col_map = ind_col_map
+        self.list_cluster_name = st.session_state.list_cluster_name
+   
+        self.fig = go.Figure()
+        self.set_visualization_cluster_3d()
+
+    def set_visualization_cluster_3d(self):
+        """Visualize K-Means clustering results in 3D using Plotly."""
+
+        u_labels = getattr(st.session_state, "u_labels", np.array([]))
+        centroids = getattr(st.session_state, "centroids", None)
+        ind_col_map = getattr(st.session_state, "ind_col_map", None)
+        FA_component_dict = getattr(st.session_state, "FA_component_dict", {})
+        list_cluster_name = getattr(st.session_state, "list_cluster_name", None)
+        label_to_value = getattr(st.session_state, "label_to_value", {})
+        dim_x = getattr(st.session_state, "dim_x", None)
+        dim_y = getattr(st.session_state, "dim_y", None)
+        dim_z = getattr(st.session_state, "dim_z", None)
+
+        # Check if required data is available
+        if ind_col_map is None:
+            st.warning("Clustering not yet run. Please run clustering first.")
+            return
+        if centroids is None:
+            st.info("Centroids not yet available. Only plotting cluster points.")
+        if not dim_x or not dim_y or not dim_z:
+            st.warning("Select dimensions (dim_x, dim_y, dim_z) before plotting.")
+            return
+
+        # ✅ FIX: Build a proper label-to-index mapping for centroids
+        # Map each label (ex: "extroverted vs introverted") to its index (0, 1, 2, ...)
+        component_keys = list(FA_component_dict.keys())
+        label_to_idx = {}
+        for idx, key in enumerate(component_keys):
+            label = FA_component_dict[key].get("label", key)
+            label_to_idx[label] = idx
+        
+        print(f"DEBUG - label_to_idx: {label_to_idx}")  # DEBUG
+        print(f"DEBUG - dim_x: {dim_x}, dim_y: {dim_y}, dim_z: {dim_z}")  # DEBUG
+
+        # Plot points for each cluster
+        for i in st.session_state.u_labels:
+            # ✅ Get points for this cluster
+            cluster_points = self.df[self.df['Cluster'] == i]
+            print(f"DEBUG - Cluster {i}: {len(cluster_points)} points")  # DEBUG
+
+            # ✅ Skip empty clusters
+            if len(cluster_points) == 0:
+                print(f"DEBUG - Cluster {i} is empty, skipping")  # DEBUG
+                continue
+
+            # ✅ FIX: Use dim_x, dim_y, dim_z directly as column names
+            # These are the labels (ex: "extroverted vs introverted")
+            # and the dataframe columns have these names
+            try:
+                x_values = cluster_points[dim_x].values
+                y_values = cluster_points[dim_y].values
+                z_values = cluster_points[dim_z].values
+                print(f"DEBUG - Cluster {i} X shape: {x_values.shape}, Y shape: {y_values.shape}, Z shape: {z_values.shape}")  # DEBUG
+            except KeyError as e:
+                print(f"ERROR - Column not found: {e}")
+                st.error(f"Column not found: {dim_x}, {dim_y}, or {dim_z}")
+                return
+            
+            # Get point labels for hover text
+            point_names = cluster_points.index.tolist()
+            index_to_label = {v: k for k, v in label_to_value.items()}
+            point_labels = [index_to_label.get(idx, "Unknown") for idx in point_names]
+            custom_data = [
+                [name] for name in point_labels
+            ]
+           
+            hovertext=(
+                "<b> %{customdata[0]} </b><br>" +
+                f"<b>{self.list_cluster_name[i]}</b><br>" +
+                f"{dim_x}: %{{x}}<br>" +  
+                f"{dim_y}: %{{y}}<br>" +
+                f"{dim_z}: %{{z}}<extra></extra>"
+            )
+            
+            # ✅ Add trace with corrected data
+            self.fig.add_trace(
+                go.Scatter3d(
+                    x=x_values,
+                    y=y_values,
+                    z=z_values,
+                    mode='markers',
+                    marker=dict(
+                        color=st.session_state.ind_col_map[i], 
+                        size=5, 
+                        opacity=0.3
+                    ),
+                    hovertemplate=hovertext,
+                    customdata=custom_data,
+                    name=self.list_cluster_name[i]
+                )
+            )
+        
+        # ✅ FIX: Plot centroids with correct indexing
+        # Get the indices for dim_x, dim_y, dim_z from the label_to_idx map
+        dim_x_idx = label_to_idx.get(dim_x, 0)
+        dim_y_idx = label_to_idx.get(dim_y, 1)
+        dim_z_idx = label_to_idx.get(dim_z, 2)
+        
+        print(f"DEBUG - dim_x_idx: {dim_x_idx}, dim_y_idx: {dim_y_idx}, dim_z_idx: {dim_z_idx}")  # DEBUG
+        print(f"DEBUG - Centroids shape: {st.session_state.centroids.shape}")  # DEBUG
+        
+        self.fig.add_trace(
+            go.Scatter3d(
+                x=st.session_state.centroids[:, dim_x_idx],
+                y=st.session_state.centroids[:, dim_y_idx],
+                z=st.session_state.centroids[:, dim_z_idx],   
+                mode='markers',
+                marker=dict(color='black', size=4, symbol='x'),
+                name='Centroids'
+            ))
+
+        # Update layout
+        self.fig.update_layout(
+            title='K-Means Clustering 3D Visualization',
+            scene=dict(
+                xaxis_title=dim_x,
+                yaxis_title=dim_y,
+                zaxis_title=dim_z
+            ),
+            legend_title='Clusters',
+            width=900,
+            height=900,
+            legend={'itemsizing': 'constant'}
+        )
+
+class ClusterVisualisation3D_v1:
     def __init__(self, df, FA_label_map, u_labels, centroids, ind_col_map):
         self.df = df
         self.FA_label_map = FA_label_map

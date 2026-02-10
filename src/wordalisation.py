@@ -178,13 +178,14 @@ class CreateWordalisation(Wordalisation):
 
 
     def __init__(self):
-        if "df" not in st.session_state:
-            st.session_state["df"] = pd.DataFrame()  
+        if "df_FA" not in st.session_state:
+            st.session_state["df_FA"] = pd.DataFrame()  
         if "FA_component_dict" not in st.session_state:
             st.session_state["FA_component_dict"] = {}
 
 
-        self.df = st.session_state.df
+        self.df = st.session_state.df_FA
+        
         self.FA_component_dict = st.session_state.FA_component_dict
         
         self.indice = st.session_state.indice
@@ -257,23 +258,26 @@ class CreateWordalisation(Wordalisation):
         return words[-1]
 
     def get_description(self, indice):
-        df = self.df[list(self.FA_component_dict.keys())]
       
+        df = self.df#[list(self.FA_component_dict)]
         indice = self.indice
 
         dictionary = st.session_state.col_mapping
         results_dict = st.session_state.FA_component_dict
+       
 
         text = ''
 
         for component_key, component in results_dict.items():
             if not component:
                 continue
-
+           
             text_left, text_right = ClusterWordalisation.split_qualities(component['label'])
            
-            text += f"{st.session_state.selected_entity} "
-            value = df.loc[indice, component_key]
+            text += f"{st.session_state.selected_entity}"
+        
+            #value = df.loc[indice, component_key]
+            value = df.loc[indice, component['label']]
             
           
 

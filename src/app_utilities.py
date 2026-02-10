@@ -311,8 +311,143 @@ def choose_article(word):
     return "an" if w.startswith(vowels) else "a"
 
 ### ----  Analysis tab utilities ---- ###
-
 def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
+    """
+    Perform Factor Analysis on the selected features.
+    
+    This function:
+    1. Extracts features from df_filtered
+    2. Fits FA or FAMD model based on data type
+    3. Creates component dictionary with top/bottom features
+    4. Generates labels and visualisations
+    """
+   
+    # Check if features are empty
+    if not st.session_state.features or st.session_state.features == []:
+        st.session_state.FA_component_dict = {}
+        return
+
+    df = st.session_state.df_filtered.loc[:, st.session_state.features].copy()
+    original_index = df.index
+    n_factors = st.session_state.get("factor_nb", factor_n)
+
+    # ------------------
+    # Fit model
+    # ------------------
+    model_name = st.session_state.get("strategy_name")
+    strategies = {
+        "FA": ContinuousFAStrategy(),
+        "FAMD": FAMDStrategy()
+    }
+    
+    strategy = strategies[model_name]
+    model, scores = strategy.fit(df, n_factors)
+
+    # ------------------
+    # Extract scores & components
+    # ------------------
+    components = model.components_  
+    if model_name == "FAMD":
+        features = st.session_state.features_famd.copy() 
+    else:
+        features = st.session_state.features.copy() 
+    
+    # Store components
+    st.session_state.components = components
+    st.session_state.features_FA = features
+
+
+
+    if scores is not None:
+        principalDf = pd.DataFrame(
+            data=scores,
+            columns=[f"Factor {i+1}" for i in range(n_factors)],
+            index=original_index,
+        )
+    else:
+        # Handle case where scores is None
+        st.error("Failed to generate factor scores")
+        return
+
+    # ------------------
+    # Build Component Dictionary
+    # ------------------
+    FA_component_dict = {}
+    
+    for i in range(n_factors):
+        # Logic for top/bottom features based on threshold
+        top = np.where(components[i] > threshold)[0]
+        bottom = np.where(components[i] < -threshold)[0]
+        
+      
+        if len(top) > 0:
+            top_components = top[np.argsort(components[i][top])[::-1]]
+        else:
+            top_components = np.array([])
+            
+        if len(bottom) > 0:
+            bottom_components = bottom[np.argsort(components[i][bottom])]
+        else:
+            bottom_components = np.array([])
+
+        # Keep only top 5
+        n = 5
+        if len(top_components) > n: 
+            top_components = top_components[:n]
+        if len(bottom_components) > n: 
+            bottom_components = bottom_components[:n]
+
+        top_values = []
+        top_features = []
+        for idx in top_components:
+            if 0 <= idx < len(features):  
+                top_values.append(round(components[i][idx], 2))
+                top_features.append(features[idx])
+        
+        # Map feature names using col_mapping
+        top_features = [st.session_state.col_mapping.get(f, f) for f in top_features]
+
+        bottom_values = []
+        bottom_features = []
+        for idx in bottom_components:
+            if 0 <= idx < len(features):  
+                bottom_values.append(round(components[i][idx], 2))
+                bottom_features.append(features[idx])
+        
+        # Map feature names using col_mapping
+        bottom_features = [st.session_state.col_mapping.get(f, f) for f in bottom_features]
+
+        FA_component_dict[f"Factor {i+1}"] = {
+            "top": top_features,
+            "values_top": top_values,
+            "bottom": bottom_features,
+            "values_bottom": bottom_values,
+        }
+
+    
+    # ------------------
+    # Finalise and Visualise
+    # ------------------
+    get_component_labels(FA_component_dict)
+    st.session_state.FA_component_dict = FA_component_dict
+  
+    # Apply Z-score and store
+    st.session_state.df_FA = principalDf #= principalDf.apply(zscore, nan_policy="omit")
+   
+
+    # Generate Plot
+    vis = DistributionPlot(
+        st.session_state.df_FA,
+        {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
+    )
+    st.session_state.fig_base = vis.fig
+    st.session_state.df_z_scores = vis.df_z_scores
+    
+    # Mark FA as done
+    st.session_state.FA_done = True
+
+
+def perform_FA1(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     if st.session_state.features != []:
         df = st.session_state.df_filtered.loc[:, st.session_state.features]
     if not st.session_state.features:
@@ -405,7 +540,6 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     # ------------------
     # Finalise and Visualise (Outside the loop)
     # ------------------
-    print('FA_component_dict before labeling:', FA_component_dict)  # Debug print
     get_component_labels(FA_component_dict)
     st.session_state.FA_component_dict = FA_component_dict
     
@@ -413,9 +547,7 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
     
     st.session_state.df_original = st.session_state.df.copy()
-    print("DEBUG: visualisation step")
-    print(st.session_state.df.head())
-    
+
     # Generate Plot
     vis = DistributionPlot(
         st.session_state.df,
@@ -607,11 +739,30 @@ def find_optimal_k_elbow(X, k_min=1, k_max=15, random_state=42):
 
 # perfom clustering
 def perform_clustering(num_clusters = DEFAULT_NUM_CLUSTERS):
+    """
+    Perform K-Means clustering on FA scores.
+    """
+    num_clusters = st.session_state.get("num_clusters", DEFAULT_NUM_CLUSTERS)
+    df_copy = st.session_state.df_FA.copy()
+    label_map = {k: v["label"] for k, v in st.session_state.FA_component_dict.items()}
+    df_copy = df_copy.rename(columns=label_map)
+    
+    # Perform clustering
+    cluster = Cluster(df_copy,label_map,  num_clusters)
+
+
+    # Store results
+    st.session_state.u_labels = cluster.u_labels
+    st.session_state.centroids = cluster.centroids
+    st.session_state.ind_col_map = cluster.ind_col_map
+    
+  
+def perform_clustering_v1(num_clusters = DEFAULT_NUM_CLUSTERS):
     num_clusters = st.session_state.get("num_clusters", DEFAULT_NUM_CLUSTERS)
     
-    st.session_state.df = st.session_state.df_original.copy()
+    
 
-    df_copy = st.session_state.df.copy()  
+    df_copy = st.session_state.df_FA.copy()  
 
     cluster = Cluster(
         df_copy,
@@ -622,7 +773,7 @@ def perform_clustering(num_clusters = DEFAULT_NUM_CLUSTERS):
     st.session_state.u_labels = cluster.u_labels
     st.session_state.centroids = cluster.centroids
     st.session_state.ind_col_map = cluster.ind_col_map
-    st.session_state.df = df_copy
+    
 
 # Cluster visualisation utilities
 def update_fig_cluster():
@@ -631,7 +782,7 @@ def update_fig_cluster():
         del st.session_state["fig_cluster"]
 
     vis_cluster = ClusterVisualisation(
-        st.session_state.df,
+        st.session_state.df_FA,
         {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
         st.session_state.u_labels,
         st.session_state.centroids,
@@ -644,7 +795,7 @@ def update_fig_cluster3d():
         del st.session_state["fig_cluster3d"]
 
     vis_cluster = ClusterVisualisation3D(
-        st.session_state.df,
+        st.session_state.df_FA,
         {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
         st.session_state.u_labels,
         st.session_state.centroids,
@@ -682,7 +833,7 @@ def add_to_fig(label_to_value):
     ind = label_to_value[selected]
     st.session_state.indice = ind
    
-    row = st.session_state.df.loc[[ind]]
+    row = st.session_state.df_FA.loc[[ind]]
 
     mapping = {factor: info["label"] for factor, info in  st.session_state.FA_component_dict.items()}
     row = row.rename(columns=mapping)
