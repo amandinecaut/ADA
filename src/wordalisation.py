@@ -801,7 +801,7 @@ class FA(Wordalisation):
         self.synthetic_text = self.description_FA(FA_component_dict)
         return self.synthetic_text 
 
-    def describe_level_FA(self, value,text):
+    def describe_level_FA(self, value, text):
         thresholds=[0.30, 0.49, 0.59, 0.70]
 
         words = [
