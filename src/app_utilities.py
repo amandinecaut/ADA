@@ -432,7 +432,8 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     st.session_state.FA_component_dict = FA_component_dict
   
     # Apply Z-score and store
-    st.session_state.df_FA = principalDf #= principalDf.apply(zscore, nan_policy="omit")
+    st.session_state.df_FA = principalDf.apply(zscore, nan_policy="omit")
+
    
 
     # Generate Plot
