@@ -32,7 +32,6 @@ class FAMDStrategy(FactorStrategy):
     name = "FAMD"
 
     def fit(self, df, n_factors):
-        # FIX: Work on a COPY to avoid modifying the original dataframe
         df_work = df.copy()
         
         num_cols = df_work.select_dtypes(include=[np.number]).columns
@@ -48,93 +47,26 @@ class FAMDStrategy(FactorStrategy):
                 df_work[col] = df_work[col].astype(float).fillna(0)
             else:
                 df_work[col] = df_work[col].astype(object).fillna("Unknown")
-                # get dummies for categorical variables
                 dummies = pd.get_dummies(df_work[col], prefix=col, dtype=int)
                 dummies.columns = [c.replace('_', ' ').lower() for c in dummies.columns]
                 df_work = pd.concat([df_work, dummies], axis=1)
                 df_work.drop(columns=[col], inplace=True)
         
-        # Store the ORIGINAL columns (before dummy encoding) in session state
-        # This is what you want to keep for later use
-        #st.session_state.df_filtered = df.copy()  # Keep ORIGINAL dataframe structure
-        #st.session_state.df_full = df.copy()      # Keep ORIGINAL dataframe structure
-        
-        # Store only the ORIGINAL features (before dummy encoding)
+
         st.session_state.features = [col for col in original_columns if col != '__dummy_numeric__']
         st.session_state.features_famd = df_work.columns.tolist()  
         
         scaler = StandardScaler()
         scaled_data = scaler.fit_transform(df_work)
+
+        print('dataset after processing:', scaled_data)
         
         model = FactorAnalysis(n_components=n_factors)
         scores = model.fit_transform(scaled_data)
         
         return model, scores
     
-class FAMDStrategy1(FactorStrategy):
-    """Path 2: Factor Analysis of Mixed Data for datasets with text/categories and numbers."""
-    name = "FAMD"
 
-    def fit(self, df, n_factors):
-       
-        num_cols = df.select_dtypes(include=[np.number]).columns
-    
-        if len(num_cols) == 0:
-            df['__dummy_numeric__'] = 1.0
-        for col in df.columns:
-            if pd.api.types.is_numeric_dtype(df[col]):
-                df[col] = df[col].astype(float).fillna(0)
-            else:
-                df[col] = df[col].astype(object).fillna("Unknown")
-                # get dummies for categorical variables
-                dummies = pd.get_dummies(df[col], prefix=col, dtype=int)
-                dummies.columns = [c.replace('_', ' ').lower() for c in dummies.columns]
-                df = pd.concat([df, dummies], axis=1)
-                df.drop(columns=[col], inplace=True)
-        
-        st.session_state.df_filtered = df
-        st.session_state.df_full = df
-       
-        st.session_state.features = df.columns.tolist()
-
-
-        scaler = StandardScaler()
-        scaled_data = scaler.fit_transform(df)
-        
-        model = FactorAnalysis(n_components=n_factors)
-        scores = model.fit_transform(scaled_data)
-        
-        return model, scores
-
-class FAMDStrategy_original(FactorStrategy):
-    """Path 2: Factor Analysis of Mixed Data for datasets with text/categories and numbers."""
-    name = "FAMD"
-
-    def fit(self, df, n_factors):
-       
-        num_cols = df.select_dtypes(include=[np.number]).columns
-    
-        if len(num_cols) == 0:
-            df['__dummy_numeric__'] = 1.0
-        for col in df.columns:
-            if pd.api.types.is_numeric_dtype(df[col]):
-                df[col] = df[col].astype(float).fillna(0)
-            else:
-                df[col] = df[col].astype(object).fillna("Unknown")
-
-        model = prince.FAMD(
-            n_components=n_factors,
-            n_iter=3,
-            copy=True,
-            check_input=True,
-            random_state=42,
-            engine="sklearn"
-        )
-        model.fit(df)
-        scores = model.row_coordinates(df).values
-        
-        return model, scores
-  
 
 
 def select_strategy(df: pd.DataFrame) -> FactorStrategy:
