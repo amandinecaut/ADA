@@ -170,7 +170,7 @@ class CreateWordalisation(Wordalisation):
 
     @property
     def tell_it_how_to_answer(self):
-        return f"{self.describe_base}/few_shot/few_shot_examples.xlsx"
+        return f"{self.describe_base}/few_shot/final_summary/few_shot_examples.xlsx"
 
     @property
     def tell_it_what_it_knows(self):
@@ -465,7 +465,7 @@ class ClusterWordalisation(Wordalisation):
 
     @property
     def tell_it_how_to_answer(self):
-        return [f"{self.describe_base}/few_shot/few_shot_cluster_description.xlsx"] 
+        return [f"{self.describe_base}/few_shot/cluster/few_shot_cluster_description.xlsx"] 
 
     @property
     def tell_it_what_it_knows(self):
@@ -680,7 +680,7 @@ class ClusterWordalisation(Wordalisation):
 class Clusterlabel(Wordalisation):
     @property
     def tell_it_how_to_answer(self):
-        return [f"{self.describe_base}/few_shot/few_shot_cluster_label.xlsx"] 
+        return [f"{self.describe_base}/few_shot/cluster/few_shot_cluster_label.xlsx"] 
 
     @property
     def tell_it_what_it_knows(self):
@@ -861,7 +861,7 @@ class FA(Wordalisation):
 class FALabel(FA):
     @property
     def tell_it_how_to_answer(self):
-        return [f"{self.describe_base}/few_shot/few_shot_FA_label.xlsx"] 
+        return [f"{self.describe_base}/few_shot/label/few_shot_FA_label.xlsx"] 
 
     @property
     def tell_it_what_it_knows(self):
@@ -958,7 +958,7 @@ class FALabel(FA):
 class QandAWordalisation(FA):
     @property
     def tell_it_how_to_answer(self):
-        return [f"{self.describe_base}/few_shot/few_shot_QandA.xlsx"] 
+        return [f"{self.describe_base}/few_shot/QA/few_shot_QandA.xlsx"] 
 
     @property
     def tell_it_what_it_knows(self):
@@ -1087,7 +1087,7 @@ class QandAWordalisation(FA):
 class QandAWordalisation_from_text(Wordalisation):
     @property
     def tell_it_how_to_answer(self):
-        return [f"{self.describe_base}/few_shot/few_shot_QandA_from_text.xlsx"] 
+        return [f"{self.describe_base}/few_shot/QA/few_shot_QandA_from_text.xlsx"] 
 
     @property
     def tell_it_what_it_knows(self):
