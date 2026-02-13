@@ -393,7 +393,7 @@ with tab2:
             right_t2.write("## Factor Analysis results")
 
             expander_FA = right_t2.expander("Factor Analysis results")
-            expander_FA.write(st.session_state.df)
+            expander_FA.write(st.session_state.df_FA)
             st.session_state.FA_done = True
 
             expander_exp = right_t2.expander("Factors components")

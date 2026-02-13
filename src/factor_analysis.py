@@ -1,8 +1,10 @@
 from abc import ABC, abstractmethod
 from pyexpat import model
+from narwhals import col
 import numpy as np
 import pandas as pd
 import prince
+from pyparsing import col
 import streamlit as st
 from sklearn.decomposition import FactorAnalysis
 from sklearn.preprocessing import StandardScaler
@@ -27,40 +29,87 @@ class ContinuousFAStrategy(FactorStrategy):
         
         return model, scores
     
+
 class FAMDStrategy(FactorStrategy):
     """Path 2: Factor Analysis of Mixed Data for datasets with text/categories and numbers."""
     name = "FAMD"
 
     def fit(self, df, n_factors):
-        df_work = df.copy()
+        df_famd = df.copy()
         
-        num_cols = df_work.select_dtypes(include=[np.number]).columns
+        num_cols = df_famd.select_dtypes(include=[np.number]).columns
     
         if len(num_cols) == 0:
-            df_work['__dummy_numeric__'] = 1.0
+            df_famd['__dummy_numeric__'] = 1.0
+        
+      
+        original_columns = df_famd.columns.tolist()
+        
+        for col in original_columns:
+           
+            if pd.api.types.is_numeric_dtype(df_famd[col]):
+                df_famd[col] = df_famd[col].astype(float).fillna(0)
+               
+            else:
+                
+                dummies = pd.get_dummies(df_famd[col], prefix=col, dtype=int)
+                dummies.columns = ['the ' + col.replace('_', ' ').lower() + ' is ' + dummy_col.replace(col + '_', '').replace('_', ' ').lower() for dummy_col in dummies.columns]
+                df_famd = pd.concat([df_famd, dummies], axis=1)
+                df_famd.drop(columns=[col], inplace=True)
+        df_famd.columns = df_famd.columns.str.replace('_', ' ').str.lower()
+       
+
+
+
+        st.session_state.features = [col for col in original_columns if col != '__dummy_numeric__']
+        st.session_state.features_famd = df_famd.columns.tolist()  
+        st.session_state.df_famd = df_famd
+        
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(df_famd)
+
+        
+        model = FactorAnalysis(n_components=n_factors)
+        scores = model.fit_transform(scaled_data)
+        
+        return model, scores
+    
+
+
+
+class FAMDStrategy_v1(FactorStrategy):
+    """Path 2: Factor Analysis of Mixed Data for datasets with text/categories and numbers."""
+    name = "FAMD"
+
+    def fit(self, df, n_factors):
+        df_famd = df.copy()
+        
+        num_cols = df_famd.select_dtypes(include=[np.number]).columns
+    
+        if len(num_cols) == 0:
+            df_famd['__dummy_numeric__'] = 1.0
         
         # Store original column names BEFORE processing
-        original_columns = df_work.columns.tolist()
+        original_columns = df_famd.columns.tolist()
         
-        for col in df_work.columns:
-            if pd.api.types.is_numeric_dtype(df_work[col]):
-                df_work[col] = df_work[col].astype(float).fillna(0)
+        for col in df_famd.columns:
+            if pd.api.types.is_numeric_dtype(df_famd[col]):
+                df_famd[col] = df_famd[col].astype(float).fillna(0)
+
             else:
-                df_work[col] = df_work[col].astype(object).fillna("Unknown")
-                dummies = pd.get_dummies(df_work[col], prefix=col, dtype=int)
+                df_famd[col] = df_famd[col].astype(object).fillna("Unknown")
+                dummies = pd.get_dummies(df_famd[col], prefix=col, dtype=int)
                 dummies.columns = [c.replace('_', ' ').lower() for c in dummies.columns]
-                df_work = pd.concat([df_work, dummies], axis=1)
-                df_work.drop(columns=[col], inplace=True)
+                df_famd = pd.concat([df_famd, dummies], axis=1)
+                df_famd.drop(columns=[col], inplace=True)
         
 
         st.session_state.features = [col for col in original_columns if col != '__dummy_numeric__']
-        st.session_state.features_famd = df_work.columns.tolist()  
+        st.session_state.features_famd = df_famd.columns.tolist()  
         
         scaler = StandardScaler()
-        scaled_data = scaler.fit_transform(df_work)
+        scaled_data = scaler.fit_transform(df_famd)
 
-        print('dataset after processing:', scaled_data)
-        
         model = FactorAnalysis(n_components=n_factors)
         scores = model.fit_transform(scaled_data)
         

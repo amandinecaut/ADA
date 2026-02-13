@@ -216,7 +216,7 @@ class CreateWordalisation(Wordalisation):
                     "The first sentence should describe the entity's specific strengths based on the metrics. \n"
                     "The second sentence should describe aspects in which the entity is average and/or weak based on the statistics. \n"
                     "Finally, summarise the entity with a single concluding statement. \n" 
-                    "But before you do the summaries I will test your knowedge about the factors and the clusters you will use.\n"
+                    "But before you do the summaries I will test your knowledge about the factors and the clusters you will use.\n"
                     "This is because it is important only to use information you established in the factor analysis and cluster analysis when you describe the entities. \n"
                     "You are going to complete a series of five entity description tasks. "
                     "For each task you will first answer questions about the factors and clusters, then I will tell you properties of the entity and you will "
@@ -247,73 +247,89 @@ class CreateWordalisation(Wordalisation):
         len(words) = len(thresholds) + 1
         """
         assert len(words) == len(thresholds) + 1, "Issue with thresholds and words"
-
-        # Iterate through thresholds to find the correct description
-    
         for i, threshold in enumerate(thresholds):
             if value < threshold:
                 return words[i]
-
-        # If no match (value exceeds the largest threshold), return the last word
         return words[-1]
 
     def get_description(self, indice):
       
         df = self.df#[list(self.FA_component_dict)]
         indice = self.indice
-
-        dictionary = st.session_state.col_mapping
         results_dict = st.session_state.FA_component_dict
-       
+        model_name = st.session_state.get("strategy_name")
 
         text = ''
 
-        for component_key, component in results_dict.items():
-            if not component:
-                continue
+        if model_name == 'FA':
+            dictionary = st.session_state.col_mapping
+       
+            for _, component in results_dict.items():
+                if not component:
+                    continue
            
-            text_left, text_right = ClusterWordalisation.split_qualities(component['label'])
-           
-            text += f"{st.session_state.selected_entity}"
-        
-            #value = df.loc[indice, component_key]
-            value = df.loc[indice, component['label']]
+                text_left, text_right = ClusterWordalisation.split_qualities(component['label'])
+                text += f"{st.session_state.selected_entity} "
+                value = df.loc[indice, component['label']]
             
-          
+                if np.isnan(value):
+                    continue
 
-            if np.isnan(value):
-                continue
+                # Describe the value
+                top_map_list = [k for k, v in dictionary.items() if v in component["top"]] 
+                bottom_map_list = [k for k, v in dictionary.items() if v in component["bottom"]]
 
-            # Describe the value
-            if value >= 0:
-                text += self.describe_level(value) + text_right + '. '
+                if value >= 0:
+                    text += self.describe_level(value) + text_right + '. '
+                 
+                    if value > 1 and top_map_list:
+                        top_values = st.session_state.df_filtered.loc[indice, top_map_list].values
+                        argmax_idx = np.argmax(top_values)
+                        argmax_column = top_map_list[argmax_idx]
+                        text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{dictionary[argmax_column].lower()}'. "
+                       
                 
-            else:
-                text += self.describe_level(value) + text_left + '. '
-               
+                else:
+                    text += self.describe_level(value) + text_left + '. '
+                
+                    if value < -1 and bottom_map_list:
+                        bottom_values = st.session_state.df_filtered.loc[indice, bottom_map_list].values
+                        argmin_idx = np.argmin(bottom_values)
+                        argmin_column = bottom_map_list[argmin_idx]
+                        text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{dictionary[argmin_column].lower()}'. "
+     
 
-            # Map top features to columns
-            top_map_list = [
-             k for k, v in dictionary.items() if v in component["top"]
-            ]
+        if model_name == 'FAMD':
+            features = st.session_state.features_FA
             
-            bottom_map_list = [
-             k for k, v in dictionary.items() if v in component["bottom"]
-            ]
 
+            for key, component in results_dict.items():
+                if not component:
+                    continue
+           
+                text_left, text_right = ClusterWordalisation.split_qualities(component['label'])
+                text += f"{st.session_state.selected_entity} "
+                value = df.loc[indice, component['label']]
+                val = st.session_state.df_famd.loc[indice]
+                top_map_list = [x for x in features if x in component["top"]]
+                bottom_map_list = [x for x in features if x in component["bottom"]]
 
-            # Fast argmax / argmin
-            if value > 1 and top_map_list:
-                top_values = st.session_state.df_filtered.loc[indice, top_map_list].values
-                argmax_idx = np.argmax(top_values)
-                argmax_column = top_map_list[argmax_idx]
-                text += f"In particular, {st.session_state.selected_entity} indicates that {dictionary[argmax_column]}. "
+                if np.isnan(value):
+                    continue
 
-            elif value < -1 and bottom_map_list:
-                bottom_values = st.session_state.df_filtered.loc[indice, bottom_map_list].values
-                argmin_idx = np.argmin(bottom_values)
-                argmin_column = bottom_map_list[argmin_idx]
-                text += f"In particular, {st.session_state.selected_entity} indicates that {dictionary[argmin_column]}. "
+                # Describe the value
+                if value >= 0:
+                    text += self.describe_level(value) + text_right + '. '
+                 
+                    if value > 1 and top_map_list:
+                        argmax_ent = np.argmax(val[top_map_list].tolist())
+                        text += f"Notably, {st.session_state.selected_entity} has characteristics related to '{top_map_list[argmax_ent].lower()}'. "
+                else:
+                    text += self.describe_level(value) + text_left + '. '
+                    if value < -1 and bottom_map_list:   
+                        argmin_ent = np.argmin(val[bottom_map_list].tolist())
+                        text += f"Notably, {st.session_state.selected_entity} has characteristics related to '{bottom_map_list[argmin_ent].lower()}'. "   
+            
 
         return text
 
@@ -836,7 +852,7 @@ class FA(Wordalisation):
             text = "The first features we look at should primarily be used to name the x pole. "
             text += "The higher the value of the association, the more important the feature is for naming the x pole. "
             text += "Here is a list of the features and how important they are for naming the x pole: "
-            descriptions = [f"the feature {feature} is " + self.describe_level_FA(value, 'the x pole') for feature, value in zip(bottom_features, bottom_values)]
+            descriptions = [f"the feature '{feature.lower()}' is " + self.describe_level_FA(value, 'the x pole').strip() for feature, value in zip(bottom_features, bottom_values)]
             text += ", ".join(descriptions) + ". "
         else:
             text = "There are no features primarily be used to name the x pole. "
@@ -848,8 +864,8 @@ class FA(Wordalisation):
             text += "The next features we look at should primarily be used to name the y pole. "
             text += "The higher the value of the association, the more important the feature is for naming the y pole. "
             text += "Here is a list of the features and how important they are for naming the y pole: "
-            descriptions = [f"the feature {feature} is " + self.describe_level_FA(value, 'the y pole')  for feature, value in zip(top_features, top_values)]
-            text += ", ".join(descriptions) + "."
+            descriptions = [f"the feature '{feature.lower()}' is " + self.describe_level_FA(value, 'the y pole').strip()  for feature, value in zip(top_features, top_values)]
+            text += ", ".join(descriptions) + ". "
         else:
             text += "There are no features used to name the y pole. "
             text += "You should describe it simply as the opposite of the x pole, which you already got information about. "

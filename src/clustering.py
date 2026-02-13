@@ -47,7 +47,7 @@ class Cluster:
 
         st.session_state.u_labels, st.session_state.centroids, st.session_state.ind_col_map = self.u_labels , self.centroids,  self.ind_col_map
         st.session_state.df_FA = self.df
-        print("DEBUG- clustering", self.df.head())
+
         st.session_state.list_cluster_name =  self.list_cluster_name
         st.session_state.list_description_cluster = self.list_description_cluster
 
