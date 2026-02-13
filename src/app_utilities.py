@@ -78,11 +78,11 @@ DATA_PATHS = {
         "map": "./data/demo_data/dogs/map.xlsx", 
         "entity": "dog"
     },
-    "Mental health & social media": {
-        "data": "./data/demo_data/mental_health/mental_health_social_media_sample.csv",
-        "map": "./data/demo_data/mental_health/map.xlsx",
-        "entity": "person"
-    },
+    # "Mental health & social media": {
+    #     "data": "./data/demo_data/mental_health/mental_health_social_media_sample.csv",
+    #     "map": "./data/demo_data/mental_health/map.xlsx",
+    #     "entity": "person"
+    # },
     "16 Personality": {
         "data": "./data/demo_data/16_personality/16p.csv",
         "map": "./data/demo_data/16_personality/map.xlsx", 
@@ -93,7 +93,7 @@ DATA_PATHS = {
         "map": "./data/demo_data/rugby/rugby_player_map.xlsx", 
         "entity": "rugby player"
     },
-    "Football test": {
+    "Football Club": {
         "data": "./data/demo_data/football_test/team_stats.csv",
         "map": "./data/demo_data/football_test/match_api_metric_map.json", 
         "entity": "football club"
