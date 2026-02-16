@@ -583,8 +583,15 @@ class ClusterWordalisation(Wordalisation):
 
         
         describe_center = []
+        normal_level=0
+        normal_factors = []
         for dim in np.arange(len(center)):
             value_dim = center[dim]
+            # if value_dim is close to 0, we can say that the cluster is normal on this dimension, and we don't need to add anything to the description.
+            if abs(value_dim) < 0.25:
+                normal_level += 1
+                normal_factors += [list_name_dim[dim]]
+                continue
             text_dim = self.describe_level_cluster(value_dim)
             text_low, text_high = self.split_qualities(list_name_dim[dim])
 
@@ -593,7 +600,10 @@ class ClusterWordalisation(Wordalisation):
             else:
                 text_dim += text_low
             describe_center.append(text_dim)
-
+        if normal_level >=1:
+            describe_center.append(f"and is normal on {', '.join(normal_factors)}.")
+        else:
+            describe_center.append(".")
         text = ", ".join(describe_center)  
         full_text = f"Members of this cluster can be described as: {text}"
             
