@@ -54,6 +54,7 @@ default_values = {
     "selected_entity" : None,
     "entity_id" : 'entity',
     'article' : 'an',
+    "analysis": None,
 }
 
 ### ---- Demo data path ---- ###
