@@ -41,13 +41,14 @@ class Cluster:
 
       
         self.u_labels = sorted(self.df['Cluster'].unique())
-        
-        colors = plotly.colors.qualitative.Set1[:len(self.u_labels)]
+    
+        print('DEBUG','len(self.u_labels):', len(self.u_labels))
+        colors = plotly.colors.qualitative.Alphabet[:len(self.u_labels)] #plotly.colors.qualitative.Set1[:len(self.u_labels)]
         self.ind_col_map = dict(zip(self.u_labels, colors))
 
         st.session_state.u_labels, st.session_state.centroids, st.session_state.ind_col_map = self.u_labels , self.centroids,  self.ind_col_map
         st.session_state.df_FA = self.df
-
+        print('color map', st.session_state.ind_col_map)
         st.session_state.list_cluster_name =  self.list_cluster_name
         st.session_state.list_description_cluster = self.list_description_cluster
 

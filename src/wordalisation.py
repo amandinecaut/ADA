@@ -323,12 +323,12 @@ class CreateWordalisation(Wordalisation):
                  
                     if value > 1 and top_map_list:
                         argmax_ent = np.argmax(val[top_map_list].tolist())
-                        text += f"Notably, {st.session_state.selected_entity} has characteristics related to '{top_map_list[argmax_ent].lower()}'. "
+                        text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{top_map_list[argmax_ent].lower()}'. "
                 else:
                     text += self.describe_level(value) + text_left + '. '
                     if value < -1 and bottom_map_list:   
                         argmin_ent = np.argmin(val[bottom_map_list].tolist())
-                        text += f"Notably, {st.session_state.selected_entity} has characteristics related to '{bottom_map_list[argmin_ent].lower()}'. "   
+                        text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{bottom_map_list[argmin_ent].lower()}'. "   
             
 
         return text
@@ -540,7 +540,7 @@ class ClusterWordalisation(Wordalisation):
                     "The first sentence should give an overview of the cluster. \n"
                     "The second sentence should describe the cluster’s specific strengths based on the available information, if any exist.\n"
                     "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exist.\n"
-                    "But before you do the cluster description I will test your knowedge about the factors.\n"
+                    "But before you do the cluster description I will test your knowledge about the factors.\n"
                     "This is because it is important only to use information you established in the factor analysis when you describe the clusters. \n"
                     "You are going to complete a series of five cluster naming tasks. "
                     "For each task you will first answer questions about the factors, then I will tell you properties of the cluster and you will "
