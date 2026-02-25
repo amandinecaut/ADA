@@ -75,7 +75,8 @@ class Chat:
         ]
 
         # Show the messages in an expander
-        st.expander("Chat transcript", expanded=False).write(messages)
+        if st.session_state.get("show_gpt_calls", False):
+            st.expander("Interactive chat query", expanded=False).write(messages)
 
         answer = self.MH.get_generate(messages, max_output_token=500)
         message = {"role": "assistant", "content": answer}

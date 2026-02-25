@@ -47,7 +47,7 @@ class Cluster:
         self.ind_col_map = dict(zip(self.u_labels, colors))
 
         st.session_state.u_labels, st.session_state.centroids, st.session_state.ind_col_map = self.u_labels , self.centroids,  self.ind_col_map
-        st.session_state.df_FA = self.df
+        # Don't overwrite df_FA - let perform_clustering handle adding the Cluster column
         print('color map', st.session_state.ind_col_map)
         st.session_state.list_cluster_name =  self.list_cluster_name
         st.session_state.list_description_cluster = self.list_description_cluster
@@ -60,7 +60,7 @@ class Cluster:
             self.desc.tell_it_what_data_to_use(center)
             self.desc.messages = self.desc.setup_messages()
           
-            description = self.desc.stream_gpt() 
+            description = self.desc.stream_gpt(prompt_description=f"Describing cluster {i+1} centroid") 
             list_description_cluster.append(description)
 
             # Convert to DataFrame and save it
@@ -80,7 +80,7 @@ class Cluster:
             self.labelisation.existing_labels(list_name_cluster)
             self.labelisation.tell_it_what_data_to_use(cluster)
             self.labelisation.messages = self.labelisation.setup_messages()
-            label = self.labelisation.stream_gpt()
+            label = self.labelisation.stream_gpt(prompt_description="Generating cluster name")
 
             list_name_cluster.append(label.lower())
         return list_name_cluster

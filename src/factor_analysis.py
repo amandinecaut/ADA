@@ -77,46 +77,6 @@ class FAMDStrategy(FactorStrategy):
 
 
 
-class FAMDStrategy_v1(FactorStrategy):
-    """Path 2: Factor Analysis of Mixed Data for datasets with text/categories and numbers."""
-    name = "FAMD"
-
-    def fit(self, df, n_factors):
-        df_famd = df.copy()
-        
-        num_cols = df_famd.select_dtypes(include=[np.number]).columns
-    
-        if len(num_cols) == 0:
-            df_famd['__dummy_numeric__'] = 1.0
-        
-        # Store original column names BEFORE processing
-        original_columns = df_famd.columns.tolist()
-        
-        for col in df_famd.columns:
-            if pd.api.types.is_numeric_dtype(df_famd[col]):
-                df_famd[col] = df_famd[col].astype(float).fillna(0)
-
-            else:
-                df_famd[col] = df_famd[col].astype(object).fillna("Unknown")
-                dummies = pd.get_dummies(df_famd[col], prefix=col, dtype=int)
-                dummies.columns = [c.replace('_', ' ').lower() for c in dummies.columns]
-                df_famd = pd.concat([df_famd, dummies], axis=1)
-                df_famd.drop(columns=[col], inplace=True)
-        
-
-        st.session_state.features = [col for col in original_columns if col != '__dummy_numeric__']
-        st.session_state.features_famd = df_famd.columns.tolist()  
-        
-        scaler = StandardScaler()
-        scaled_data = scaler.fit_transform(df_famd)
-
-        model = FactorAnalysis(n_components=n_factors)
-        scores = model.fit_transform(scaled_data)
-        
-        return model, scores
-    
-
-
 
 def select_strategy(df: pd.DataFrame) -> FactorStrategy:
     """

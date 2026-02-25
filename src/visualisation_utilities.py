@@ -158,9 +158,15 @@ class ClusterVisualisation:
 
         component_keys = list(FA_component_dict.keys())
         label_to_idx = {}
+        label_to_factor = {}  # Map semantic labels back to Factor names
         for idx, key in enumerate(component_keys):
             label = FA_component_dict[key].get("label", key)
             label_to_idx[label] = idx
+            label_to_factor[label] = key  # e.g., "aloof vs vibrant" -> "Factor 1"
+        
+        # Get the actual column names to use for accessing the dataframe
+        dim_x_col = label_to_factor.get(dim_x, dim_x)
+        dim_y_col = label_to_factor.get(dim_y, dim_y)
 
        
         # Plot points for each cluster
@@ -170,8 +176,8 @@ class ClusterVisualisation:
             if len(cluster_points) == 0:
                 continue
             try:
-                x_values = cluster_points[dim_x].values
-                y_values = cluster_points[dim_y].values
+                x_values = cluster_points[dim_x_col].values
+                y_values = cluster_points[dim_y_col].values
                
             except KeyError as e:
                 print(f"ERROR - Column not found: {e}")
@@ -202,7 +208,7 @@ class ClusterVisualisation:
                     marker=dict(
                         color=st.session_state.ind_col_map[i], 
                         size=5, 
-                        opacity=0.3
+                        opacity=0.6
                     ),
                     hovertemplate=hovertext,
                     customdata=custom_data,
@@ -214,22 +220,29 @@ class ClusterVisualisation:
         dim_x_idx = label_to_idx.get(dim_x, 0)
         dim_y_idx = label_to_idx.get(dim_y, 1)
         
-
-        
-        self.fig.add_trace(
-            go.Scatter(
-                x=st.session_state.centroids[:, dim_x_idx],
-                y=st.session_state.centroids[:, dim_y_idx],
-                mode='markers',
-                marker=dict(color='black', size=6, symbol='x'),
-                name='Centroids'
-            ))
+        # Plot centroids with matching cluster colors
+        for i in st.session_state.u_labels:
+            self.fig.add_trace(
+                go.Scatter(
+                    x=[st.session_state.centroids[i, dim_x_idx]],
+                    y=[st.session_state.centroids[i, dim_y_idx]],
+                    mode='markers',
+                    marker=dict(
+                        color=st.session_state.ind_col_map[i], 
+                        size=12, 
+                        symbol='x',
+                        line=dict(width=2)
+                    ),
+                    showlegend=False,
+                    hoverinfo='skip'
+                )
+            )
   
         try:
-            x_min = self.df[dim_x].min()
-            x_max = self.df[dim_x].max()
-            y_min = self.df[dim_y].min()
-            y_max = self.df[dim_y].max()
+            x_min = self.df[dim_x_col].min()
+            x_max = self.df[dim_x_col].max()
+            y_min = self.df[dim_y_col].min()
+            y_max = self.df[dim_y_col].max()
         except KeyError as e:
             st.error(f"Error getting axis ranges: {e}")
             return

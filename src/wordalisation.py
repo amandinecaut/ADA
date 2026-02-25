@@ -142,19 +142,22 @@ class Wordalisation(ABC):
             user_query = new_messages.pop()
         return {"system_instruction": system_prompt, "history": new_messages, "content": user_query}
 
-    def stream_gpt(self, temperature=1):
+    def stream_gpt(self, temperature=1, prompt_description="LLM Prompt"):
         """
         Run the LLM model on the messages and stream the output.
 
         Arguments:
         temperature: optional float
             The temperature of the LLM model.
+        prompt_description: str
+            Description of what this prompt is doing for debugging display
 
         Yields:
             str
         """
         
-        st.expander("Chat transcript", expanded=False).write(self.messages)
+        if st.session_state.get("show_gpt_calls", False):
+            st.expander(prompt_description, expanded=False).write(self.messages)
         
     
         msgs = self.convert_messages_format(self.messages)
@@ -264,13 +267,13 @@ class CreateWordalisation(Wordalisation):
         if model_name == 'FA':
             dictionary = st.session_state.col_mapping
        
-            for _, component in results_dict.items():
+            for factor_name, component in results_dict.items():
                 if not component:
                     continue
            
                 text_left, text_right = ClusterWordalisation.split_qualities(component['label'])
                 text += f"{st.session_state.selected_entity} "
-                value = df.loc[indice, component['label']]
+                value = df.loc[indice, factor_name]
             
                 if np.isnan(value):
                     continue
@@ -334,8 +337,17 @@ class CreateWordalisation(Wordalisation):
         return text
 
     def get_description_cluster_entity(self):
+        # Return empty string if clustering hasn't been performed
+        if "list_cluster_name" not in st.session_state or "list_description_cluster" not in st.session_state:
+            return ""
+            
         indice = st.session_state.indice
         df = self.df
+        
+        # Check if 'Cluster' column exists
+        if 'Cluster' not in df.columns:
+            return ""
+            
         cluster_number = int(df.loc[indice, 'Cluster'])
         cluster_name = st.session_state.list_cluster_name[cluster_number]
         cluster_desc = st.session_state.list_description_cluster[cluster_number]
@@ -367,8 +379,16 @@ class CreateWordalisation(Wordalisation):
         return [{"role": "user", "content": prompt}]
 
     def tell_it_what_it_knows_cluster(self):
+        # Only add cluster information if clustering has been performed
+        if "list_cluster_name" not in st.session_state or "list_description_cluster" not in st.session_state:
+            return []
+            
         cluster_name = st.session_state.list_cluster_name
         cluster_desc = st.session_state.list_description_cluster
+        
+        # Additional safety check - ensure both are iterable
+        if not cluster_name or not cluster_desc:
+            return []
     
         messages = [
             {

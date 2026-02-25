@@ -8,6 +8,7 @@ from visualisation_utilities import (
 )
 from wordalisation import ModelHandler, ClusterWordalisation, FALabel, QandAWordalisation,QandAWordalisation_from_text
 from factor_analysis import *
+from embeddings import Embeddings, embed
 
 from clustering import Cluster
 from sklearn.decomposition import FactorAnalysis
@@ -54,7 +55,6 @@ default_values = {
     "selected_entity" : None,
     "entity_id" : 'entity',
     'article' : 'an',
-    "analysis": None,
 }
 
 ### ---- Demo data path ---- ###
@@ -62,42 +62,50 @@ DATA_PATHS = {
     "Big Five": {
         "data": "./data/demo_data/big_five/data-sample.csv",
         "map": "./data/demo_data/big_five/map.xlsx", 
-        "entity": "person"
+        "entity": "person",
+        "name_col": None
     },
     "World Value Survey": {
         "data": "./data/demo_data/wvs/data-wvs.csv",
         "map": "./data/demo_data/wvs/questions.xlsx", 
-        "entity": "country"
+        "entity": "country",
+        "name_col": "B_COUNTRY_ALPHA"
     },
     "Football Players": {
         "data": "./data/demo_data/football/Forwards.csv",
         "map": "./data/demo_data/football/map-football.xlsx", 
-        "entity": "football player"
+        "entity": "football player",
+        "name_col": "shortName"
     },
     "Dogs Breeds": {
         "data": "./data/demo_data/dogs/breed_traits.csv",
         "map": "./data/demo_data/dogs/map.xlsx", 
-        "entity": "dog"
+        "entity": "dog",
+        "name_col": "Breed"
     },
     # "Mental health & social media": {
     #     "data": "./data/demo_data/mental_health/mental_health_social_media_sample.csv",
     #     "map": "./data/demo_data/mental_health/map.xlsx",
-    #     "entity": "person"
+    #     "entity": "person",
+    #     "name_col": None
     # },
     "16 Personality": {
         "data": "./data/demo_data/16_personality/16p.csv",
         "map": "./data/demo_data/16_personality/map.xlsx", 
-        "entity": "person"
+        "entity": "person",
+        "name_col": None
     },
     "Rugby Players": {
         "data": "./data/demo_data/rugby/Statistic_rugby_players.csv",
         "map": "./data/demo_data/rugby/rugby_player_map.xlsx", 
-        "entity": "rugby player"
+        "entity": "rugby player",
+        "name_col": "Name"
     },
     "Football Club": {
         "data": "./data/demo_data/football_test/team_stats.csv",
         "map": "./data/demo_data/football_test/match_api_metric_map.json", 
-        "entity": "football club"
+        "entity": "football club",
+        "name_col": "club_name"
     },
     "Cat Breeds": {
         "data": "./data/demo_data/cats/cat_breeds.csv",
@@ -123,6 +131,18 @@ def set_default_data(choice):
     load_data(dataset_info["data"])
     load_map(dataset_info["map"])
     st.session_state.entity_id = dataset_info["entity"]
+    st.session_state.col_name = dataset_info.get("name_col")
+    
+    # Filter columns based on mapping - only keep columns that are in the mapping
+    if st.session_state.col_mapping != {}:
+        default_ignore = [
+            c
+            for c in st.session_state.df_full.columns.to_list()
+            if c not in st.session_state.col_mapping.keys()
+            and c != st.session_state.entity_col
+        ]
+        st.session_state.ignore_cols = default_ignore
+        update_df(default_ignore)
     
 def set_default_data_callback():
     """Wrapper function to handle the selectbox on_change event."""
@@ -237,11 +257,9 @@ def update_df(ignore_cols=[]):
         cols = [st.session_state.entity_col] + st.session_state.features
 
     # --- DROP ROWS WITH ANY NaN ---
-    #na_values=['?', 'NA', 'N/A', '--', '-', 'null', 'None', '']
     df_filtered = df[cols]
     df_filtered = df_filtered.dropna(axis=0, how="any") 
     st.session_state.df_filtered = df_filtered
-    #st.session_state.df_filtered = df[cols].dropna()
 
     # set the entity column as the index
     if st.session_state.entity_col != "Index":
@@ -261,26 +279,26 @@ def load_map(file=None):
     if file is None:
         file = st.session_state.map
 
+    # Determine file extension and get content
     if isinstance(file, str):
         file_extension = os.path.splitext(file)[1].lower()
-        if file_extension == ".json":
-            with open(file, "r") as f:
-                map = json.load(f)
-        elif file_extension in [".xlsx", ".xls"]:
-            df = pd.read_excel(file)
-            map = dict(zip(df["Key"], df["Value"]))
-        else:
-            raise ValueError(f"Unsupported file type: {file_extension}")
+        file_content = file
     else:
         file_extension = os.path.splitext(file.name)[1].lower()
-        if file_extension == ".json":
-            map = json.load(file)
-        elif file_extension in [".xlsx", ".xls"]:
-            df = pd.read_excel(file)    
-            map = dict(zip(df["Key"], df["Value"]))
-            
+        file_content = file
+
+    # Load mapping based on file type
+    if file_extension == ".json":
+        if isinstance(file, str):
+            with open(file_content, "r") as f:
+                map = json.load(f)
         else:
-            raise ValueError(f"Unsupported file type: {file_extension}")
+            map = json.load(file_content)
+    elif file_extension in [".xlsx", ".xls"]:
+        df = pd.read_excel(file_content)
+        map = dict(zip(df["Key"], df["Value"]))
+    else:
+        raise ValueError(f"Unsupported file type: {file_extension}")
 
     st.session_state.col_mapping = map
     
@@ -447,117 +465,30 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     
     # Mark FA as done
     st.session_state.FA_done = True
-
-
-def perform_FA1(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
-    if st.session_state.features != []:
-        df = st.session_state.df_filtered.loc[:, st.session_state.features]
-    if not st.session_state.features:
-        st.session_state.FA_component_dict = {}
-        st.session_state.df = None
-        return
-
-    df = st.session_state.df_filtered.loc[:, st.session_state.features].copy()
-    original_index = df.index
-    n_factors = st.session_state.get("factor_nb", factor_n)
-
-    # ------------------
-    # Fit model
-    # ------------------
-    model_name = st.session_state.get("strategy_name")
-    strategies = {
-        "FA": ContinuousFAStrategy(),
-        "FAMD": FAMDStrategy()
-    }
-    
-    strategy = strategies[model_name]
-    model, scores = strategy.fit(df, n_factors)
-
-    # ------------------
-    # Extract scores & components
-    # ------------------
-    #if model_name == "FA":
-    #    components = model.components_
-    #else:
-        #components = model.column_coordinates_
-        #components = components.T
-        #components= components.to_numpy()
-
-    components = model.components_
-    df = st.session_state.df_filtered.copy()
-
-
     
     # ------------------
-    # Store results in Session State (Matching Original)
+    # Generate Q&A automatically
     # ------------------
-   
-    st.session_state.components = components
-    features = st.session_state.df_filtered.columns.tolist()
-    st.session_state.features = features 
-  
-
-    if scores is not None:
-        principalDf = pd.DataFrame(
-            data=scores,
-            columns=[f"Factor {i+1}" for i in range(n_factors)],
-            index=original_index,
-        )
-
-    # ------------------
-    # Build Component Dictionary
-    # ------------------
-    FA_component_dict = {}
+    QandA = create_QandA(text=None)
     
-    for i in range(n_factors):
-        # Logic for top/bottom features based on threshold
-        top = np.where(components[i] > threshold)[0]
-        bottom = np.where(components[i] < -threshold)[0]
+    if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
+        # Path to save the CSV
+        QandA_path = "./data/describe/generate/QandA_data.csv"
+        # Ensure the folder exists
+        os.makedirs(os.path.dirname(QandA_path), exist_ok=True)
+        # Save the DataFrame as a CSV file
+        QandA.to_csv(QandA_path, index=False)
         
-        top_components = top[np.argsort(components[i][top])[::-1]]
-        bottom_components = bottom[np.argsort(components[i][bottom])]
-
-        # Keep only top 5
-        n = 5
-        if len(top_components) > n: top_components = top_components[:n]
-        if len(bottom_components) > n: bottom_components = bottom_components[:n]
-
-        top_values = [round(components[i][c], 2) for c in top_components]
-        top_features = [features[c] for c in top_components]
-        top_features = [st.session_state.col_mapping.get(f, f) for f in top_features]
-
-        bottom_values = [round(components[i][c], 2) for c in bottom_components]
-        bottom_features = [features[c] for c in bottom_components]
-        bottom_features = [st.session_state.col_mapping.get(f, f) for f in bottom_features]
-
-        FA_component_dict[f"Factor {i+1}"] = {
-            "top": top_features,
-            "values_top": top_values,
-            "bottom": bottom_features,
-            "values_bottom": bottom_values,
-        }
-
+        # Generate embeddings
+        embeddings = Embeddings()
+        os.makedirs(os.path.dirname("./data/embeddings/"), exist_ok=True)
+        embed(QandA_path, embeddings)
+        
+        # Store Q&A in session state for display
+        st.session_state.QandA = QandA
     
- 
-    # ------------------
-    # Finalise and Visualise (Outside the loop)
-    # ------------------
-    get_component_labels(FA_component_dict)
-    st.session_state.FA_component_dict = FA_component_dict
-    
-    # Apply Z-score and store
-    st.session_state.df = principalDf.apply(zscore, nan_policy="omit")
-    
-    st.session_state.df_original = st.session_state.df.copy()
-
-    # Generate Plot
-    vis = DistributionPlot(
-        st.session_state.df,
-        {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
-    )
-    st.session_state.fig_base = vis.fig
-    st.session_state.df_z_scores = vis.df_z_scores
-
+    # Mark tab2 as done
+    st.session_state.tab2_done = True
 
 
 
@@ -571,7 +502,7 @@ def get_component_labels(FA_component_dict):
         FALabeler.existing_labels(list_FA_labels)
         FALabeler.tell_it_what_data_to_use(details)
         FALabeler.messages = FALabeler.setup_messages()
-        label = FALabeler.stream_gpt().lower()
+        label = FALabeler.stream_gpt(prompt_description=f"Generating label for {key}").lower()
 
         list_FA_labels.append(label)
         # update the dict directly
@@ -631,13 +562,13 @@ def create_QandA(text: str | None):
         question = f"What does it mean when {article} {entity} is described as {factor}?"
         QandA.tell_it_what_data_to_use(article,entity,factor, oppositefactor, wholefactor, details)
         QandA.messages = QandA.setup_messages()
-        answer = QandA.stream_gpt()
+        answer = QandA.stream_gpt(prompt_description=f"Generating Q&A: {factor}")
         list_QandA.append({"Question": question, "Answer": answer})
 
         question = f"What does it mean when {article} {entity} is described as {oppositefactor}?"
         QandA.tell_it_what_data_to_use(article,entity,oppositefactor, factor, wholefactor, details)
         QandA.messages = QandA.setup_messages()
-        answer = QandA.stream_gpt()
+        answer = QandA.stream_gpt(prompt_description=f"Generating Q&A: {oppositefactor}")
         list_QandA.append({"Question": question, "Answer": answer})
     
     if text is not None:
@@ -645,7 +576,7 @@ def create_QandA(text: str | None):
         QandA_text = QandAWordalisation_from_text()
         QandA_text.tell_it_what_data_to_use(text)
         QandA_text.messages = QandA_text.setup_messages()
-        sublist = QandA_text.stream_gpt()
+        sublist = QandA_text.stream_gpt(prompt_description="Generating Q&A from text")
      
         cleaned_list =  clean_qanda_list_text(sublist)
  
@@ -745,18 +676,21 @@ def perform_clustering(num_clusters = DEFAULT_NUM_CLUSTERS):
     Perform K-Means clustering on FA scores.
     """
     num_clusters = st.session_state.get("num_clusters", DEFAULT_NUM_CLUSTERS)
-    df_copy = st.session_state.df_FA.copy()
+    
+    # Don't rename columns - keep "Factor 1", "Factor 2", etc. for CreateWordalisation
+    df_for_clustering = st.session_state.df_FA.copy()
     label_map = {k: v["label"] for k, v in st.session_state.FA_component_dict.items()}
-    df_copy = df_copy.rename(columns=label_map)
     
     # Perform clustering
-    cluster = Cluster(df_copy,label_map,  num_clusters)
-
+    cluster = Cluster(df_for_clustering, label_map, num_clusters)
 
     # Store results
     st.session_state.u_labels = cluster.u_labels
     st.session_state.centroids = cluster.centroids
     st.session_state.ind_col_map = cluster.ind_col_map
+    
+    # Add Cluster column to original df_FA
+    st.session_state.df_FA['Cluster'] = cluster.df['Cluster']
     
   
 def perform_clustering_v1(num_clusters = DEFAULT_NUM_CLUSTERS):
@@ -861,9 +795,3 @@ def add_to_fig(label_to_value):
 
     if "fig" in st.session_state:
         del st.session_state["fig"]
-
-# Chat utility
-def create_chat(to_hash, chat_class,*args, **kwargs):
-    chat_hash_state = hash(to_hash)
-    chat = chat_class(chat_hash_state, *args, **kwargs)
-    return chat
