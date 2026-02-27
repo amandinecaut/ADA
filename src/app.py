@@ -547,17 +547,11 @@ with tab4:
             
         st.session_state['indice'] = indice
         
-        # Debug output
-        st.write(f"DEBUG: Selected entity: {selected_entity}, Indice: {indice}")
-        
         # Update figure with selected entity data
         if 'df_FA' in st.session_state and indice in st.session_state.df_FA.index:
             row = st.session_state.df_FA.loc[[indice]]
             mapping = {factor: info["label"] for factor, info in st.session_state.FA_component_dict.items()}
             row = row.rename(columns=mapping)
-            
-            st.write(f"DEBUG: Row columns: {list(row.columns)}")
-            st.write(f"DEBUG: First few values: {row.iloc[0, :3].to_dict()}")
             
             color = st.get_option("theme.primaryColor")
             if color is None:
@@ -566,7 +560,6 @@ with tab4:
             # Update each factor's marker position
             for col in row.columns[:-1]:  
                 value = row[col].values[0]
-                st.write(f"DEBUG: Updating trace '{col} selected' with value {value}")
                 st.session_state.fig_base.update_traces(
                     selector={"name": f"{col} selected"},
                     x=[value],                     
