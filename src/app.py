@@ -43,7 +43,7 @@ for key, value in default_values.items():
 
 
 # Add and app header
-st.title("ADA Pipeline")
+st.title("Automated Data Analysis (ADA)")
 
 tab1, tab2, tab3, tab4 = st.tabs(["Load", "Factors", "Clusters", "Describe"])
 
@@ -58,38 +58,45 @@ with tab1:
         st.selectbox(
             "Choose data source:",
             options=data_options,
-            key="demo_dataset_choice", 
-            index=1
+            key="demo_dataset_choice"
         )
     
     with col_load:
         st.markdown("<br>", unsafe_allow_html=True)  # Align with selectbox
-        if st.button("Load", use_container_width=True, type="primary"):
-            if st.session_state.demo_dataset_choice not in ["Select a Dataset", "Upload Custom Data"]:
-                set_default_data_callback()
+        # Show Load button for demo datasets or when custom file is uploaded
+        can_load_demo = st.session_state.demo_dataset_choice not in ["Select a Dataset", "Upload Custom Data"]
+        can_load_custom = st.session_state.demo_dataset_choice == "Upload Custom Data" and st.session_state.get("file") is not None
+        
+        if can_load_demo or can_load_custom:
+            if st.button("Load", use_container_width=True, type="primary"):
+                if can_load_demo:
+                    set_default_data_callback()
+                elif can_load_custom:
+                    with st.spinner("Loading data..."):
+                        load_new_data()
+                        if st.session_state.get("map") is not None:
+                            load_map()
     
     # Show different controls based on data source selection
     is_custom_upload = st.session_state.demo_dataset_choice == "Upload Custom Data"
-    is_demo_selected = st.session_state.demo_dataset_choice != "Select a Dataset" and not is_custom_upload
+    is_demo_selected = st.session_state.demo_dataset_choice not in ["Select a Dataset", "Upload Custom Data"] and not is_custom_upload
     
     if is_custom_upload:
         with col_content:
             col_upload1, col_upload2, col_upload3 = st.columns(3)
             
             with col_upload1:
-                st.file_uploader(
+                uploaded_file = st.file_uploader(
                     "CSV file",
                     type=["csv"],
                     key="file",
-                    on_change=load_new_data,
                 )
             
             with col_upload2:
-                st.file_uploader(
+                uploaded_map = st.file_uploader(
                     "Column mapping (optional)",
                     type=["json", "xlsx", "xls"],
                     key="map",
-                    on_change=load_map,
                 )
             
             with col_upload3:
@@ -373,6 +380,14 @@ with tab2:
                         st.markdown(f"**{row['User']}**")
                         st.markdown(row['Assistant'])
                         st.write("\n")
+            
+            # Display FA-specific debug prompts if available
+            if st.session_state.get("show_gpt_calls", False) and st.session_state.get("debug_prompts_fa"):
+                st.markdown("---")
+                st.markdown("### Debug: Factor Analysis LLM Prompts")
+                for prompt_data in st.session_state.debug_prompts_fa:
+                    with st.expander(prompt_data["description"], expanded=False):
+                        st.write(prompt_data["messages"])
 
 
 # Clustering
@@ -470,6 +485,14 @@ with tab3:
             for i in list_color_cluster:
                 display_cluster_color(list_cluster_name[i], list_color_cluster[i])
                 st.write(list_description_cluster[i])
+        
+        # Display clustering-specific debug prompts if available
+        if st.session_state.get("show_gpt_calls", False) and st.session_state.get("debug_prompts_clustering"):
+            st.markdown("---")
+            st.markdown("### Debug: Clustering LLM Prompts")
+            for prompt_data in st.session_state.debug_prompts_clustering:
+                with st.expander(prompt_data["description"], expanded=False):
+                    st.write(prompt_data["messages"])
 
 
 # View
@@ -482,36 +505,105 @@ with tab4:
         label_to_value = st.session_state.get("label_to_value", {})
         option_labels = list(label_to_value.keys()) if label_to_value else []
         
+        # Callback to clear cached description when entity changes
+        def on_entity_change():
+            if 'entity_description' in st.session_state:
+                del st.session_state['entity_description']
+            if 'last_described_entity' in st.session_state:
+                st.session_state['last_described_entity'] = None
+        
         # Entity selector - defaults to first entity
         if option_labels:
-            entity = st.selectbox(
+            # If selected_entity is None or invalid, remove it so widget can use index parameter
+            if st.session_state.get("selected_entity") is None or st.session_state.get("selected_entity") not in option_labels:
+                if "selected_entity" in st.session_state:
+                    del st.session_state["selected_entity"]
+                default_index = 0
+            else:
+                default_index = option_labels.index(st.session_state.selected_entity)
+            
+            # Create selectbox - key auto-manages st.session_state.selected_entity
+            st.selectbox(
                 label="Select entity",
                 options=option_labels,
+                index=default_index,
                 key="selected_entity",
-                index=0,
-                on_change=add_to_fig(label_to_value),
+                on_change=on_entity_change,
                 label_visibility="collapsed"
             )
+            
+            # Get selected entity from session state
+            selected_entity = st.session_state.selected_entity
+        else:
+            selected_entity = None
+
+        # Get the selected entity index
+        if selected_entity and selected_entity in label_to_value:
+            indice = label_to_value[selected_entity]
+        elif option_labels:
+            indice = label_to_value[option_labels[0]]
+        else:
+            indice = 0
+            
+        st.session_state['indice'] = indice
+        
+        # Debug output
+        st.write(f"DEBUG: Selected entity: {selected_entity}, Indice: {indice}")
+        
+        # Update figure with selected entity data
+        if 'df_FA' in st.session_state and indice in st.session_state.df_FA.index:
+            row = st.session_state.df_FA.loc[[indice]]
+            mapping = {factor: info["label"] for factor, info in st.session_state.FA_component_dict.items()}
+            row = row.rename(columns=mapping)
+            
+            st.write(f"DEBUG: Row columns: {list(row.columns)}")
+            st.write(f"DEBUG: First few values: {row.iloc[0, :3].to_dict()}")
+            
+            color = st.get_option("theme.primaryColor")
+            if color is None:
+                color = "#FF4B4B"
+
+            # Update each factor's marker position
+            for col in row.columns[:-1]:  
+                value = row[col].values[0]
+                st.write(f"DEBUG: Updating trace '{col} selected' with value {value}")
+                st.session_state.fig_base.update_traces(
+                    selector={"name": f"{col} selected"},
+                    x=[value],                     
+                )
+            
+            # Update the legend with entity name
+            if selected_entity:
+                st.session_state.fig_base.update_traces(
+                    selector={"uid": "dummy_legend_name"}, 
+                    name=f"{selected_entity}"
+                )
 
         # Visualization section
         st.plotly_chart(st.session_state.fig_base, use_container_width=True, theme="streamlit")
 
-        if st.session_state.selected_entity == None:
-            indice = 0
-        else:
-            indice = label_to_value[st.session_state.selected_entity]
-            
-        st.session_state['indice'] = indice
-
-        # Generate entity description
-        if 'entity_description' not in st.session_state or st.session_state.get('last_described_entity') != indice:
+        # Generate entity description (regenerate if entity changed)
+        if 'last_described_entity' not in st.session_state or st.session_state.get('last_described_entity') != indice:
+            st.session_state.current_debug_context = "describe"
             wordalisation = CreateWordalisation()
+            # Clear right before the final prompt to capture only the entity description
+            st.session_state.debug_prompts_describe = []
             summary = wordalisation.stream_gpt(prompt_description="Generating entity description")
             st.session_state.entity_description = summary
             st.session_state.last_described_entity = indice
         
         # Display entity description
         st.write(st.session_state.entity_description)
+        
+        # Display only the entity description prompt (should be just one)
+        if st.session_state.get("show_gpt_calls", False) and st.session_state.get("debug_prompts_describe"):
+            st.markdown("---")
+            st.markdown("### Debug: Entity Description Prompt")
+            # Only show the last (entity description) prompt
+            if len(st.session_state.debug_prompts_describe) > 0:
+                prompt_data = st.session_state.debug_prompts_describe[-1]
+                with st.expander(prompt_data["description"], expanded=False):
+                    st.write(prompt_data["messages"])
 
         st.session_state.tab4_done = True
        

@@ -53,8 +53,13 @@ default_values = {
     "data_loading": False,
     "indice": 0,
     "selected_entity" : None,
+    "last_visualized_entity": None,
     "entity_id" : 'entity',
     'article' : 'an',
+    "debug_prompts_fa": [],
+    "debug_prompts_clustering": [],
+    "debug_prompts_describe": [],
+    "demo_dataset_choice": "Select a Dataset",
 }
 
 ### ---- Demo data path ---- ###
@@ -122,7 +127,7 @@ DATA_PATHS = {
 ### ---- Load data tab utilities ---- ###
 
 def set_default_data(choice):
-    #clear_session_state(skip=["file", "map"])
+    clear_session_state(skip=["demo_dataset_choice"])
     dataset_info = DATA_PATHS.get(choice)
     if not dataset_info:
         st.info("Please select a dataset to load.")
@@ -132,6 +137,7 @@ def set_default_data(choice):
     load_map(dataset_info["map"])
     st.session_state.entity_id = dataset_info["entity"]
     st.session_state.col_name = dataset_info.get("name_col")
+    st.session_state.article = choose_article(st.session_state.entity_id)
     
     # Filter columns based on mapping - only keep columns that are in the mapping
     if st.session_state.col_mapping != {}:
@@ -163,7 +169,7 @@ def clear_session_state(skip=[]):
                 st.session_state[key] = value
 
 def load_new_data():
-    clear_session_state(skip=["file", "map"])
+    clear_session_state(skip=["file", "map", "demo_dataset_choice", "entity_id"])
     load_data()
 
 def detect_delimiter(first_line):
@@ -235,7 +241,7 @@ def load_data(file=None):
     st.session_state.data_loading = False
 
 def update_df(ignore_cols=[]):
-    if st.session_state.get("FA_done", True):
+    if st.session_state.get("FA_done", False):
         return
     df = st.session_state.df_full.copy()
 
@@ -341,6 +347,10 @@ def perform_FA(factor_n=DEFAULT_FACTOR_NB, threshold=DEFAULT_THRESHOLD):
     4. Generates labels and visualisations
     """
    
+    # Clear previous FA debug prompts
+    st.session_state.debug_prompts_fa = []
+    st.session_state.current_debug_context = "fa"
+    
     # Check if features are empty
     if not st.session_state.features or st.session_state.features == []:
         st.session_state.FA_component_dict = {}
@@ -676,6 +686,10 @@ def perform_clustering(num_clusters = DEFAULT_NUM_CLUSTERS):
     Perform K-Means clustering on FA scores.
     """
     num_clusters = st.session_state.get("num_clusters", DEFAULT_NUM_CLUSTERS)
+    
+    # Clear previous clustering debug prompts
+    st.session_state.debug_prompts_clustering = []
+    st.session_state.current_debug_context = "clustering"
     
     # Don't rename columns - keep "Factor 1", "Factor 2", etc. for CreateWordalisation
     df_for_clustering = st.session_state.df_FA.copy()

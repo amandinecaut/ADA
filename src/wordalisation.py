@@ -157,7 +157,17 @@ class Wordalisation(ABC):
         """
         
         if st.session_state.get("show_gpt_calls", False):
-            st.expander(prompt_description, expanded=False).write(self.messages)
+            # Store prompt in appropriate context-specific list
+            context = st.session_state.get("current_debug_context", "fa")
+            prompt_key = f"debug_prompts_{context}"
+            
+            if prompt_key not in st.session_state:
+                st.session_state[prompt_key] = []
+            
+            st.session_state[prompt_key].append({
+                "description": prompt_description,
+                "messages": self.messages
+            })
         
     
         msgs = self.convert_messages_format(self.messages)

@@ -5,6 +5,15 @@ ADA (Automatic Data Analysis) is a Streamlit-based data exploration and clusteri
 
 **Key Flow:** Data Upload → Factor Analysis → Component Labeling (via LLM) → Clustering → Interactive Visualization & Chat
 
+## UI/UX Guidelines
+
+**IMPORTANT**: Do NOT add debug information, instruction messages, warnings, or explanatory text to the user interface unless explicitly requested. The app should present a clean, professional interface focused on data analysis results.
+
+- Keep the UI minimal and focused on essential functionality
+- Avoid adding st.info(), st.warning(), or instructional messages unless specifically asked
+- Debug features should only be visible when the user enables "Show GPT calls" in the sidebar
+- Error messages should be clear but concise
+
 ## Architecture Patterns
 
 ### Session State Management
