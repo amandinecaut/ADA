@@ -292,87 +292,32 @@ with tab2:
     elif len(st.session_state.df_filtered) < 10:
         st.markdown("Not enough data to perform Factor Analysis")
     else:
-        # Factor analysis choice
-        data_to_analyse = st.session_state.df_filtered.loc[:, st.session_state.features]
-        strategy_name = select_strategy(data_to_analyse).name
-        st.session_state.strategy_name = strategy_name
+        # Only run factor analysis if it hasn't been completed yet
+        if not st.session_state.get("tab2_done", False):
+            if st.button("Start Factor Analysis"):
+                # Factor analysis choice
+                data_to_analyse = st.session_state.df_filtered.loc[:, st.session_state.features]
+                strategy_name = select_strategy(data_to_analyse).name
+                st.session_state.strategy_name = strategy_name
 
-        # Ask user if they want to automatically find optimal number of factors
-        factor_auto = st.radio(
-            "Select factor determination method:",
-            ("Automatic (recommended)", "Manual selection"),
-            index=0,
-            help="Automatic optimization uses statistical tests to find the best fit for your data."
-        )
+                # Automatically determine optimal number of factors
+                with st.spinner("Analysing data and identifying factors..."):
+                    if strategy_name in "FA":
+                        Horn = HornParallelAnalysis()
+                        st.session_state.factor_nb = Horn
+                        perform_FA()
 
-        if factor_auto == "Automatic (recommended)":
-           
-            if strategy_name in "FA":
-                with st.spinner("Calculating optimal factors..."):
-                    kaiser_number = get_kaiser_criterion()
-                    Horn = HornParallelAnalysis()
-              
-                # Using metrics for a more "Dashboard" feel
-                m_col1, m_col2 = st.columns(2)
-                m_col1.metric("Kaiser Criterion", f"{kaiser_number} Factors", help="A standard approach based on eigenvalues > 1.")
-                m_col2.metric("Parallel Analysis", f"{Horn} Factors", help="A more robust statistical simulation method.")
-
-                # Action Buttons
-                col1, col2 = st.columns(2)
-                if col1.button(f"Use Kaiser Criterion ({kaiser_number})", use_container_width=True, help="Eigenvalues > 1", type="primary"):
-                    st.session_state.factor_nb = kaiser_number
-                    perform_FA()
-
-                if col2.button(f"Use Parallel Analysis ({Horn})", use_container_width=True, help="Simulation-based", type="primary"):
-                    st.session_state.factor_nb = Horn
-                    perform_FA()
-
-            elif strategy_name == 'FAMD':
-                with st.spinner("Analyzing mixed data structure..."):
-                    famd_suggested = get_famd_metrics(data_to_analyse)
-                    kaiser_famd_number = get_kaiser_famd(data_to_analyse)
-
-                m_col1, m_col2 = st.columns(2)
-                m_col1.metric("Suggested Factors", f"{famd_suggested} factors", help="The number of factors required to reach the 70% Cumulative Inertia threshold.")
-                m_col2.metric("Kaiser Criterion", f"{kaiser_famd_number} factors", help="A standard approach based on eigenvalues > 1.")
-
-                # Action Buttons
-                col1, col2 = st.columns(2)
+                    elif strategy_name == 'FAMD':
+                        famd_suggested = get_famd_metrics(data_to_analyse)
+                        st.session_state.factor_nb = famd_suggested
+                        perform_FA()
                 
-                if col1.button(f"Use 70% Variance ({famd_suggested})", use_container_width=True, type="primary"):
-                    st.session_state.factor_nb = famd_suggested
-                    perform_FA()
+                st.rerun()
 
-                if col2.button(f"Use Kaiser Criterion ({kaiser_famd_number})", use_container_width=True, type="primary"):
-                    st.session_state.factor_nb = kaiser_famd_number
-                    perform_FA()
-
-        else:
-            factor_nb = st.slider(
-                "Select the number of components",
-                min_value=1,
-                max_value=default_max_components,
-                value=default_factor_nb,
-                step=1,
-                key="factor_nb",
-                on_change=perform_FA,
-            )
-
-        # Results Section
-        if "factor_nb" in st.session_state:
+        # Results Section - only show if factor analysis is complete
+        if st.session_state.get("tab2_done", False):
             
-            # Debug mode: show all technical details
-            if st.session_state.get("show_gpt_calls", True):
-                display_results(st)
-
-                expander_FA = st.expander("Factor Analysis results")
-                expander_FA.write(st.session_state.df_FA)
-
-                expander_exp = st.expander("Factors components")
-                expander_exp.write(pd.DataFrame(st.session_state.components, columns=st.session_state.features_FA,
-                        index=[f"Factor {i+1}" for i in range(st.session_state.factor_nb)]))
-            
-            # Display Q&A if available (shown in both debug and non-debug mode)
+            # Display Q&A if available (shown first, always visible)
             if "QandA" in st.session_state and st.session_state.QandA is not None:
                 QandA = st.session_state.QandA
                 if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
@@ -381,13 +326,29 @@ with tab2:
                         st.markdown(row['Assistant'])
                         st.write("\n")
             
-            # Display FA-specific debug prompts if available
-            if st.session_state.get("show_gpt_calls", False) and st.session_state.get("debug_prompts_fa"):
+            # Debug mode: show all technical details
+            if st.session_state.get("show_gpt_calls", True):
                 st.markdown("---")
-                st.markdown("### Debug: Factor Analysis LLM Prompts")
-                for prompt_data in st.session_state.debug_prompts_fa:
-                    with st.expander(prompt_data["description"], expanded=False):
-                        st.write(prompt_data["messages"])
+                st.markdown("### Debug Information")
+                
+                # Factor descriptions with loadings
+                display_results(st)
+
+                # Factor Analysis raw results
+                expander_FA = st.expander("Factor Analysis results")
+                expander_FA.write(st.session_state.df_FA)
+
+                # Factor components matrix
+                expander_exp = st.expander("Factors components")
+                expander_exp.write(pd.DataFrame(st.session_state.components, columns=st.session_state.features_FA,
+                        index=[f"Factor {i+1}" for i in range(st.session_state.factor_nb)]))
+                
+                # Display FA-specific LLM prompts if available
+                if st.session_state.get("debug_prompts_fa"):
+                    st.markdown("#### LLM Prompts")
+                    for prompt_data in st.session_state.debug_prompts_fa:
+                        with st.expander(prompt_data["description"], expanded=False):
+                            st.write(prompt_data["messages"])
 
 
 # Clustering
@@ -396,103 +357,84 @@ with tab3:
         st.warning("You must complete the factor analysis first!")
 
     else:
-        # Configuration section
-        col1, col2, col3 = st.columns(3)
-        
-        with col1:
-            # Ask user if they want to automatically find optimal k
-            use_elbow = st.radio(
-                "Select cluster determination method:",
-                options=("Automatic (Elbow Method)", "Manual selection"),
-                index=0,
-                help=(
-                    "The Elbow Method calculates the 'Within-Cluster Sum of Squares' (WCSS). "
-                    "It helps you identify the point where adding more clusters no longer "
-                    "significantly improves the model, ensuring your groups are statistically distinct."
-                )
-            )
-
-        with col2:
-            if use_elbow == "Automatic (Elbow Method)":
-                optimal_k = app_utilities.find_optimal_k_elbow(st.session_state.df_FA)
-                st.metric("Optimal Clusters", f"{optimal_k}", help="Calculated using the Elbow Method")
+        # Only run clustering if it hasn't been completed yet
+        if not st.session_state.get("tab3_done", False):
+            if st.button("Start Clustering"):
+                # Automatically determine optimal number of clusters using Elbow Method
+                with st.spinner("Calculating optimal number of clusters..."):
+                    optimal_k = app_utilities.find_optimal_k_elbow(st.session_state.df_FA)
+                
                 st.session_state.num_clusters = optimal_k
-            else:
-                # Slider for number of clusters
-                num_clusters = st.slider(
-                    "Select the number of clusters",
-                    min_value=2,
-                    max_value=10,
-                    value=default_num_clusters,
-                    step=1,
-                    key="num_clusters",
-                    on_change=perform_clustering,
-                )
 
-        # Button to trigger clustering
-        if st.button("Run Clustering", use_container_width=True, type="primary"):
-            with st.spinner("Analyzing patterns and forming clusters..."):
-                perform_clustering()
-
-        # Results section
-        factors = [v["label"] for k, v in st.session_state.FA_component_dict.items()]
-
-        if len(factors) >= 2:
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                dimension_x = st.selectbox(
-                    "X-axis",
-                    factors,
-                    key="dim_x",
-                    on_change=update_fig_cluster,
-                    label_visibility="collapsed"
-                )
-                st.session_state.dimension_x = dimension_x
-
-            with col2:
-                available_for_y = [f for f in factors if f != dimension_x]
-                dimension_y = st.selectbox(
-                    "Y-axis",
-                    available_for_y,
-                    key="dim_y",
-                    on_change=update_fig_cluster,
-                    label_visibility="collapsed"
-                )
-                st.session_state.dimension_y = dimension_y
-
-            # Create cluster visualization (always 2D)
-            vis_cluster = ClusterVisualisation(
-                st.session_state.df_FA,
-                {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
-                st.session_state.u_labels,
-                st.session_state.centroids,
-                st.session_state.ind_col_map,
-            )
-            st.session_state.fig_cluster = vis_cluster.fig
-            fig_cluster = st.session_state.get("fig_cluster")
-            if fig_cluster is not None and fig_cluster.data:
-                st.plotly_chart(fig_cluster, use_container_width=True, theme="streamlit")
-
-            st.session_state.tab3_done = True
-
-        # Cluster description section
-        list_cluster_name = st.session_state.get("list_cluster_name")
-        list_color_cluster = st.session_state.get("ind_col_map")
-        list_description_cluster = st.session_state.get("list_description_cluster")
-
-        if list_color_cluster and list_cluster_name and list_description_cluster:
-            for i in list_color_cluster:
-                display_cluster_color(list_cluster_name[i], list_color_cluster[i])
-                st.write(list_description_cluster[i])
+                # Run clustering
+                with st.spinner("Analyzing patterns and forming clusters..."):
+                    perform_clustering()
+                
+                st.session_state.tab3_done = True
+                st.rerun()
         
-        # Display clustering-specific debug prompts if available
-        if st.session_state.get("show_gpt_calls", False) and st.session_state.get("debug_prompts_clustering"):
-            st.markdown("---")
-            st.markdown("### Debug: Clustering LLM Prompts")
-            for prompt_data in st.session_state.debug_prompts_clustering:
-                with st.expander(prompt_data["description"], expanded=False):
-                    st.write(prompt_data["messages"])
+        # Results section - only show if clustering is complete
+        if st.session_state.get("tab3_done", False):
+            factors = [v["label"] for k, v in st.session_state.FA_component_dict.items()]
+
+            if len(factors) >= 2:
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    dimension_x = st.selectbox(
+                        "X-axis",
+                        factors,
+                        key="dim_x",
+                        on_change=update_fig_cluster,
+                        label_visibility="collapsed"
+                    )
+                    st.session_state.dimension_x = dimension_x
+
+                with col2:
+                    available_for_y = [f for f in factors if f != dimension_x]
+                    dimension_y = st.selectbox(
+                        "Y-axis",
+                        available_for_y,
+                        key="dim_y",
+                        on_change=update_fig_cluster,
+                        label_visibility="collapsed"
+                    )
+                    st.session_state.dimension_y = dimension_y
+
+                # Create cluster visualization (always 2D)
+                vis_cluster = ClusterVisualisation(
+                    st.session_state.df_FA,
+                    {k: v["label"] for k, v in st.session_state.FA_component_dict.items()},
+                    st.session_state.u_labels,
+                    st.session_state.centroids,
+                    st.session_state.ind_col_map,
+                )
+                st.session_state.fig_cluster = vis_cluster.fig
+                fig_cluster = st.session_state.get("fig_cluster")
+                if fig_cluster is not None and fig_cluster.data:
+                    st.plotly_chart(fig_cluster, use_container_width=True, theme="streamlit")
+
+            # Cluster description section
+            list_cluster_name = st.session_state.get("list_cluster_name")
+            list_color_cluster = st.session_state.get("ind_col_map")
+            list_description_cluster = st.session_state.get("list_description_cluster")
+
+            if list_color_cluster and list_cluster_name and list_description_cluster:
+                for i in list_color_cluster:
+                    display_cluster_color(list_cluster_name[i], list_color_cluster[i])
+                    st.write(list_description_cluster[i])
+            
+                # Debug mode: show technical details
+                if st.session_state.get("show_gpt_calls", True):
+                    st.markdown("---")
+                    st.markdown("### Debug Information")
+                    
+                    # Display clustering-specific LLM prompts if available
+                    if st.session_state.get("debug_prompts_clustering"):
+                        st.markdown("#### LLM Prompts")
+                        for prompt_data in st.session_state.debug_prompts_clustering:
+                            with st.expander(prompt_data["description"], expanded=False):
+                                st.write(prompt_data["messages"])
 
 
 # View
@@ -588,12 +530,15 @@ with tab4:
         # Display entity description
         st.write(st.session_state.entity_description)
         
-        # Display only the entity description prompt (should be just one)
-        if st.session_state.get("show_gpt_calls", False) and st.session_state.get("debug_prompts_describe"):
+        # Debug mode: show technical details
+        if st.session_state.get("show_gpt_calls", True):
             st.markdown("---")
-            st.markdown("### Debug: Entity Description Prompt")
-            # Only show the last (entity description) prompt
-            if len(st.session_state.debug_prompts_describe) > 0:
+            st.markdown("### Debug Information")
+            
+            # Display entity description prompt
+            if st.session_state.get("debug_prompts_describe") and len(st.session_state.debug_prompts_describe) > 0:
+                st.markdown("#### LLM Prompts")
+                # Show the last (entity description) prompt
                 prompt_data = st.session_state.debug_prompts_describe[-1]
                 with st.expander(prompt_data["description"], expanded=False):
                     st.write(prompt_data["messages"])

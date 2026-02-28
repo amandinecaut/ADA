@@ -322,7 +322,7 @@ class CreateWordalisation(Wordalisation):
            
                 text_left, text_right = ClusterWordalisation.split_qualities(component['label'])
                 text += f"{st.session_state.selected_entity} "
-                value = df.loc[indice, component['label']]
+                value = df.loc[indice, key]
                 val = st.session_state.df_famd.loc[indice]
                 top_map_list = [x for x in features if x in component["top"]]
                 bottom_map_list = [x for x in features if x in component["bottom"]]

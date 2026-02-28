@@ -86,7 +86,8 @@ DATA_PATHS = {
         "data": "./data/demo_data/dogs/breed_traits.csv",
         "map": "./data/demo_data/dogs/map.xlsx", 
         "entity": "dog",
-        "name_col": "Breed"
+        "name_col": "Breed",
+        "categorical_cols": ["Coat Type", "Coat Length"]  # Categorical columns to include in FAMD analysis
     },
     # "Mental health & social media": {
     #     "data": "./data/demo_data/mental_health/mental_health_social_media_sample.csv",
@@ -104,7 +105,8 @@ DATA_PATHS = {
         "data": "./data/demo_data/rugby/Statistic_rugby_players.csv",
         "map": "./data/demo_data/rugby/rugby_player_map.xlsx", 
         "entity": "rugby player",
-        "name_col": "Name"
+        "name_col": "Name",
+        "categorical_cols": ["Nationality", "Position"]  # Categorical columns to include in FAMD analysis
     },
     "Football Club": {
         "data": "./data/demo_data/football_test/team_stats.csv",
@@ -139,13 +141,17 @@ def set_default_data(choice):
     st.session_state.col_name = dataset_info.get("name_col")
     st.session_state.article = choose_article(st.session_state.entity_id)
     
-    # Filter columns based on mapping - only keep columns that are in the mapping
+    # Get categorical columns that should always be included
+    categorical_cols = dataset_info.get("categorical_cols", [])
+    
+    # Filter columns based on mapping - only keep columns that are in the mapping OR are categorical
     if st.session_state.col_mapping != {}:
         default_ignore = [
             c
             for c in st.session_state.df_full.columns.to_list()
             if c not in st.session_state.col_mapping.keys()
             and c != st.session_state.entity_col
+            and c not in categorical_cols  # Don't ignore categorical columns
         ]
         st.session_state.ignore_cols = default_ignore
         update_df(default_ignore)
