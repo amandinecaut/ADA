@@ -290,7 +290,7 @@ class CreateWordalisation(Wordalisation):
                        
                 
                 else:
-                    text += self.describe_level(value) + text_left + '. '
+                    text += self.describe_level(-value) + text_left + '. '
                 
                     if value < -1 and bottom_map_list:
                         bottom_values = st.session_state.df_filtered.loc[indice, bottom_map_list].values
@@ -325,7 +325,7 @@ class CreateWordalisation(Wordalisation):
                         argmax_ent = np.argmax(val[top_map_list].tolist())
                         text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{top_map_list[argmax_ent].lower()}'. "
                 else:
-                    text += self.describe_level(value) + text_left + '. '
+                    text += self.describe_level(-value) + text_left + '. '
                     if value < -1 and bottom_map_list:   
                         argmin_ent = np.argmin(val[bottom_map_list].tolist())
                         text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{bottom_map_list[argmin_ent].lower()}'. "   
