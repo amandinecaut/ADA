@@ -40,7 +40,7 @@ for key, value in default_values.items():
 # Add and app header
 st.title("ADA pipeline")
 
-tab1, tab2, tab3, tab4 = st.tabs(["Load data", "FactorAnalysis", "Clustering", "View"])
+tab1, tab2, tab3, tab4 = st.tabs(["Load data", "Factor Analysis", "Clustering", "View"])
 
 FA_done = False
 
