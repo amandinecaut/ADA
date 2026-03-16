@@ -290,7 +290,7 @@ class CreateWordalisation(Wordalisation):
                        
                 
                 else:
-                    text += self.describe_level(value) + text_left + '. '
+                    text += self.describe_level(-value) + text_left + '. '
                 
                     if value < -1 and bottom_map_list:
                         bottom_values = st.session_state.df_filtered.loc[indice, bottom_map_list].values
@@ -323,12 +323,12 @@ class CreateWordalisation(Wordalisation):
                  
                     if value > 1 and top_map_list:
                         argmax_ent = np.argmax(val[top_map_list].tolist())
-                        text += f"Notably, {st.session_state.selected_entity} has characteristics related to '{top_map_list[argmax_ent].lower()}'. "
+                        text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{top_map_list[argmax_ent].lower()}'. "
                 else:
-                    text += self.describe_level(value) + text_left + '. '
+                    text += self.describe_level(-value) + text_left + '. '
                     if value < -1 and bottom_map_list:   
                         argmin_ent = np.argmin(val[bottom_map_list].tolist())
-                        text += f"Notably, {st.session_state.selected_entity} has characteristics related to '{bottom_map_list[argmin_ent].lower()}'. "   
+                        text += f"In particular, {st.session_state.selected_entity} has characteristics related to '{bottom_map_list[argmin_ent].lower()}'. "   
             
 
         return text
@@ -540,7 +540,7 @@ class ClusterWordalisation(Wordalisation):
                     "The first sentence should give an overview of the cluster. \n"
                     "The second sentence should describe the cluster’s specific strengths based on the available information, if any exist.\n"
                     "The third sentence should describe the cluster’s specific weaknesses based on the available information, if any exist.\n"
-                    "But before you do the cluster description I will test your knowedge about the factors.\n"
+                    "But before you do the cluster description I will test your knowledge about the factors.\n"
                     "This is because it is important only to use information you established in the factor analysis when you describe the clusters. \n"
                     "You are going to complete a series of five cluster naming tasks. "
                     "For each task you will first answer questions about the factors, then I will tell you properties of the cluster and you will "
@@ -579,21 +579,22 @@ class ClusterWordalisation(Wordalisation):
         for _ , details in st.session_state.FA_component_dict.items():
             list_name_dim.append(details['label'])
         
-        list_description_cluster = []
-
-        
         describe_center = []
+
         for dim in np.arange(len(center)):
             value_dim = center[dim]
-            text_dim = self.describe_level_cluster(value_dim)
+            
             text_low, text_high = self.split_qualities(list_name_dim[dim])
 
             if value_dim >= 0:
+                text_dim = self.describe_level_cluster(value_dim)
                 text_dim += text_high
             else:
+                text_dim = self.describe_level_cluster(-value_dim)
                 text_dim += text_low
             describe_center.append(text_dim)
-
+        
+       
         text = ", ".join(describe_center)  
         full_text = f"Members of this cluster can be described as: {text}"
             
