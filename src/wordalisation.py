@@ -579,31 +579,22 @@ class ClusterWordalisation(Wordalisation):
         for _ , details in st.session_state.FA_component_dict.items():
             list_name_dim.append(details['label'])
         
-        list_description_cluster = []
-
-        
         describe_center = []
-        normal_level=0
-        normal_factors = []
+
         for dim in np.arange(len(center)):
             value_dim = center[dim]
-            # if value_dim is close to 0, we can say that the cluster is normal on this dimension, and we don't need to add anything to the description.
-            if abs(value_dim) < 0.25:
-                normal_level += 1
-                normal_factors += [list_name_dim[dim]]
-                continue
-            text_dim = self.describe_level_cluster(value_dim)
+            
             text_low, text_high = self.split_qualities(list_name_dim[dim])
 
             if value_dim >= 0:
+                text_dim = self.describe_level_cluster(value_dim)
                 text_dim += text_high
             else:
+                text_dim = self.describe_level_cluster(-value_dim)
                 text_dim += text_low
             describe_center.append(text_dim)
-        if normal_level >=1:
-            describe_center.append(f"and is normal on {', '.join(normal_factors)}.")
-        else:
-            describe_center.append(".")
+        
+       
         text = ", ".join(describe_center)  
         full_text = f"Members of this cluster can be described as: {text}"
             

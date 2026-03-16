@@ -40,7 +40,7 @@ for key, value in default_values.items():
 # Add and app header
 st.title("ADA pipeline")
 
-tab1, tab2, tab3, tab4 = st.tabs(["Load data", "Analysis tools", "Clustering", "View"])
+tab1, tab2, tab3, tab4 = st.tabs(["Load data", "FactorAnalysis", "Clustering", "View"])
 
 FA_done = False
 
@@ -54,80 +54,75 @@ with tab1:
     right_t1 = right_t1.container(height=height, border=3)
 
     # clear data button
-    if left_t1.button("Clear data"):
-        app_utilities.clear_session_state(skip=["file", "map"])
+    #if left_t1.button("Clear data"):
+    #    app_utilities.clear_session_state(skip=["file", "map"])
 
     # run default data
     #data_options = ["Select a Dataset", "Big Five", "World Value Survey", "Football Players", "Breast Cancer","16 Personality", "Cardiovascular Disease"]
-    data_options = ["Select a Dataset"] + list(DATA_PATHS.keys())
-    left_t1.selectbox(
-        "Load demo dataset:",
-        options=data_options,
-        key="demo_dataset_choice", 
-        index=0, 
-        on_change=set_default_data_callback 
-    )
-
-    # left all box to upload data
-    left_t1.markdown("#### Upload data")
-    left_t1.file_uploader(
-        "Choose a file",
-        type=["csv"],
-        key="file",
-        on_change=load_new_data,
-    )
-
-    left_t1.markdown("#### Upload column name mapping")
-    left_t1.file_uploader(
-        "Choose a map",
-        type=["json", "xlsx", "xls"],
-        key="map",
-        on_change=load_map,
-    )
-
-   
-    with left_t1:
-        st.markdown("#### Variable name input")
-        user_input = st.text_input("Enter your variable name:", key="entity_id")
-        st.session_state.article = choose_article(st.session_state.entity_id)
-    
-  
-
     # display the info of the data
     right_t1.markdown("### Data information")
 
     if "df_full" not in st.session_state:
         right_t1.markdown("Welcome to ADA: the Automatic Data Analyst pipeline")
         right_t1.markdown(":sparkles: Load data to view information :sparkles:")
-        right_t1.markdown(
+
+    with left_t1:
+        st.markdown("## 📂 Step 1:  Load Data")
+        st.markdown("---")
+
+        load_mode = st.radio(
+            "How would you like to load data?",
+            options=["🎲 Try a demo dataset", "⬆️ Upload your own"],
+            index=0,
+            key="load_mode"
+        )
+
+        st.markdown("---")
+
+        if load_mode == "🎲 Try a demo dataset":
+            st.markdown("#### Choose a demo dataset")
+            data_options = ["Select a Dataset"] + list(DATA_PATHS.keys())
+            st.selectbox(
+                "Available datasets:",
+                options=data_options,
+                key="demo_dataset_choice",
+                index=0,
+                on_change=set_default_data_callback
+            )
+
+        else:
+            st.markdown("#### Upload your dataset")
+            st.file_uploader(
+                "Upload a CSV file",
+                type=["csv"],
+                key="file",
+                on_change=load_new_data,
+            )
+
+            st.markdown("#### Upload column name mapping *(optional)*")
+            st.file_uploader(
+                "Upload a JSON or Excel mapping file",
+                type=["json", "xlsx", "xls"],
+                key="map",
+                on_change=load_map,
+            )
+            right_t1.markdown(
             "⚠️ The uploaded dataset must be a **numerical DataFrame** with only numeric columns."
-        )
+            )
+            # Show example dataframe image 
+            right_t1.image("./data/example_dataframe.png",caption="Example of a valid numerical DataFrame", width=450)
+            right_t1.markdown("The uploaded column mapping could be or a `.json` file, an Excel file (`.xlsx` or `.xls`)")
+            # Show example column mapping image 
+            right_t1.image("./data/example_json.png", caption="Example of a valid json file", width=450)
+            right_t1.markdown("The Excel file (`.xlsx` or `.xls`) must have:\n" "- A first column named **`Key`**\n" "- A second column named **`Value`**")
+            right_t1.image("./data/example_xlsx.png", caption="Example of a valid xlsx file", width=450)
 
-        # Show example dataframe image 
-        right_t1.image(
-            "./data/example_dataframe.png",
-            caption="Example of a valid numerical DataFrame",
-            width=450,
-        )
 
-        right_t1.markdown(
-            "The uploaded column mapping could be or a `.json` file, an Excel file (`.xlsx` or `.xls`)"
-        )
-
-        # Show example column mapping image 
-        right_t1.image(
-            "./data/example_json.png", caption="Example of a valid json file", width=450
-        )
-        right_t1.markdown(
-            "The Excel file (`.xlsx` or `.xls`) must have:\n"
-            "- A first column named **`Key`**\n"
-            "- A second column named **`Value`**"
-        )
-        right_t1.image(
-            "./data/example_xlsx.png", caption="Example of a valid xlsx file", width=450
-        )
-
-    else:
+        st.markdown("---")
+        st.markdown("#### Variable name")
+        st.text_input("Enter your variable name:", key="entity_id")
+        st.session_state.article = choose_article(st.session_state.entity_id)
+  
 
         if st.session_state.get("data_loading", False):
             st.info("Loading data, please wait...")
@@ -220,7 +215,7 @@ with tab1:
             if "entity_radio" not in st.session_state:
                 st.session_state.entity_radio = "No"
                 
-            entity_name_radio = right_t1.radio(
+            entity_name_radio = left_t1.radio(
                 f"Does your dataset contain a column for the names?",
                 options=["Yes", "No"],
                 #index=1,  # default to "No"
@@ -233,7 +228,7 @@ with tab1:
                 
             elif entity_name_radio == "Yes":
                 if st.session_state.ignore_cols:
-                    selected_from_ignore = right_t1.selectbox(
+                    selected_from_ignore = left_t1.selectbox(
                          f"Pick the column to use for the {st.session_state.entity_id} names",
                          options = st.session_state.ignore_cols,
                          key="selected_from_ignore",
@@ -280,99 +275,93 @@ with tab2:
         if "analysis" not in st.session_state:
             st.session_state.analysis = None
 
-        left_t2.markdown("### 🧠 Data Intelligence Hub")
-        left_t2.markdown("Select your analytical path to begin.")
+        left_t2.markdown("## 🧠 Step 2: Factor Analysis")
 
-    with left_t2:
-        col1, col2 = st.columns(2)
+    # with left_t2:
+    #     col1, col2 = st.columns(2)
 
-        with col1:
-            st.markdown("#### 🧩 Factor Analysis")
-            st.write("Uncover the hidden patterns and latent structures in your data.")
-            if st.button("Explore Patterns", use_container_width=True):
-                st.session_state.analysis = "FA"
-        with col2:
-            st.markdown("#### 📉 Logistic Regression")
-            st.write("Predict outcomes and understand the probability of events.")
-            if st.button("Predict Outcomes", use_container_width=True):
-                st.session_state.analysis = "LR"
-        left_t2.markdown("---")
+    #     with col1:
+    #         st.markdown("#### 🧩 Factor Analysis")
+    #         st.write("Uncover the hidden patterns and latent structures in your data.")
+    #         if st.button("Explore Patterns", use_container_width=True):
+    #             st.session_state.analysis = "FA"
+    #     with col2:
+    #         st.markdown("#### 📉 Logistic Regression")
+    #         st.write("Predict outcomes and understand the probability of events.")
+    #         if st.button("Predict Outcomes", use_container_width=True):
+    #             st.session_state.analysis = "LR"
+    #     left_t2.markdown("---")
 
-
-    if st.session_state.analysis == "FA":
-        left_t2.markdown("## 🧩 Factor Analysis")
-        left_t2.markdown("#### 🛠️ Factor Configuration")
-
-        # Factor analysis choice
-        data_to_analyse = st.session_state.df_filtered.loc[:, st.session_state.features]
-        strategy_name = select_strategy(data_to_analyse).name
-        st.session_state.strategy_name = strategy_name
+    # Factor analysis choice
+    data_to_analyse = st.session_state.df_filtered.loc[:, st.session_state.features]
+    strategy_name = select_strategy(data_to_analyse).name
+    st.session_state.strategy_name = strategy_name
         
-        left_t2.markdown(get_strategy_description(strategy_name))
+    
 
 
-        # Number of factors
-        left_t2.markdown("##### ✨ **Finding the right balance is key to a clean model:**")
+    # Number of factors
+    left_t2.markdown("##### ✨ **Finding the right balance is the key to a clean model:**")
+    left_t2.markdown(get_strategy_description(strategy_name))
 
-        # Ask user if they want to automatically find optimal number of factors
-        factor_auto = left_t2.radio(
-            "🚀 Smart Suggestion: Should we calculate the ideal factors for you?",
+    # Ask user if they want to automatically find optimal number of factors
+    factor_auto = left_t2.radio(
+        "🚀 Smart Suggestion: Should we calculate the ideal factors for you?",
             ("Yes, let's optimize!", "No, I prefer manual control"),
             index=0,
             help="Automatic optimisation uses statistical tests to find the best fit for your data."
-            )
+        )
 
-        if factor_auto == "Yes, let's optimize!":
-            left_t2.caption("Recommendation for your data:")
+    if factor_auto == "Yes, let's optimize!":
            
-            if strategy_name in "FA":
-                with st.spinner("Calculating optimal factors..."):
-                    kaiser_number = get_kaiser_criterion()
-                    Horn = HornParallelAnalysis()
+        if strategy_name in "FA":
+            with st.spinner("Calculating optimal factors..."):
+                kaiser_number = get_kaiser_criterion()
+                Horn = HornParallelAnalysis()
               
-                # Using metrics for a more "Dashboard" feel
-                m_col1, m_col2 = left_t2.columns(2)
-                m_col1.metric("Kaiser Criterion", f"{kaiser_number} Factors", help="A standard approach based on eigenvalues > 1.")
-                m_col2.metric("Parallel Analysis", f"{Horn} Factors", help="A more robust statistical simulation method.")
+            # Using metrics for a more "Dashboard" feel
+            m_col1, m_col2 = left_t2.columns(2)
+            m_col1.metric("Kaiser Criterion", f"{kaiser_number} Factors", help="A standard approach based on eigenvalues > 1.")
+            m_col2.metric("Parallel Analysis", f"{Horn} Factors", help="A more robust statistical simulation method.")
 
-                # Action Buttons
-                col1, col2 = left_t2.columns(2)
-                if col1.button(f"🎯 Use Kaiser ({kaiser_number})", use_container_width=True, help="Eigenvalues > 1"):
-                    st.session_state.factor_nb = kaiser_number
-                    st.toast(f"Applying Kaiser", icon="✅")
-                    perform_FA()
+            # Action Buttons
+            col1, col2 = left_t2.columns(2)
+            if col1.button(f"🎯 Use Kaiser ({kaiser_number})", use_container_width=True, help="Eigenvalues > 1"):
+                st.session_state.factor_nb = kaiser_number
+                st.toast(f"Applying Kaiser", icon="✅")
+                perform_FA()
 
-                if col2.button(f"🚀 Use Parallel Analysis ({Horn})", use_container_width=True, help="Simulation-based"):
-                    st.session_state.factor_nb = Horn
-                    st.toast(f"Applying Parallel Analysis ({Horn})", icon="✅")
-                    perform_FA()
+            if col2.button(f"🚀 Use Parallel Analysis ({Horn})", use_container_width=True, help="Simulation-based"):
+                st.session_state.factor_nb = Horn
+                st.toast(f"Applying Parallel Analysis ({Horn})", icon="✅")
+                perform_FA()
 
 
-            elif strategy_name == 'FAMD':
-                with st.spinner("Analyzing mixed data structure..."):
-                    famd_suggested = get_famd_metrics(data_to_analyse)
-                    kaiser_famd_number = get_kaiser_famd(data_to_analyse)
+        elif strategy_name == 'FAMD':
+            with st.spinner("Analyzing mixed data structure..."):
+                famd_suggested = get_famd_metrics(data_to_analyse)
+                kaiser_famd_number = get_kaiser_famd(data_to_analyse)
 
-                m_col1, m_col2 = left_t2.columns(2)
-                m_col1.metric("Suggested Factors", f"{famd_suggested} factors", help="The number of factors required to reach the 70% Cumulative Inertia threshold.")
-                m_col2.metric("Kaiser Criterion", f"{kaiser_famd_number} factors", help="A standard approach based on eigenvalues > 1.")
+            m_col1, m_col2 = left_t2.columns(2)
+            m_col1.metric("Suggested Factors", f"{famd_suggested} factors", help="The number of factors required to reach the 70% Cumulative Inertia threshold.")
+            m_col2.metric("Kaiser Criterion", f"{kaiser_famd_number} factors", help="A standard approach based on eigenvalues > 1.")
 
-                # Action Buttons
-                col1, col2 = left_t2.columns(2)
+            # Action Buttons
+            col1, col2 = left_t2.columns(2)
                 
-                if col1.button(f"🚀 Use 70% Variance ({famd_suggested})", use_container_width=True):
-                    st.session_state.factor_nb = famd_suggested
-                    st.toast(f"Applying 70% threshold: {famd_suggested} factors", icon="✅")
-                    perform_FA()
+            if col1.button(f"🚀 Use 70% Variance ({famd_suggested})", use_container_width=True):
+                st.session_state.factor_nb = famd_suggested
+                st.toast(f"Applying 70% threshold: {famd_suggested} factors", icon="✅")
+                perform_FA()
 
-                if col2.button(f"🎯 Use Kaiser ({kaiser_famd_number})", use_container_width=True):
-                    st.session_state.factor_nb = kaiser_famd_number
-                    st.toast(f"Applying Kaiser: {kaiser_famd_number} factors", icon="✅")
-                    perform_FA()
+            if col2.button(f"🎯 Use Kaiser ({kaiser_famd_number})", use_container_width=True):
+                st.session_state.factor_nb = kaiser_famd_number
+                st.toast(f"Applying Kaiser: {kaiser_famd_number} factors", icon="✅")
+                perform_FA()
 
-        else:
+    else:
 
-            factor_nb = left_t2.slider(
+        factor_nb = left_t2.slider(
                     "Select the number of components",
                     min_value=1,
                     max_value=default_max_components,
@@ -384,73 +373,64 @@ with tab2:
 
         
         
-        if "factor_nb" in st.session_state:
-            left_t2.write(f"Number of components: {st.session_state.factor_nb}.")
-            right_t2.write("## Automated labelling")
-            display_results(right_t2)
+    if "factor_nb" in st.session_state:
+        left_t2.write(f"Number of components: {st.session_state.factor_nb}.")
+        right_t2.write("## Automated labelling")
+        display_results(right_t2)
 
-            right_t2.markdown("---")
-            right_t2.write("## Factor Analysis results")
+        right_t2.markdown("---")
+        right_t2.write("## Factor Analysis results")
 
-            expander_FA = right_t2.expander("Factor Analysis results")
-            expander_FA.write(st.session_state.df_FA)
-            st.session_state.FA_done = True
+        expander_FA = right_t2.expander("Factor Analysis results")
+        expander_FA.write(st.session_state.df_FA)
+        st.session_state.FA_done = True
 
-            expander_exp = right_t2.expander("Factors components")
+        expander_exp = right_t2.expander("Factors components")
             
-            expander_exp.write(pd.DataFrame(st.session_state.components,columns=st.session_state.features_FA,
+        expander_exp.write(pd.DataFrame(st.session_state.components,columns=st.session_state.features_FA,
                     index=[f"Factor {i+1}" for i in range(st.session_state.factor_nb)],))
 
     if st.session_state.get("FA_done", True):
         right_t2.markdown("---")
         right_t2.write("## Question and Answer pairs")
-        right_t2.write(
-                """
-                ADA will now generate Question–Answer pairs for clustering and visualisation. 
-                """
-            )
-        if right_t2.button("Generate Q&A"):
+        
+        
                 
-            QandA = create_QandA(text=None)
+        QandA = create_QandA(text=None)
 
-            if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
-                # Display Q&A
-                for i, row in QandA.iterrows():
-                    right_t2.markdown(f"### **Question {i+1}:** {row['User']}")
-                    right_t2.markdown(f"**Answer:** {row['Assistant']}")
-                    right_t2.write("\n")
+        if isinstance(QandA, pd.DataFrame) and {"User", "Assistant"}.issubset(QandA.columns):
+            for i, row in QandA.iterrows():
+                right_t2.markdown(f"### **Question {i+1}:** {row['User']}")
+                right_t2.markdown(f"**Answer:** {row['Assistant']}")
+                right_t2.write("\n")
 
-            # Path to save the CSV
-            QandA_path = "./data/describe/generate/QandA_data.csv"
-            # Ensure the folder exists
-            os.makedirs(os.path.dirname(QandA_path), exist_ok=True)
-            # Save the DataFrame as a CSV file
-            QandA.to_csv(QandA_path, index=False)
+        # Path to save the CSV
+        QandA_path = "./data/describe/generate/QandA_data.csv"
+        # Ensure the folder exists
+        os.makedirs(os.path.dirname(QandA_path), exist_ok=True)
+        # Save the DataFrame as a CSV file
+        QandA.to_csv(QandA_path, index=False)
 
-            st.success("Q&A generated and saved!")
+          
 
+        embeddings = Embeddings()
 
-            embeddings = Embeddings()
-
-            directory = os.makedirs(os.path.dirname("./data/embeddings/"), exist_ok=True)
-            st.write("Starting to embedd ")
-            st.write("Updating all embeddings...")
-            embed(QandA_path,embeddings)
+        directory = os.makedirs(os.path.dirname("./data/embeddings/"), exist_ok=True)
+        embed(QandA_path,embeddings)
 
 
-            st.session_state.tab2_done = True
-        else:
-            st.error("Failed to generate Q&A. Please check your input.")
+        st.session_state.tab2_done = True
+        
     else:
         st.error("You must complete the Factor Analysis first!")
         
-    left_t2.markdown("---")
+    # left_t2.markdown("---")
 
-    if st.session_state.analysis == "LR":
-        right_t2.markdown("---")
-        left_t2.markdown("### 📉 Logistic Regression")
-        left_t2.write("#### Work in progress")
-        right_t2.write("### Work in progress")
+    # if st.session_state.analysis == "LR":
+    #     right_t2.markdown("---")
+    #     left_t2.markdown("### 📉 Logistic Regression")
+    #     left_t2.write("#### Work in progress")
+    #     right_t2.write("### Work in progress")
 
 
 
@@ -466,7 +446,7 @@ with tab3:
         left_t3 = left_t3.container(height=height, border=0)
         right_t3 = right_t3.container(height=height, border=3)
 
-        left_t3.markdown("### Clustering")
+        left_t3.markdown("## Step 3: Clustering")
 
         # Ask user if they want to automatically find optimal k
         use_elbow = left_t3.radio(
@@ -644,19 +624,18 @@ with tab4:
         
     else:
         left_t4, right_t4 = st.columns([0.3, 0.7])
-        left_t4.markdown("### Select entity")
+        left_t4.markdown("## Step 4: View and Summary")
 
-        
-        
-
-
+        left_t4.markdown("#### Entity selection")
         # drop down with entity column, default to first column
         entity = left_t4.selectbox(
-            label="Select entity",
+            label="Entity",
             options=option_labels,
             key="selected_entity",
-            index=0,
+            index=None,
+            placeholder="Select an entity to view details",
             on_change=add_to_fig(label_to_value),
+            label_visibility="collapsed"
         )
 
 
@@ -673,7 +652,7 @@ with tab4:
 
 
 
-            st.markdown("# Wordalisation")   
+            st.markdown("# Summary")   
 
             # Chat state hash determines whether or not we should load a new chat or continue an old one
             # We can add or remove variables to this hash to change conditions for loading a new chat
