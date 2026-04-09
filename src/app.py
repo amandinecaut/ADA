@@ -301,15 +301,20 @@ with tab2:
                 st.session_state.strategy_name = strategy_name
 
                 # Automatically determine optimal number of factors
-                with st.spinner("Analysing data and identifying factors..."):
-                    if strategy_name in "FA":
+                if strategy_name in "FA":
+                    with st.spinner("Calculating optimal factors..."):
                         Horn = HornParallelAnalysis()
-                        st.session_state.factor_nb = Horn
+                    
+                    st.session_state.factor_nb = Horn
+                    with st.spinner(f"Analysing data and identifying {Horn} factors"):
                         perform_FA()
 
-                    elif strategy_name == 'FAMD':
+                elif strategy_name == 'FAMD':
+                    with st.spinner("Analyzing mixed data structure..."):
                         famd_suggested = get_famd_metrics(data_to_analyse)
-                        st.session_state.factor_nb = famd_suggested
+
+                    st.session_state.factor_nb = famd_suggested
+                    with st.spinner(f"Analysing data and identifying {famd_suggested} factors"):
                         perform_FA()
                 
                 st.rerun()
